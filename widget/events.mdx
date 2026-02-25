@@ -3,7 +3,7 @@ title: "Events Reference"
 description: "All widget events, payload schemas, and subscription patterns"
 ---
 
-All events are dispatched as `postMessage` calls from the widget iframe to the parent window. Each message conforms to the `TranscryptsEvent` interface.
+The widget emits events during the verification lifecycle. Each event conforms to the `TranscryptsEvent` interface.
 
 ## TranscryptsEvent Interface
 
@@ -39,7 +39,7 @@ type TranscryptsEventType =
 {
   success: boolean;
   verified: boolean;
-  verificationId: string;   // Format: "ver_{timestamp}"
+  verificationId: string;   // Unique verification identifier
   workExperience: Array<{
     id: string;
     companyName: string;

@@ -28,14 +28,6 @@
               "widget/events",
               "widget/customization"
             ]
-          },
-          {
-            "group": "Architecture",
-            "pages": [
-              "architecture/overview",
-              "architecture/security",
-              "architecture/development"
-            ]
           }
         ]
       },
@@ -57,11 +49,6 @@
     "global": {
       "anchors": [
         {
-          "anchor": "GitHub",
-          "href": "https://github.com/transcrypts/transcrypts-sdk",
-          "icon": "github"
-        },
-        {
           "anchor": "npm",
           "href": "https://www.npmjs.com/package/transcrypts",
           "icon": "npm"
@@ -77,7 +64,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "https://github.com/transcrypts/transcrypts-sdk/issues"
+        "href": "mailto:support@transcrypts.com"
       }
     ],
     "primary": {

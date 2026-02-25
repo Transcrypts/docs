@@ -3,9 +3,9 @@ title: "Widget Lifecycle"
 description: "Step-by-step flow from verify() call to result"
 ---
 
-The Transcrypts verification widget is an iframe-based UI that the SDK injects into your page. When your application calls `verify()`, the SDK creates a full-viewport overlay containing an iframe that loads the Transcrypts widget application. The widget guides users through employment verification, communicating status and results back to your application via the browser `postMessage` API.
+The Transcrypts verification widget is a secure iframe-based UI that the SDK injects into your page. When your application calls `verify()`, the SDK creates a full-viewport overlay containing the widget. The widget guides users through employment verification and communicates results back to your application.
 
-The widget is a self-contained React application. Your application never interacts with the widget DOM directly -- all communication happens through structured message events.
+Your application never interacts with the widget DOM directly — all communication happens through the SDK's event system and the `verify()` promise.
 
 ## Verification Flow
 
@@ -13,25 +13,16 @@ The widget is a self-contained React application. Your application never interac
 verify() called
   |
   v
-SDK creates session token (base64-encoded JSON)
+SDK creates a secure session and opens the widget overlay
   |
   v
-SDK creates iframe overlay, appends to document.body
-  |
-  v
-Iframe loads: {widgetUrl}/verify?token={base64token}
-  |
-  v
-Widget parses token, validates apiKey and ssn
-  |
-  v
-Widget sends "ready" event to parent
+Widget sends "ready" event
   |
   v
 Widget fetches user data (loading spinner shown)
   |
   v
-Widget sends "loaded" event with masked SSN
+Widget sends "loaded" event
   |
   v
 User reviews profile and work experience list
@@ -49,30 +40,26 @@ User clicks Continue
 Widget sends "verification_complete" event with results
   |
   v
-SDK validates message origin, cleans up iframe, resolves promise
+SDK cleans up the overlay and resolves the verify() promise
 ```
 
 ## Step-by-Step Detail
 
 <Steps>
-  <Step title="Token Creation">
-    The SDK encodes `{ apiKey, ssn, user, timestamp }` as a base64 string via `btoa(JSON.stringify(payload))`.
+  <Step title="Session Creation">
+    The SDK creates a secure session with the provided API key and verification parameters.
   </Step>
 
-  <Step title="Iframe Injection">
-    The SDK creates a container `<div>` (the backdrop overlay) and an `<iframe>` element. Both are appended to `document.body`. Body scroll is locked by setting `overflow: hidden`.
-  </Step>
-
-  <Step title="Widget Initialization">
-    The widget (a separate React app at the iframe URL) reads the `token` query parameter, decodes it with `atob`, and parses the JSON. It validates that `apiKey` and `ssn` are present.
+  <Step title="Widget Display">
+    The SDK creates a full-viewport overlay and loads the verification widget inside it. Body scroll is locked while the widget is open.
   </Step>
 
   <Step title="Ready Signal">
-    Once parsed, the widget posts `{ type: 'ready', payload: {} }` to `window.parent`.
+    Once the widget has initialized, it signals that it is ready.
   </Step>
 
   <Step title="Data Loading">
-    The widget fetches user data and employment records. During this phase a loading spinner is displayed. On completion, it posts `{ type: 'loaded', payload: { ssn: '***-**-1234' } }` with the masked SSN.
+    The widget fetches user data and employment records. A loading spinner is displayed during this phase.
   </Step>
 
   <Step title="Interactive Review">
@@ -84,60 +71,25 @@ SDK validates message origin, cleans up iframe, resolves promise
   </Step>
 
   <Step title="Completion">
-    The user clicks Continue. The widget posts `{ type: 'verification_complete', payload: { ... } }` with the full result. The SDK receives the message, validates the origin, destroys the iframe overlay (with fade-out animation), restores body scroll, and resolves the `verify()` promise.
+    The user clicks Continue. The SDK receives the verification results, cleans up the overlay (with a fade-out animation), restores body scroll, and resolves the `verify()` promise with a [`VerificationResult`](/sdk/types#verificationresult).
   </Step>
 </Steps>
 
-## postMessage Protocol
+## Events During the Lifecycle
 
-Communication between the SDK (parent window) and the widget (iframe) uses the browser `window.postMessage` API.
-
-### Direction: Widget to Parent
-
-The widget sends messages to the parent via:
+You can subscribe to events emitted during the widget lifecycle using the [`on()`](/sdk/transcrypts-class#oneventtype-callback) method:
 
 ```typescript
-window.parent.postMessage({ type, payload }, '*');
+const transcrypts = new Transcrypts({ apiKey: 'your-api-key' });
+
+transcrypts.on('ready', () => console.log('Widget is ready'));
+transcrypts.on('loaded', () => console.log('Widget loaded'));
+transcrypts.on('verification_started', () => console.log('Verification started'));
+transcrypts.on('verification_complete', (event) => {
+  console.log('Verification complete:', event.payload);
+});
+
+const result = await transcrypts.verify({ ssn: '123-45-6789' });
 ```
 
-Every message is a plain object with `type` (string) and `payload` (object) fields.
-
-### Direction: Parent to Self (Close Trigger)
-
-When the user clicks the backdrop overlay (outside the iframe), the SDK container's click handler sends a close message to its own window:
-
-```typescript
-window.postMessage({ type: 'close' }, '*');
-```
-
-The SDK's message listener picks this up and triggers cleanup. This allows the close behavior to flow through the same event pipeline as widget-originated messages.
-
-### Message Format
-
-```typescript
-{
-  type: string;              // Event type identifier
-  payload: object;           // Event-specific data
-}
-```
-
-### Origin Validation
-
-The SDK validates every incoming `postMessage` against the widget origin:
-
-```typescript
-private isValidOrigin(origin: string): boolean {
-  try {
-    const widgetOrigin = new URL(this.widgetUrl).origin;
-    return origin === widgetOrigin;
-  } catch {
-    return false;
-  }
-}
-```
-
-Only messages whose `event.origin` matches `new URL(widgetUrl).origin` are processed. All other messages are silently discarded.
-
-<Note>
-The backdrop-click close message is sent via `window.postMessage` to the same window, so its origin will match the parent page's origin, not the widget origin. This message bypasses origin validation because it originates from the SDK's own event handler within the `handleMessage` callback flow.
-</Note>
+See [Widget Events](/widget/events) for the full list of event types and their payloads.

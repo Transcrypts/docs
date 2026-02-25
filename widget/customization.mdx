@@ -1,50 +1,15 @@
 ---
 title: "Widget Customization"
-description: "Iframe overlay styling, dimensions, UI states, and verification methods"
+description: "Overlay styling, UI states, and verification methods"
 ---
 
 ## Iframe Overlay
 
 The widget renders inside a fixed-position overlay that covers the full viewport.
 
-### Container (Backdrop) Styles
-
-| Property | Value |
-|---|---|
-| `position` | `fixed` |
-| `top` | `0` |
-| `left` | `0` |
-| `width` | `100%` |
-| `height` | `100%` |
-| `z-index` | `999999` |
-| `background-color` | `rgba(0, 0, 0, 0.5)` |
-| `display` | `flex` |
-| `align-items` | `center` |
-| `justify-content` | `center` |
-
-The container element has the id `transcrypts-widget-container`.
-
-### Iframe Styles
-
-| Property | Value |
-|---|---|
-| `width` | `100%` |
-| `max-width` | `480px` |
-| `height` | `100%` |
-| `max-height` | `680px` |
-| `border` | `none` |
-| `border-radius` | `12px` |
-| `box-shadow` | `0 25px 50px -12px rgba(0, 0, 0, 0.25)` |
-
-The iframe element has the id `transcrypts-widget-iframe`.
-
-<Note>
-Iframe styles are not configurable through the SDK options.
-</Note>
-
 ### containerStyle Override
 
-You can override the container styles by passing `containerStyle` when constructing the SDK:
+You can customize the overlay container styles by passing `containerStyle` when constructing the SDK:
 
 ```typescript
 const transcrypts = new Transcrypts({
@@ -56,7 +21,9 @@ const transcrypts = new Transcrypts({
 });
 ```
 
-The `containerStyle` option accepts a `Partial<CSSStyleDeclaration>` object. These styles are merged on top of the defaults using `Object.assign`, so you only need to specify the properties you want to override.
+The `containerStyle` option accepts a `Partial<CSSStyleDeclaration>` object. These styles are merged on top of the defaults, so you only need to specify the properties you want to override.
+
+See [TranscryptsOptions](/sdk/types#transcryptsoptions) for the full list of default container styles.
 
 ### z-index Considerations
 
@@ -70,18 +37,15 @@ containerStyle: {
 
 ## Body Scroll Lock
 
-While the widget is open, the SDK sets `document.body.style.overflow = 'hidden'` to prevent the page from scrolling behind the overlay. When the widget is destroyed, the overflow style is reset to its original value (empty string).
+While the widget is open, the SDK prevents the page from scrolling behind the overlay. Scrolling is restored automatically when the widget closes.
 
 ## Animation
 
-The overlay uses a CSS opacity transition for entrance and exit:
-
-- **Mount:** The container is appended with `opacity: 0`, then a `transition: opacity 0.2s ease-out` is applied, and `opacity` is set to `1` on the next animation frame.
-- **Destroy:** The container's `opacity` is set to `0`. After a 200ms delay, the DOM elements are removed.
+The overlay fades in when opened and fades out when closed for a smooth user experience.
 
 ## Widget UI States
 
-The widget progresses through four internal states:
+The widget progresses through four states:
 
 <AccordionGroup>
   <Accordion title="Loading">
@@ -93,10 +57,10 @@ The widget progresses through four internal states:
 
     - **Header** -- TransCrypts logo and branding.
     - **Progress bar** -- Shows `{verified}/{total}` jobs verified, with an animated fill bar.
-    - **User profile card** -- Full name, email, date of birth, and masked SSN in `***-**-XXXX` format.
+    - **User profile card** -- Full name, email, date of birth, and masked SSN.
     - **Credential banner** -- Appears for the current employer if a TransCrypts credential is detected. Includes a "Share Credential" button that instantly verifies the current job.
-    - **Current Employment section** -- `WorkExperienceCard` components for active jobs, each with a VERIFY button.
-    - **Previous Employment section** -- `WorkExperienceCard` components for past jobs, each with a VERIFY button.
+    - **Current Employment section** -- Cards for active jobs, each with a VERIFY button.
+    - **Previous Employment section** -- Cards for past jobs, each with a VERIFY button.
     - **Footer** -- "Data encrypted & secure" badge and a Continue button.
   </Accordion>
 
@@ -105,7 +69,7 @@ The widget progresses through four internal states:
   </Accordion>
 
   <Accordion title="Error">
-    Displayed when token parsing fails. Shows a warning icon, "Verification Error" heading, and the error message (e.g., "Missing verification token" or "Invalid verification token").
+    Displayed when an error occurs. Shows a warning icon, "Verification Error" heading, and the error message.
   </Accordion>
 </AccordionGroup>
 
@@ -138,11 +102,13 @@ Each work experience card displays:
 
 The widget can be closed in three ways:
 
-### Backdrop Click
+| Method | Result |
+|---|---|
+| **Backdrop Click** | Clicking the semi-transparent backdrop area outside the widget closes it. |
+| **Escape Key** | Pressing the Escape key closes the widget. |
+| **Verification Complete** | The widget closes automatically after the verification flow completes or fails. |
 
-Clicking the semi-transparent backdrop area outside the iframe triggers a close event. The container's click handler checks if `event.target === container` (i.e., the click was not on the iframe itself) and posts `{ type: 'close' }` via `window.postMessage`.
-
-The SDK receives this message through its message listener, runs cleanup, and resolves the `verify()` promise with:
+In all cases, the `verify()` promise resolves with the appropriate result. If the user closed the widget manually, the result will have `success: false` with error code `USER_CLOSED`.
 
 ```typescript
 {
@@ -154,29 +120,3 @@ The SDK receives this message through its message listener, runs cleanup, and re
   },
 }
 ```
-
-### Escape Key
-
-Pressing the Escape key triggers a `keydown` event listener registered by the SDK. This runs the same cleanup and resolves with the same `USER_CLOSED` result as backdrop click.
-
-### Programmatic (Verification Complete)
-
-When the widget sends `verification_complete` or `verification_failed`, the SDK automatically cleans up the iframe and resolves or rejects the promise.
-
-### Cleanup Procedure
-
-Regardless of how the widget closes, the cleanup procedure is:
-
-<Steps>
-  <Step title="Remove Event Listener">
-    Remove the `message` event listener from `window`.
-  </Step>
-
-  <Step title="Destroy Iframe Manager">
-    Call `iframeManager.destroy()`, which:
-
-    - Resets `document.body.style.overflow` to `''` (restores scrolling).
-    - Fades out the container (`opacity: 0`).
-    - After 200ms, removes the container and iframe DOM elements.
-  </Step>
-</Steps>
