@@ -1,0 +1,185 @@
+---
+title: "Transcrypts Class"
+description: "Constructor, verify(), and on() methods reference"
+---
+
+The primary class of the SDK. Instantiate it with your API key, then call `verify()` to launch the employment verification widget.
+
+## Constructor
+
+```typescript
+new Transcrypts(options: TranscryptsOptions)
+```
+
+Creates a new Transcrypts SDK instance.
+
+### Parameters
+
+| Parameter | Type                                          | Required | Description                        |
+|-----------|-----------------------------------------------|----------|------------------------------------|
+| `options` | [`TranscryptsOptions`](/sdk/types#transcryptsoptions) | Yes      | Configuration options for the SDK. |
+
+### Exceptions
+
+| Error message                     | Condition                             |
+|-----------------------------------|---------------------------------------|
+| `Transcrypts: apiKey is required` | `options.apiKey` is falsy or missing. |
+
+### Examples
+
+Basic initialization:
+
+```typescript
+import { Transcrypts } from 'transcrypts';
+
+const transcrypts = new Transcrypts({
+  apiKey: 'your-api-key',
+});
+```
+
+With all options:
+
+```typescript
+import { Transcrypts } from 'transcrypts';
+
+const transcrypts = new Transcrypts({
+  apiKey: 'your-api-key',
+  widgetUrl: 'https://custom-widget.example.com',
+  containerStyle: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+});
+```
+
+---
+
+## verify(options)
+
+```typescript
+verify(options: VerifyOptions): Promise<VerificationResult>
+```
+
+Opens the Transcrypts verification widget in a full-screen iframe overlay and returns a promise that resolves when the verification flow completes.
+
+The widget is mounted to `document.body` as a fixed-position overlay. Body scroll is disabled while the widget is open. The overlay and iframe are removed automatically when the verification completes, fails, or is dismissed by the user.
+
+### Parameters
+
+| Parameter | Type                                      | Required | Description                                                |
+|-----------|-------------------------------------------|----------|------------------------------------------------------------|
+| `options` | [`VerifyOptions`](/sdk/types#verifyoptions) | Yes      | Verification options including SSN and optional user info. |
+
+### Returns
+
+`Promise<VerificationResult>` -- Resolves with a [`VerificationResult`](/sdk/types#verificationresult) object.
+
+#### Promise Resolution Scenarios
+
+| Scenario                 | `success` | `verified` | `error`                                                                    |
+|--------------------------|-----------|------------|----------------------------------------------------------------------------|
+| Verification succeeded   | `true`    | `true`     | `undefined`                                                                |
+| User closed the widget   | `false`   | `false`    | `{ code: 'USER_CLOSED', message: 'User closed the verification widget' }` |
+| User pressed Escape key  | `false`   | `false`    | `{ code: 'USER_CLOSED', message: 'User closed the verification widget' }` |
+| User clicked backdrop    | `false`   | `false`    | `{ code: 'USER_CLOSED', message: 'User closed the verification widget' }` |
+
+#### Promise Rejection Scenarios
+
+| Scenario                  | Error message                                                                |
+|---------------------------|------------------------------------------------------------------------------|
+| `options.ssn` is falsy    | `Transcrypts: ssn is required`                                               |
+| Verification failed       | Message from widget payload, or `'Verification failed'` as fallback          |
+
+### Security
+
+<Warning>
+The `verify` method validates the `origin` of all incoming `postMessage` events against the configured `widgetUrl` origin. Messages from unrecognized origins are silently ignored.
+</Warning>
+
+### Widget Lifecycle
+
+<Steps>
+  <Step title="Create session token">
+    A base64-encoded session token is created containing `apiKey`, `ssn`, `user`, and `timestamp`.
+  </Step>
+  <Step title="Mount iframe overlay">
+    An iframe overlay is created and mounted to `document.body`.
+  </Step>
+  <Step title="Load widget">
+    The iframe loads `{widgetUrl}/verify?token={token}`.
+  </Step>
+  <Step title="Listen for events">
+    The SDK listens for `message` and `keydown` (Escape) events on `window`.
+  </Step>
+  <Step title="Settle promise">
+    When a terminal event is received (`verification_complete`, `verification_failed`, or `close`), the iframe overlay is destroyed and the promise settles.
+  </Step>
+</Steps>
+
+### Example
+
+```typescript
+const transcrypts = new Transcrypts({ apiKey: 'your-api-key' });
+
+try {
+  const result = await transcrypts.verify({
+    ssn: '123-45-6789',
+    user: {
+      firstName: 'Jane',
+      lastName: 'Doe',
+      email: 'jane@example.com',
+    },
+  });
+
+  if (result.success && result.verified) {
+    console.log('Verification ID:', result.verificationId);
+    console.log('Work history:', result.workExperience);
+  } else if (result.error?.code === 'USER_CLOSED') {
+    console.log('User dismissed the widget');
+  }
+} catch (error) {
+  console.error('Verification failed:', error.message);
+}
+```
+
+---
+
+## on(eventType, callback)
+
+```typescript
+on(
+  eventType: TranscryptsEventType,
+  callback: (event: TranscryptsEvent) => void
+): () => void
+```
+
+Subscribes a callback function to a specific widget event type. Multiple callbacks can be registered for the same event type. Events are emitted as the widget communicates via `postMessage`.
+
+### Parameters
+
+| Parameter   | Type                                                           | Required | Description                           |
+|-------------|----------------------------------------------------------------|----------|---------------------------------------|
+| `eventType` | [`TranscryptsEventType`](/sdk/types#transcryptseventtype)       | Yes      | The event type to listen for.         |
+| `callback`  | `(event: TranscryptsEvent) => void`                            | Yes      | Function called when the event fires. |
+
+### Returns
+
+`() => void` -- An unsubscribe function. Call it to remove the callback.
+
+### Example
+
+```typescript
+const transcrypts = new Transcrypts({ apiKey: 'your-api-key' });
+
+// Subscribe to the 'ready' event
+const unsubscribe = transcrypts.on('ready', (event) => {
+  console.log('Widget is ready:', event);
+});
+
+// Subscribe to verification completion
+transcrypts.on('verification_complete', (event) => {
+  console.log('Verification complete:', event.payload);
+});
+
+// Later: unsubscribe from the 'ready' event
+unsubscribe();
+```

@@ -1,97 +1,82 @@
 ---
 title: "Introduction"
-description: "Welcome to the new home for your documentation"
+description: "Employment verification made simple. Integrate Transcrypts into your application with just a few lines of code."
 ---
 
-## Setting up
+The Transcrypts SDK lets you add employment verification to any web application. It uses a secure iframe-based widget, works with any JavaScript framework, and ships as a ~5KB package with full TypeScript support.
 
-Get your documentation site up and running in minutes.
+```typescript
+import { Transcrypts } from 'transcrypts';
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+const transcrypts = new Transcrypts({ apiKey: 'your-api-key' });
+const result = await transcrypts.verify({ ssn: '123-45-6789' });
 
-## Make it yours
+if (result.verified) {
+  console.log('Verified!', result.workExperience);
+}
+```
 
-Design a docs site that looks great and empowers your users.
+## Get Started
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Install the SDK and run your first verification in minutes.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Framework Examples" icon="layer-group" href="/framework-examples">
+    Integration guides for React, Vue, Angular, and Vanilla JS.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="SDK Reference" icon="code" href="/sdk/overview">
+    Complete API reference for classes, methods, and types.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Architecture" icon="building" href="/architecture/overview">
+    Learn how the iframe-based architecture provides security and isolation.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## How It Works
 
-Everything you need to create world-class documentation.
+<Steps>
+  <Step title="Install the SDK">
+    Add `transcrypts` to your project via npm, yarn, or pnpm.
+  </Step>
+  <Step title="Initialize with your API key">
+    Create a `Transcrypts` instance with the API key from your dashboard.
+  </Step>
+  <Step title="Call verify()">
+    The SDK opens a secure iframe widget where the user completes employment verification.
+  </Step>
+  <Step title="Handle the result">
+    The `verify()` promise resolves with verified work experience records.
+  </Step>
+</Steps>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+## Key Features
 
-## Need inspiration?
+<CardGroup cols={3}>
+  <Card title="Framework Agnostic" icon="puzzle-piece">
+    Works with React, Vue, Angular, or plain JavaScript.
+  </Card>
+  <Card title="Lightweight" icon="feather">
+    ~5KB bundle size with zero runtime dependencies.
+  </Card>
+  <Card title="Secure by Design" icon="shield-halved">
+    Iframe isolation keeps sensitive data out of your application.
+  </Card>
+</CardGroup>
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+## Explore the Docs
+
+<CardGroup cols={2}>
+  <Card title="Widget Lifecycle" icon="arrows-spin" href="/widget/lifecycle">
+    Understand the step-by-step verification flow.
+  </Card>
+  <Card title="Events" icon="bell" href="/widget/events">
+    Subscribe to widget events for real-time status updates.
+  </Card>
+  <Card title="Security Model" icon="lock" href="/architecture/security">
+    Threat model, origin validation, and data handling.
+  </Card>
+  <Card title="Development Setup" icon="wrench" href="/architecture/development">
+    Set up the monorepo for local development.
+  </Card>
+</CardGroup>

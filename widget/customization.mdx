@@ -1,0 +1,182 @@
+---
+title: "Widget Customization"
+description: "Iframe overlay styling, dimensions, UI states, and verification methods"
+---
+
+## Iframe Overlay
+
+The widget renders inside a fixed-position overlay that covers the full viewport.
+
+### Container (Backdrop) Styles
+
+| Property | Value |
+|---|---|
+| `position` | `fixed` |
+| `top` | `0` |
+| `left` | `0` |
+| `width` | `100%` |
+| `height` | `100%` |
+| `z-index` | `999999` |
+| `background-color` | `rgba(0, 0, 0, 0.5)` |
+| `display` | `flex` |
+| `align-items` | `center` |
+| `justify-content` | `center` |
+
+The container element has the id `transcrypts-widget-container`.
+
+### Iframe Styles
+
+| Property | Value |
+|---|---|
+| `width` | `100%` |
+| `max-width` | `480px` |
+| `height` | `100%` |
+| `max-height` | `680px` |
+| `border` | `none` |
+| `border-radius` | `12px` |
+| `box-shadow` | `0 25px 50px -12px rgba(0, 0, 0, 0.25)` |
+
+The iframe element has the id `transcrypts-widget-iframe`.
+
+<Note>
+Iframe styles are not configurable through the SDK options.
+</Note>
+
+### containerStyle Override
+
+You can override the container styles by passing `containerStyle` when constructing the SDK:
+
+```typescript
+const transcrypts = new Transcrypts({
+  apiKey: 'your-api-key',
+  containerStyle: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',   // Darker backdrop
+    zIndex: '1000000',                         // Higher z-index
+  },
+});
+```
+
+The `containerStyle` option accepts a `Partial<CSSStyleDeclaration>` object. These styles are merged on top of the defaults using `Object.assign`, so you only need to specify the properties you want to override.
+
+### z-index Considerations
+
+The default `z-index` of `999999` is intentionally high to ensure the widget renders above most application content. If your application uses z-index values in this range (for modals, dropdowns, or other overlays), override it via `containerStyle`:
+
+```typescript
+containerStyle: {
+  zIndex: '2147483647',  // Maximum 32-bit integer
+}
+```
+
+## Body Scroll Lock
+
+While the widget is open, the SDK sets `document.body.style.overflow = 'hidden'` to prevent the page from scrolling behind the overlay. When the widget is destroyed, the overflow style is reset to its original value (empty string).
+
+## Animation
+
+The overlay uses a CSS opacity transition for entrance and exit:
+
+- **Mount:** The container is appended with `opacity: 0`, then a `transition: opacity 0.2s ease-out` is applied, and `opacity` is set to `1` on the next animation frame.
+- **Destroy:** The container's `opacity` is set to `0`. After a 200ms delay, the DOM elements are removed.
+
+## Widget UI States
+
+The widget progresses through four internal states:
+
+<AccordionGroup>
+  <Accordion title="Loading">
+    Displayed immediately after the widget loads. Shows a centered spinner and "Loading verification..." text. This state is active while the widget fetches user data and employment records.
+  </Accordion>
+
+  <Accordion title="Review (Interactive)">
+    The main interactive state. Displays:
+
+    - **Header** -- TransCrypts logo and branding.
+    - **Progress bar** -- Shows `{verified}/{total}` jobs verified, with an animated fill bar.
+    - **User profile card** -- Full name, email, date of birth, and masked SSN in `***-**-XXXX` format.
+    - **Credential banner** -- Appears for the current employer if a TransCrypts credential is detected. Includes a "Share Credential" button that instantly verifies the current job.
+    - **Current Employment section** -- `WorkExperienceCard` components for active jobs, each with a VERIFY button.
+    - **Previous Employment section** -- `WorkExperienceCard` components for past jobs, each with a VERIFY button.
+    - **Footer** -- "Data encrypted & secure" badge and a Continue button.
+  </Accordion>
+
+  <Accordion title="Success">
+    Displayed after verification completes. Shows a green checkmark icon, "Verification Complete" heading, and a confirmation message.
+  </Accordion>
+
+  <Accordion title="Error">
+    Displayed when token parsing fails. Shows a warning icon, "Verification Error" heading, and the error message (e.g., "Missing verification token" or "Invalid verification token").
+  </Accordion>
+</AccordionGroup>
+
+## Verification Methods
+
+When the user clicks VERIFY on a work experience card, a modal dialog presents four verification options:
+
+| Method | ID | Description | Estimated Time |
+|---|---|---|---|
+| **SSA Integration** | `ssa` | Verify through Social Security Administration records for historical employment. | ~5 min |
+| **Previous Payroll** | `payroll` | Connect to the previous payroll provider for employment verification. | ~3 min |
+| **Open Banking** | `banking` | Securely connect a bank account to verify historical income deposits. | ~3 min |
+| **Upload Documents** | `upload` | Upload a W-2 form or paystub from the employer to verify employment. | ~2 min |
+
+<Tip>
+SSA Integration is marked as "Recommended" with a highlighted card and badge in the modal.
+</Tip>
+
+The user selects one option, and the corresponding job is marked as verified in the widget.
+
+Each work experience card displays:
+
+- Company logo placeholder (or icon)
+- Company name and position title
+- Date range (formatted as `"Mon YYYY -- Mon YYYY"` or `"Mon YYYY -- Present"`)
+- A "Current" badge for active employment
+- VERIFY button (or a green "Verified" badge once complete)
+
+## Closing the Widget
+
+The widget can be closed in three ways:
+
+### Backdrop Click
+
+Clicking the semi-transparent backdrop area outside the iframe triggers a close event. The container's click handler checks if `event.target === container` (i.e., the click was not on the iframe itself) and posts `{ type: 'close' }` via `window.postMessage`.
+
+The SDK receives this message through its message listener, runs cleanup, and resolves the `verify()` promise with:
+
+```typescript
+{
+  success: false,
+  verified: false,
+  error: {
+    code: 'USER_CLOSED',
+    message: 'User closed the verification widget',
+  },
+}
+```
+
+### Escape Key
+
+Pressing the Escape key triggers a `keydown` event listener registered by the SDK. This runs the same cleanup and resolves with the same `USER_CLOSED` result as backdrop click.
+
+### Programmatic (Verification Complete)
+
+When the widget sends `verification_complete` or `verification_failed`, the SDK automatically cleans up the iframe and resolves or rejects the promise.
+
+### Cleanup Procedure
+
+Regardless of how the widget closes, the cleanup procedure is:
+
+<Steps>
+  <Step title="Remove Event Listener">
+    Remove the `message` event listener from `window`.
+  </Step>
+
+  <Step title="Destroy Iframe Manager">
+    Call `iframeManager.destroy()`, which:
+
+    - Resets `document.body.style.overflow` to `''` (restores scrolling).
+    - Fades out the container (`opacity: 0`).
+    - After 200ms, removes the container and iframe DOM elements.
+  </Step>
+</Steps>

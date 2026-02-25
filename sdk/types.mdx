@@ -1,0 +1,182 @@
+---
+title: "Types & Interfaces"
+description: "Complete TypeScript type reference for the Transcrypts SDK"
+---
+
+## TranscryptsOptions
+
+Configuration object passed to the [`Transcrypts` constructor](/sdk/transcrypts-class#constructor).
+
+```typescript
+interface TranscryptsOptions {
+  apiKey: string;
+  widgetUrl?: string;
+  containerStyle?: Partial<CSSStyleDeclaration>;
+}
+```
+
+### Properties
+
+| Property         | Type                           | Required | Default                            | Description                                                                              |
+|------------------|--------------------------------|----------|------------------------------------|------------------------------------------------------------------------------------------|
+| `apiKey`         | `string`                       | Yes      | --                                 | Your Transcrypts API key. Must be a non-empty string.                                    |
+| `widgetUrl`      | `string`                       | No       | `'https://widget.transcrypts.com'` | Custom widget URL. Use this to point to a staging or self-hosted widget instance.         |
+| `containerStyle` | `Partial<CSSStyleDeclaration>` | No       | See default styles below           | Custom CSS styles applied to the overlay container `<div>` that wraps the widget iframe. |
+
+### Default Container Styles
+
+When no `containerStyle` is provided, the overlay container uses the following defaults:
+
+| CSS Property      | Default Value         |
+|-------------------|-----------------------|
+| `position`        | `fixed`               |
+| `top`             | `0`                   |
+| `left`            | `0`                   |
+| `width`           | `100%`                |
+| `height`          | `100%`                |
+| `zIndex`          | `999999`              |
+| `backgroundColor` | `rgba(0, 0, 0, 0.5)` |
+| `display`         | `flex`                |
+| `alignItems`      | `center`              |
+| `justifyContent`  | `center`              |
+
+<Note>
+Any properties set in `containerStyle` are merged on top of these defaults.
+</Note>
+
+---
+
+## VerifyOptions
+
+Options passed to the [`verify()`](/sdk/transcrypts-class#verifyoptions) method.
+
+```typescript
+interface VerifyOptions {
+  ssn: string;
+  user?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  };
+}
+```
+
+### Properties
+
+| Property         | Type     | Required | Description                          |
+|------------------|----------|----------|--------------------------------------|
+| `ssn`            | `string` | Yes      | The user's Social Security Number.   |
+| `user`           | `object` | No       | Pre-fill user information in the widget. |
+| `user.firstName` | `string` | No       | User's first name.                   |
+| `user.lastName`  | `string` | No       | User's last name.                    |
+| `user.email`     | `string` | No       | User's email address.                |
+
+---
+
+## VerificationResult
+
+Object returned by [`verify()`](/sdk/transcrypts-class#verifyoptions) on successful resolution.
+
+```typescript
+interface VerificationResult {
+  success: boolean;
+  verified: boolean;
+  userId?: string;
+  verificationId?: string;
+  workExperience?: WorkExperience[];
+  error?: {
+    code: string;
+    message: string;
+  };
+}
+```
+
+### Properties
+
+| Property         | Type                                          | Required | Description                                                                        |
+|------------------|-----------------------------------------------|----------|------------------------------------------------------------------------------------|
+| `success`        | `boolean`                                     | Yes      | `true` if the verification flow completed successfully.                            |
+| `verified`       | `boolean`                                     | Yes      | `true` if the user's employment was verified.                                      |
+| `userId`         | `string`                                      | No       | The unique identifier for the verified user.                                       |
+| `verificationId` | `string`                                     | No       | The unique verification identifier. Format: `ver_{timestamp}`.                     |
+| `workExperience` | [`WorkExperience[]`](#workexperience)         | No       | Array of verified work experience records. Present when verification succeeds.     |
+| `error`          | `object`                                      | No       | Error details. Present when the verification did not complete successfully.        |
+| `error.code`     | `string`                                      | Yes*     | Machine-readable error code (e.g., `'USER_CLOSED'`). *Required when `error` is present. |
+| `error.message`  | `string`                                      | Yes*     | Human-readable error description. *Required when `error` is present.              |
+
+---
+
+## WorkExperience
+
+A single work experience record returned as part of a successful verification.
+
+```typescript
+interface WorkExperience {
+  id: string;
+  companyName: string;
+  position: string;
+  startDate: string;
+  endDate?: string;
+  isCurrentJob: boolean;
+  verified: boolean;
+}
+```
+
+### Properties
+
+| Property       | Type      | Required | Description                                                                  |
+|----------------|-----------|----------|------------------------------------------------------------------------------|
+| `id`           | `string`  | Yes      | Unique identifier for this work experience record.                           |
+| `companyName`  | `string`  | Yes      | Name of the employer.                                                        |
+| `position`     | `string`  | Yes      | Job title or position held.                                                  |
+| `startDate`    | `string`  | Yes      | Employment start date as an ISO 8601 date string.                            |
+| `endDate`      | `string`  | No       | Employment end date as an ISO 8601 date string. Absent if currently employed. |
+| `isCurrentJob` | `boolean` | Yes      | `true` if this is the user's current position.                               |
+| `verified`     | `boolean` | Yes      | `true` if this specific work experience record was verified.                 |
+
+---
+
+## TranscryptsEvent
+
+Event object emitted by the widget and delivered to [`on()`](/sdk/transcrypts-class#oneventtype-callback) callbacks.
+
+```typescript
+interface TranscryptsEvent {
+  type: TranscryptsEventType;
+  payload?: Record<string, unknown>;
+}
+```
+
+### Properties
+
+| Property  | Type                                            | Required | Description                                        |
+|-----------|-------------------------------------------------|----------|----------------------------------------------------|
+| `type`    | [`TranscryptsEventType`](#transcryptseventtype) | Yes      | The event type identifier.                         |
+| `payload` | `Record<string, unknown>`                       | No       | Arbitrary event data. Shape depends on event type. |
+
+---
+
+## TranscryptsEventType
+
+A union of string literal types representing all widget event types.
+
+```typescript
+type TranscryptsEventType =
+  | 'ready'
+  | 'loaded'
+  | 'verification_started'
+  | 'verification_complete'
+  | 'verification_failed'
+  | 'close';
+```
+
+### Event Types
+
+| Value                     | Description                                                      |
+|---------------------------|------------------------------------------------------------------|
+| `'ready'`                 | The widget iframe has initialized and is ready to receive input. |
+| `'loaded'`                | The widget UI has fully loaded.                                  |
+| `'verification_started'`  | The user has initiated the verification process.                 |
+| `'verification_complete'` | Verification completed successfully. Payload contains the result. |
+| `'verification_failed'`   | Verification failed. Payload contains error details.             |
+| `'close'`                 | The user closed the widget via the widget's close button.        |

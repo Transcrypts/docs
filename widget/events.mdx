@@ -1,0 +1,160 @@
+---
+title: "Events Reference"
+description: "All widget events, payload schemas, and subscription patterns"
+---
+
+All events are dispatched as `postMessage` calls from the widget iframe to the parent window. Each message conforms to the `TranscryptsEvent` interface.
+
+## TranscryptsEvent Interface
+
+```typescript
+interface TranscryptsEvent {
+  type: TranscryptsEventType;
+  payload?: Record<string, unknown>;
+}
+
+type TranscryptsEventType =
+  | 'ready'
+  | 'loaded'
+  | 'verification_started'
+  | 'verification_complete'
+  | 'verification_failed'
+  | 'close';
+```
+
+## Event Details
+
+| Event | When Fired | Payload |
+|---|---|---|
+| `ready` | Widget has loaded and parsed the session token | `{}` |
+| `loaded` | User data has been fetched and rendered | `{ ssn: "***-**-1234" }` |
+| `verification_started` | User began verification for a specific job | `{}` |
+| `verification_complete` | User clicked Continue after verifying jobs | See [payload below](#verification_complete-payload) |
+| `verification_failed` | An error occurred during verification | `{ message: "error description" }` |
+| `close` | User dismissed the widget (backdrop click) | `{}` |
+
+## `verification_complete` Payload
+
+```typescript
+{
+  success: boolean;
+  verified: boolean;
+  verificationId: string;   // Format: "ver_{timestamp}"
+  workExperience: Array<{
+    id: string;
+    companyName: string;
+    position: string;
+    startDate: string;       // ISO date string
+    endDate?: string;        // ISO date string, undefined if current job
+    isCurrentJob: boolean;
+    verified: boolean;
+  }>;
+}
+```
+
+## `verification_failed` Payload
+
+```typescript
+{
+  message: string;           // Human-readable error description
+}
+```
+
+## Listening with `.on()`
+
+The SDK exposes an `.on()` method that lets you subscribe to widget events. It returns an unsubscribe function.
+
+### Method Signature
+
+```typescript
+on(
+  eventType: TranscryptsEventType,
+  callback: (event: TranscryptsEvent) => void
+): () => void
+```
+
+### Parameters
+
+| Parameter | Type | Description |
+|---|---|---|
+| `eventType` | `TranscryptsEventType` | The event type to listen for |
+| `callback` | `(event: TranscryptsEvent) => void` | Function called when the event fires |
+
+**Returns:** A function that, when called, removes the listener.
+
+### Code Example
+
+```typescript
+const transcrypts = new Transcrypts({ apiKey: 'your-api-key' });
+
+// Subscribe to the "ready" event
+const unsubscribeReady = transcrypts.on('ready', (event) => {
+  console.log('Widget is ready');
+});
+
+// Subscribe to the "loaded" event
+const unsubscribeLoaded = transcrypts.on('loaded', (event) => {
+  console.log('User data loaded, masked SSN:', event.payload?.ssn);
+});
+
+// Subscribe to verification completion
+const unsubscribeComplete = transcrypts.on('verification_complete', (event) => {
+  console.log('Verification result:', event.payload);
+});
+```
+
+## Multiple Listeners
+
+You can register multiple listeners for the same event type. Each callback is stored independently and fires in registration order.
+
+```typescript
+// Both callbacks fire when "loaded" is emitted
+transcrypts.on('loaded', (event) => {
+  analytics.track('widget_loaded');
+});
+
+transcrypts.on('loaded', (event) => {
+  updateUI(event.payload);
+});
+```
+
+## Cleanup Patterns
+
+<Warning>
+Always unsubscribe listeners when they are no longer needed to prevent memory leaks.
+</Warning>
+
+### Array Approach
+
+```typescript
+// Store unsubscribe functions
+const unsubscribers: Array<() => void> = [];
+
+unsubscribers.push(transcrypts.on('ready', handleReady));
+unsubscribers.push(transcrypts.on('loaded', handleLoaded));
+unsubscribers.push(transcrypts.on('verification_complete', handleComplete));
+
+// Clean up all listeners at once
+function cleanupListeners() {
+  unsubscribers.forEach((unsub) => unsub());
+  unsubscribers.length = 0;
+}
+```
+
+### React useEffect Example
+
+```typescript
+useEffect(() => {
+  const unsubReady = transcrypts.on('ready', () => setWidgetReady(true));
+  const unsubLoaded = transcrypts.on('loaded', (e) => setMaskedSSN(e.payload?.ssn));
+  const unsubFailed = transcrypts.on('verification_failed', (e) => {
+    setError(e.payload?.message);
+  });
+
+  return () => {
+    unsubReady();
+    unsubLoaded();
+    unsubFailed();
+  };
+}, [transcrypts]);
+```

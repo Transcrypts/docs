@@ -1,0 +1,163 @@
+---
+title: "Security Model"
+description: "Threat model, defense in depth, token architecture, and iframe isolation"
+---
+
+## Threat Model
+
+The security architecture addresses the following threat categories:
+
+| Threat | Mitigation |
+|--------|------------|
+| Cross-origin data theft | Iframe isolation prevents parent page from accessing widget DOM or JavaScript context |
+| Message spoofing | Origin validation on all postMessage events ensures only the legitimate widget origin is accepted |
+| Clickjacking | Widget renders in a controlled overlay with a high z-index backdrop |
+| SSN exposure to client app | Full SSN exists only within the iframe; the SDK receives only masked values (last 4 digits) |
+| Token tampering | Timestamp field enables replay detection; production JWT adds cryptographic integrity |
+| XSS in client app | Even if the client application is compromised, the attacker cannot access data inside the cross-origin iframe |
+
+## Defense in Depth
+
+<AccordionGroup>
+  <Accordion title="Layer 1: Browser Same-Origin Policy">
+    The iframe loads content from `widget.transcrypts.com`, which is a different origin than the client application. The browser enforces strict isolation:
+
+    - No DOM access across the origin boundary
+    - No JavaScript execution across the origin boundary
+    - No cookie or storage sharing across the origin boundary
+    - `postMessage` is the only permitted communication channel
+  </Accordion>
+
+  <Accordion title="Layer 2: postMessage Origin Validation">
+    Every message received by the SDK is validated against the expected widget origin before processing:
+
+    ```typescript
+    if (!this.isValidOrigin(event.origin)) {
+      return; // Silently discard messages from unknown origins
+    }
+    ```
+
+    This prevents:
+    - Malicious iframes on the page from injecting events
+    - Other windows or tabs from sending spoofed messages
+    - Man-in-the-middle message injection
+  </Accordion>
+
+  <Accordion title="Layer 3: Data Minimization">
+    The SDK follows the principle of least privilege for data exposure:
+
+    - The full SSN is passed to the widget via the session token
+    - The widget masks the SSN for display: `***-**-1234`
+    - Events sent back to the SDK contain only masked SSN values
+    - The client application never receives the full SSN through the SDK
+  </Accordion>
+
+  <Accordion title="Layer 4: Controlled Iframe Permissions">
+    The iframe's `allow` attribute explicitly grants only `clipboard-write`. All other permissions (camera, microphone, geolocation, etc.) are denied by default.
+  </Accordion>
+
+  <Accordion title="Layer 5: Lifecycle Management">
+    The SDK ensures clean resource management:
+
+    - Event listeners are removed on widget close
+    - The iframe DOM element is destroyed after the exit animation
+    - Body scroll lock is restored
+    - No persistent references to the iframe remain after cleanup
+  </Accordion>
+</AccordionGroup>
+
+## Token Architecture
+
+### Current Implementation (Base64)
+
+The SDK currently creates session tokens using base64 encoding:
+
+```typescript
+const token = btoa(JSON.stringify({
+  ssn: options.ssn,
+  timestamp: Date.now(),
+  apiKey: this.apiKey,
+}));
+```
+
+The widget decodes and parses the token on load:
+
+```typescript
+export function parseToken(token: string): TokenData {
+  const decoded = atob(token);
+  return JSON.parse(decoded);
+}
+```
+
+<Warning>
+  Base64 encoding is **not encryption**. The current token implementation is suitable for development and demo purposes only. Tokens are readable by anyone who intercepts them. Do not use this approach in production with real sensitive data.
+</Warning>
+
+### Production Recommendation: JWT
+
+For production deployments, replace the base64 token with a signed JWT (JSON Web Token):
+
+- Sign tokens server-side using a secret or RSA key pair
+- Include an `exp` (expiration) claim to limit token lifetime
+- Include an `iss` (issuer) claim for additional validation
+- Verify the signature on the widget backend before processing
+- This adds cryptographic integrity and prevents token tampering or replay attacks
+
+## Iframe Isolation
+
+The widget runs inside an `<iframe>` element, which provides the browser's strongest same-origin isolation boundary.
+
+### Iframe Configuration
+
+The iframe is created dynamically by the `createIframeManager` function in `iframe.ts`:
+
+```typescript
+iframe = document.createElement('iframe');
+iframe.id = 'transcrypts-widget-iframe';
+iframe.src = `${options.widgetUrl}/verify?token=${encodeURIComponent(options.token)}`;
+iframe.allow = 'clipboard-write';
+```
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| `id` | `transcrypts-widget-iframe` | DOM identification for debugging |
+| `src` | `{widgetUrl}/verify?token={token}` | Loads widget SPA with session token |
+| `allow` | `clipboard-write` | Permits copy-to-clipboard within widget |
+
+### Overlay Container
+
+The iframe is mounted inside a full-viewport overlay container:
+
+| Style Property | Value | Purpose |
+|----------------|-------|---------|
+| `position` | `fixed` | Overlay covers entire viewport |
+| `top`, `left` | `0` | Anchored to top-left corner |
+| `width`, `height` | `100%` | Full viewport coverage |
+| `z-index` | `999999` | Renders above all client content |
+| `background-color` | `rgba(0, 0, 0, 0.5)` | Semi-transparent dark backdrop |
+| `display` | `flex` | Centers the iframe |
+
+### Iframe Dimensions
+
+| Style Property | Value | Purpose |
+|----------------|-------|---------|
+| `max-width` | `480px` | Constrains widget width |
+| `max-height` | `680px` | Constrains widget height |
+| `border-radius` | `12px` | Rounded corners |
+| `box-shadow` | `0 25px 50px -12px rgba(0,0,0,0.25)` | Elevated card appearance |
+
+### Lifecycle
+
+1. **Mount:** Container and iframe are created and appended to `document.body`. Body scroll is locked (`overflow: hidden`). An entrance animation fades the overlay from 0 to 1 opacity over 200ms.
+2. **Active:** The widget operates independently within the iframe. Communication occurs only via `postMessage`.
+3. **Destroy:** An exit animation fades the overlay to 0 opacity. After 200ms, the DOM elements are removed and body scroll is restored.
+
+### Dismissal Methods
+
+The widget can be dismissed through three mechanisms:
+
+| Method | Trigger | Result |
+|--------|---------|--------|
+| Backdrop click | User clicks outside the iframe | `close` event dispatched, `verify()` resolves with `USER_CLOSED` |
+| Escape key | User presses Escape | `verify()` resolves with `USER_CLOSED` |
+| Widget close | Widget sends `close` event | `verify()` resolves with `USER_CLOSED` |
