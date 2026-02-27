@@ -1,0 +1,159 @@
+---
+title: "Payroll Integration"
+description: "Connect directly to payroll providers for comprehensive employment and income verification including pay statements, tax documents, and employer details"
+---
+
+## Overview
+
+Payroll Integration is the most comprehensive verification method available through Transcrypts. By connecting directly to payroll providers, it pulls complete employment and income data including employment records, pay statements, W-2s, 1099s, and identity information.
+
+Transcrypts supports hundreds of payroll providers including ADP, Gusto, Paychex, Workday, and many more. Users connect through the Transcrypts Bridge widget, authenticate with their payroll credentials, and the platform retrieves structured data directly from the source.
+
+## How It Works
+
+1. **Generate a Bridge Token** -- Create a [Bridge Token](/user-flow-endpoints/bridge-token) to initialize the Transcrypts Bridge widget
+2. **User opens Bridge** -- The user launches the Bridge widget in your application
+3. **Search for employer** -- The user searches for and selects their employer or payroll provider
+4. **Authenticate** -- The user enters their payroll credentials through Bridge
+5. **Data retrieval** -- Transcrypts connects to the payroll provider and pulls employment and income data
+6. **Task tracking** -- A [Task](/platform-management/connection-lifecycle) is created and progresses through the connection lifecycle (`new` -> `login` -> `mfa` -> `parse` -> `full_parse` -> `done`)
+7. **Data available** -- Once the Task reaches `done` status, full employment and income data is available through the API
+
+<Info>
+After the user authenticates and closes Bridge, data processing continues in the background. The `full_parse` stage handles downloading and parsing pay stubs, W-2s, and other documents. Use [webhooks](/platform-management/webhooks) or the [Task status endpoint](/user-flow-endpoints/tasks-read) to track completion.
+</Info>
+
+## Available Data
+
+Payroll Integration provides the richest data set of any verification method. The following categories of data are available after a successful connection.
+
+### Employment Records
+
+Current and historical employment information including:
+
+- Employment status (active/inactive)
+- Job title and job type (Full Time, Part Time, Contract, etc.)
+- Start date, original hire date, and end date
+- Base income and pay rate
+- Pay frequency (Monthly, Bi-Weekly, Weekly, etc.)
+- Manager name
+- Employer details (name, address, EIN, phone)
+
+See the [Employment](/income-and-employment/employment) documentation for the full attribute reference.
+
+### Pay Statements
+
+Detailed pay stub data for each pay period:
+
+- Gross pay and net pay (current and year-to-date)
+- Pay date and pay period (start/end)
+- Earnings breakdown by category (regular, bonus, commission, overtime, other)
+- Deductions by category (federal tax, state tax, retirement, benefits, etc.)
+- Hours worked and basis of pay
+- Links to original pay stub documents
+
+See the [Pay Statements](/income-and-employment/pay-statements) documentation for the full attribute reference.
+
+### Tax Documents
+
+W-2 and 1099 forms retrieved directly from payroll providers:
+
+- W-2 document files
+- Tax year
+- Wages, tips, and other compensation
+- Federal tax withheld
+- Social Security and Medicare wages
+- Gross pay totals
+
+See the [Tax Documents](/income-and-employment/tax-documents) documentation for the full attribute reference.
+
+### Income Summary
+
+Annual income breakdowns by year:
+
+- Regular pay
+- Bonus, commission, and overtime amounts
+- Other pay
+- Net and gross pay totals
+
+### Identity Information
+
+Personal information from payroll records:
+
+- Full name
+- Social Security Number
+- Date of birth
+- Address
+
+See the [Identity](/income-and-employment/identity) documentation for the full attribute reference.
+
+## Supported Providers
+
+Transcrypts supports hundreds of payroll providers. The platform covers major providers including:
+
+- **ADP** (Workforce Now, RUN, TotalSource)
+- **Gusto**
+- **Paychex** (Flex, Oasis)
+- **Workday**
+- **Paylocity**
+- **Paycom**
+- **UKG** (UltiPro, Kronos)
+- **Ceridian Dayforce**
+- **Square Payroll**
+- **Rippling**
+
+Use the [Company Autocomplete Search](/user-flow-endpoints/company-autocomplete-search) endpoint to search available companies and providers programmatically. The [Companies and Data Providers](/user-flow-endpoints/companies-and-data-providers) documentation describes company and provider attributes including confidence levels and mapping status.
+
+<Note>
+Each company entry includes a `confidence_level` and `success_rate` indicating the likelihood of a successful connection. Use these values to set expectations in your application.
+</Note>
+
+## Relevant API Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Bridge Token" icon="key" href="/user-flow-endpoints/bridge-token">
+    Generate a short-lived token to initialize Transcrypts Bridge.
+  </Card>
+  <Card title="Companies & Data Providers" icon="building" href="/user-flow-endpoints/companies-and-data-providers">
+    Search and retrieve company and payroll provider information.
+  </Card>
+  <Card title="Employment" icon="briefcase" href="/income-and-employment/employment">
+    Retrieve employment records including job details and employer information.
+  </Card>
+  <Card title="Identity" icon="user" href="/income-and-employment/identity">
+    Access identity information from payroll records.
+  </Card>
+  <Card title="Pay Statements" icon="file-invoice-dollar" href="/income-and-employment/pay-statements">
+    Retrieve detailed pay stub data with earnings and deductions.
+  </Card>
+  <Card title="Tax Documents" icon="file-lines" href="/income-and-employment/tax-documents">
+    Access W-2s and 1099s from payroll providers.
+  </Card>
+  <Card title="Income & Employment Report" icon="chart-bar" href="/income-and-employment/income-employment-report">
+    Generate combined income and employment verification reports.
+  </Card>
+  <Card title="VOIE Reports" icon="file-certificate" href="/user-reports/voie-reports-create">
+    Create Verification of Income and Employment reports.
+  </Card>
+</CardGroup>
+
+## Connection Lifecycle
+
+Payroll connections follow the standard [Task lifecycle](/platform-management/connection-lifecycle). After the user authenticates through Bridge, the Task progresses through these stages:
+
+| Stage | Approximate Time | Description |
+|-------|-----------------|-------------|
+| `login` | < 10 seconds | Authentication with payroll provider |
+| `mfa` | 10-30 seconds | Multi-factor authentication if required |
+| `parse` | ~30 seconds | Collecting identity, employment, and pay date information |
+| `full_parse` | 45 seconds to 5 minutes | Downloading and parsing pay stubs, W-2s, and income sources |
+
+<Warning>
+Each Task has a maximum 20-minute completion limit. If a Task does not reach `done` status within this window, it will result in an error state.
+</Warning>
+
+## Data Refresh
+
+To refresh payroll data for an existing connection without requiring the user to re-authenticate, use the [Data Refresh](/user-flow-endpoints/data-refresh) flow. Pass the existing `access_token` into a new Bridge Token request to initiate a refresh. This creates a new Task that pulls updated data from the payroll provider.
+
+See the [Stored Credentials](/verification-methods/stored-credentials) verification method for more details on re-verification workflows.

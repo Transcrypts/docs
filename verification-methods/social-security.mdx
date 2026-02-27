@@ -1,0 +1,50 @@
+---
+title: "Social Security Verification"
+description: "Verify employment history through the Social Security Administration (SSA)"
+---
+
+## Overview
+
+Social Security Verification allows users to verify their employment history by connecting to their "my Social Security" account on ssa.gov. Through the Transcrypts Bridge widget, users authenticate with their SSA credentials, and Transcrypts securely retrieves official employment records maintained by the Social Security Administration.
+
+This method is useful when payroll provider access is unavailable or when a comprehensive, government-sourced employment history is needed.
+
+## How It Works
+
+1. **Open Transcrypts Bridge** -- Your application initializes the Bridge widget using a [bridge token](/user-flow-endpoints/bridge-token).
+2. **Select Social Security** -- The user selects Social Security as their verification source within the Bridge.
+3. **Authenticate with SSA** -- The user enters their SSA credentials through the Bridge. Transcrypts securely connects to the Social Security Administration on the user's behalf.
+4. **Employment history retrieved** -- Transcrypts pulls the user's employment history from SSA records. A Task is created and tracked through the standard [connection lifecycle](/platform-management/connection-lifecycle).
+5. **Data available via API** -- Once the Task completes, employment data is available through the standard [Employment](/income-and-employment/employment) endpoints.
+
+## Available Data
+
+SSA records provide the following employment information:
+
+| Data | Description |
+|------|-------------|
+| Employer names | Names of employers reported to the SSA |
+| Employment dates | Start and end dates for each employment period |
+| Annual earnings | Yearly earnings reported per employer |
+| Employment timeline | Full chronological employment history |
+
+<Warning>
+SSA records may not include detailed pay statements, current employer information, or granular income breakdowns (such as bonuses or commissions). For detailed pay data, consider using a payroll-based verification method.
+</Warning>
+
+## Setup
+
+Social Security Verification is enabled through the Bridge Token configuration. When creating a bridge token, set the appropriate `product_type` and include Social Security in your `data_sources` configuration.
+
+Refer to the [Bridge Token](/user-flow-endpoints/bridge-token) documentation for details on token creation and configuration options.
+
+<Info>
+Contact your Transcrypts account representative to ensure Social Security is enabled for your organization.
+</Info>
+
+## Related Resources
+
+- [Bridge Token](/user-flow-endpoints/bridge-token) -- Create and configure bridge tokens
+- [Employment](/income-and-employment/employment) -- Employment object attributes and data structure
+- [Employment History Report](/income-and-employment/employment-history-report) -- VOE report for a link
+- [Income and Employment Report](/income-and-employment/income-employment-report) -- VOIE report

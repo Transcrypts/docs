@@ -1,9 +1,33 @@
 ---
 title: "Introduction"
-description: "Overview of the Transcrypts API platform, authentication, protocols, security, error handling, and rate limiting."
+description: "Overview of the Transcrypts Employment and Income Verification platform, verification methods, authentication, protocols, security, error handling, and rate limiting."
 ---
 
-This documentation covers the API Reference sections with details and descriptions for the Transcrypts platform. For inquiries, contact support@transcrypts.com or access the Dashboard.
+Transcrypts is an Employment and Income Verification platform that enables verifiers to confirm applicant employment history and income through multiple data sources. The platform provides an SDK widget that applicants interact with to authorize and complete verification requests. For inquiries, contact support@transcrypts.com or access the Dashboard.
+
+## Verification Methods
+
+The Transcrypts SDK widget supports five verification methods. Each method connects to a different data source to retrieve employment and income information.
+
+### Bank Integration
+
+Applicants connect their bank accounts through the widget to verify income. Transaction and deposit history from linked accounts provides proof of income.
+
+### Payroll Integration
+
+Applicants connect their payroll provider through the widget. Employment details, salary information, and pay history are retrieved directly from the payroll system.
+
+### Social Security Account
+
+Applicants connect to the Social Security Administration (SSA) website through the widget. SSA records provide a verified employment history across all employers that reported wages.
+
+### Stored Credentials
+
+Applicants who have previously completed verification through Transcrypts can reuse their stored credentials. This method skips the initial connection step and retrieves data using existing authorized access.
+
+### Instant Verification
+
+The verifier provides the applicant's name, date of birth, and address history. Transcrypts returns results immediately by matching this information against available data sources without requiring applicant interaction.
 
 ## Supported Environments
 

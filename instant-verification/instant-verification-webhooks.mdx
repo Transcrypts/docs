@@ -1,0 +1,58 @@
+---
+title: "Instant Verification Webhooks"
+description: "Webhook payload examples for instant verification events"
+---
+
+## Overview
+
+Webhook events that occur during instant verification operations. These webhooks notify your system when an instant verification request completes or fails.
+
+## Instant Verification Completed
+
+**Event Type:** `instant-verification-completed`
+
+This webhook triggers when an instant verification request finishes processing and results are available. The verification status will be `completed` or `partial` depending on data availability.
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "a12b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+  "event": "instant-verification-completed",
+  "data": {
+    "verification_id": "iv_8f3a2b1c4d5e6f7a8b9c0d1e2f3a4b5c",
+    "status": "completed",
+    "timestamp": "2025-09-15T14:30:12.345678Z"
+  }
+}
+```
+
+## Instant Verification Failed
+
+**Event Type:** `instant-verification-failed`
+
+This webhook triggers when an instant verification request fails to process. This can occur due to insufficient data, invalid input, or an internal processing error.
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "b23c4d5e6f7a8b9c0d1e2f3a4b5c6d7e",
+  "event": "instant-verification-failed",
+  "data": {
+    "verification_id": "iv_9e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b",
+    "status": "failed",
+    "timestamp": "2025-09-15T15:05:33.123456Z"
+  }
+}
+```
+
+## Common Webhook Fields
+
+| Field | Description |
+|-------|-------------|
+| `webhook_id` | Unique identifier for the webhook delivery |
+| `event` | Webhook event classification |
+| `data.verification_id` | The instant verification request identifier |
+| `data.status` | Final status of the verification (`completed`, `partial`, or `failed`) |
+| `data.timestamp` | ISO 8601 timestamp of when the event occurred |

@@ -22,6 +22,26 @@
             ]
           },
           {
+            "group": "Verification Methods",
+            "pages": [
+              "verification-methods/overview",
+              "verification-methods/payroll-integration",
+              "verification-methods/bank-integration",
+              "verification-methods/social-security",
+              "verification-methods/stored-credentials"
+            ]
+          },
+          {
+            "group": "Instant Verification",
+            "pages": [
+              "instant-verification/instant-verification",
+              "instant-verification/instant-verification-create",
+              "instant-verification/instant-verification-retrieve",
+              "instant-verification/instant-verification-list",
+              "instant-verification/instant-verification-webhooks"
+            ]
+          },
+          {
             "group": "Platform Management",
             "pages": [
               "platform-management/connection-lifecycle",
@@ -82,17 +102,6 @@
             ]
           },
           {
-            "group": "Customization Templates",
-            "pages": [
-              "user-flow-endpoints/customization-templates",
-              "user-flow-endpoints/templates-create",
-              "user-flow-endpoints/templates-read",
-              "user-flow-endpoints/templates-list",
-              "user-flow-endpoints/templates-update",
-              "user-flow-endpoints/templates-delete"
-            ]
-          },
-          {
             "group": "Webhook Endpoints",
             "pages": [
               "user-flow-endpoints/webhook-endpoints",
@@ -140,14 +149,6 @@
             ]
           },
           {
-            "group": "Shifts",
-            "pages": [
-              "income-and-employment/shifts",
-              "income-and-employment/shifts-list",
-              "income-and-employment/shifts-webhooks"
-            ]
-          },
-          {
             "group": "Income & Employment Reports",
             "pages": [
               "income-and-employment/reports",
@@ -155,43 +156,9 @@
             ]
           },
           {
-            "group": "Uploaded Documents",
+            "group": "Bank Income",
             "pages": [
-              "document-processing/uploaded-documents",
-              "document-processing/documents-list",
-              "document-processing/document-retrieve"
-            ]
-          },
-          {
-            "group": "Parsed Documents",
-            "pages": [
-              "document-processing/parsed-documents",
-              "document-processing/parsed-document-retrieve"
-            ]
-          },
-          {
-            "group": "Document Collections",
-            "pages": [
-              "document-processing/document-collections",
-              "document-processing/collections-create",
-              "document-processing/collections-list",
-              "document-processing/collections-retrieve",
-              "document-processing/collections-upload",
-              "document-processing/collections-finalize",
-              "document-processing/collections-finalize-retrieve",
-              "document-processing/collections-file-retrieve",
-              "document-processing/collections-file-delete",
-              "document-processing/collections-delete"
-            ]
-          },
-          {
-            "group": "Financial Accounts",
-            "pages": [
-              "financial-accounts/accounts",
-              "financial-accounts/auth",
-              "financial-accounts/transactions",
-              "financial-accounts/liabilities",
-              "financial-accounts/income-report"
+              "bank-income/income-report"
             ]
           },
           {
@@ -212,12 +179,6 @@
             ]
           },
           {
-            "group": "VOA Reports",
-            "pages": [
-              "user-reports/voa-reports"
-            ]
-          },
-          {
             "group": "VOIE Reports",
             "pages": [
               "user-reports/voie-reports",
@@ -226,44 +187,11 @@
             ]
           },
           {
-            "group": "DDS Reports",
-            "pages": [
-              "user-reports/dds-reports",
-              "user-reports/dds-report-retrieve"
-            ]
-          },
-          {
-            "group": "Assets Reports",
-            "pages": [
-              "user-reports/assets-report-create",
-              "user-reports/assets-report-retrieve"
-            ]
-          },
-          {
             "group": "Income Insights",
             "pages": [
               "user-reports/income-insights-reports",
               "user-reports/income-insights-create",
               "user-reports/income-insights-retrieve"
-            ]
-          },
-          {
-            "group": "Direct Deposit Switching",
-            "pages": [
-              "direct-deposit-switching/bank-accounts",
-              "direct-deposit-switching/deposit-switch-reports"
-            ]
-          },
-          {
-            "group": "Insurance",
-            "pages": [
-              "insurance/insurance-reports"
-            ]
-          },
-          {
-            "group": "Scoring Attributes",
-            "pages": [
-              "scoring-attributes/report"
             ]
           }
         ]

@@ -1,0 +1,68 @@
+---
+title: "Bank Integration"
+description: "Verify income through bank account deposit history and transaction analysis"
+---
+
+## Overview
+
+Bank Integration allows verifiers to confirm a user's income by analyzing deposit history from their bank accounts. Instead of relying solely on payroll data, this method connects directly to a user's bank to identify income deposits, detect pay frequency, and calculate average earnings over configurable time periods.
+
+## How It Works
+
+1. **User opens Bridge** -- The user launches the Bridge widget and selects their bank from the list of supported institutions.
+2. **User authenticates** -- The user enters their banking credentials to authorize access.
+3. **Transaction data is pulled** -- Transcrypts retrieves transaction history from the connected bank account.
+4. **Income deposits are identified** -- The system analyzes transactions to isolate income-related deposits and categorize them by source.
+5. **Bank Income Report is generated** -- A structured report is produced containing deposit patterns, frequency analysis, and income summaries.
+
+<Info>Bank Integration is particularly useful when payroll provider access is unavailable or when additional income verification is needed alongside payroll data.</Info>
+
+## Available Data
+
+Bank Integration provides the following data through the Bank Income Report:
+
+### Account Information
+
+| Data Point | Description |
+|------------|-------------|
+| Account type | Category of account (e.g., CHECKING, SAVINGS) |
+| Account subtype | Specific account type (e.g., MONEY_MARKET, PLAN_401_K) |
+| Masked account number | Partial account number for identification |
+| Account owners | Name, email, phone, and address of account holders |
+
+### Income Analysis
+
+| Data Point | Description |
+|------------|-------------|
+| Income deposits | Individual deposit transactions identified as income |
+| Income category | Categorized income type (e.g., Paycheck, Freelance) |
+| Pay frequency | Detected deposit frequency (Monthly, Bi-Weekly, Weekly, etc.) |
+| Average deposit amount | Average net deposit per income transaction |
+| Average gross deposit | Predicted average gross payment before deductions |
+| Next payment date | Projected date of next expected deposit |
+
+### Income Summaries
+
+| Data Point | Description |
+|------------|-------------|
+| Total earnings | Combined income over the requested period |
+| Transaction count | Number of income transactions identified |
+| Income sources count | Number of distinct income sources detected |
+| Historical monthly summaries | Month-by-month breakdowns with individual transactions |
+
+<Note>You can request transaction data for configurable time periods. Common configurations include 30, 60, and 90 day windows.</Note>
+
+### Fraud Detection
+
+The Bank Income Report includes an `is_suspicious` flag that indicates whether potentially fraudulent activity was detected in the income data.
+
+## Endpoints
+
+Two primary operations support Bank Income Reports:
+
+1. **Create a Bank Income Report** -- Initiate report generation for a connected bank account.
+2. **Retrieve a Bank Income Report** -- Fetch the completed report with all income analysis data.
+
+## Related Pages
+
+- [Bank Income Report](/bank-income/income-report)

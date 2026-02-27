@@ -1,0 +1,101 @@
+---
+title: "Retrieve an Instant Verification"
+description: "Get the details and results of a specific instant verification request"
+api: "GET /v1/instant-verifications/{verification_id}/"
+---
+
+## Description
+
+Retrieve the current state and results of a specific instant verification request. When the verification status is `completed` or `partial`, the `results` object will contain employment and income data.
+
+## Authentication
+
+This endpoint requires API credentials to be provided in the request header:
+- **X-Access-Client-ID** (header)
+- **X-Access-Secret** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `verification_id` | string | Yes | The unique identifier for the instant verification request |
+
+## Response
+
+The endpoint returns the full Instant Verification object in JSON format, including results when the verification has completed.
+
+## Example Response
+
+```json
+{
+  "id": "iv_8f3a2b1c4d5e6f7a8b9c0d1e2f3a4b5c",
+  "status": "completed",
+  "created_at": "2025-09-15T14:30:00.000000Z",
+  "completed_at": "2025-09-15T14:30:12.345678Z",
+  "subject": {
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "date_of_birth": "1990-05-14",
+    "ssn": "1234"
+  },
+  "addresses": [
+    {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "IL",
+      "zip": "62704",
+      "country": "US",
+      "from_date": "2021-03-01",
+      "to_date": null
+    },
+    {
+      "street": "100 Main St",
+      "city": "Shelbyville",
+      "state": "IL",
+      "zip": "62565",
+      "country": "US",
+      "from_date": "2018-06-15",
+      "to_date": "2021-02-28"
+    }
+  ],
+  "results": {
+    "employments": [
+      {
+        "employer_name": "Acme Corporation",
+        "job_title": "Software Engineer",
+        "start_date": "2021-04-01",
+        "end_date": null,
+        "is_active": true,
+        "income": "95000.00",
+        "income_unit": "YEARLY",
+        "pay_frequency": "BW"
+      },
+      {
+        "employer_name": "Initech LLC",
+        "job_title": "Junior Developer",
+        "start_date": "2018-08-01",
+        "end_date": "2021-03-15",
+        "is_active": false,
+        "income": "65000.00",
+        "income_unit": "YEARLY",
+        "pay_frequency": "SM"
+      }
+    ],
+    "income_summary": {
+      "current_annual_income": "95000.00",
+      "previous_annual_income": "65000.00",
+      "currency": "USD"
+    },
+    "confidence_score": 0.95,
+    "sources": ["national_employment_database", "credit_bureau"]
+  },
+  "tracking_info": "app-ref-98765"
+}
+```
+
+## Related Endpoints
+
+- [Instant Verification object](instant-verification) - Object attributes and data structure
+- [Create an instant verification](instant-verification-create) - POST endpoint for creating a verification
+- [List all instant verifications](instant-verification-list) - GET endpoint for listing verifications
+- [Instant Verification webhooks](instant-verification-webhooks) - Webhook notifications for verification events

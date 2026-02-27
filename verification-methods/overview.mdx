@@ -1,0 +1,134 @@
+---
+title: "Verification Methods"
+description: "Overview of all verification methods available through the Transcrypts platform for employment and income verification"
+---
+
+## Overview
+
+Transcrypts offers multiple methods to verify employment and income, each suited to different use cases and data requirements. Depending on the verification scenario, you can connect directly to payroll systems, pull data from bank accounts, leverage government records, re-use stored credentials, or perform instant database lookups.
+
+All verification methods are accessible through the Transcrypts API and Bridge widget. Select the method that best fits your verification needs based on data richness, user friction, and coverage.
+
+<CardGroup cols={2}>
+  <Card title="Payroll Integration" icon="building-columns" href="/verification-methods/payroll-integration">
+    Connect directly to payroll providers for the most comprehensive employment and income data, including pay statements, W-2s, and employer details.
+  </Card>
+  <Card title="Bank Integration" icon="landmark" href="/verification-methods/bank-integration">
+    Verify income through bank account connections, analyzing deposit history and bank statements when payroll data is unavailable.
+  </Card>
+  <Card title="Social Security Verification" icon="id-card" href="/verification-methods/social-security">
+    Pull official employment history records from the Social Security Administration for comprehensive historical verification.
+  </Card>
+  <Card title="Stored Credentials" icon="rotate" href="/verification-methods/stored-credentials">
+    Re-verify data using previously stored credentials without requiring the user to re-authenticate, reducing friction for repeat verifications.
+  </Card>
+  <Card title="Instant Verification" icon="bolt" href="/instant-verification/instant-verification">
+    Get immediate employment and income verification from the Transcrypts database without requiring the user to connect any accounts.
+  </Card>
+</CardGroup>
+
+## Payroll Integration
+
+The most comprehensive verification method. Users connect their payroll provider through Transcrypts Bridge, granting access to complete employment and income records.
+
+**How it works:**
+
+1. Generate a [Bridge Token](/user-flow-endpoints/bridge-token) to initialize the widget
+2. The user opens Transcrypts Bridge and searches for their employer or payroll provider
+3. The user authenticates with their payroll credentials
+4. Transcrypts connects to the provider and retrieves employment and income data
+5. A [Task](/platform-management/connection-lifecycle) tracks the connection through its lifecycle
+6. Once complete, data is available through the API
+
+**Available data:** Employment records, employer details, pay statements, W-2s, 1099s, income summaries, and identity information.
+
+**Supported providers:** ADP, Gusto, Paychex, Workday, and hundreds more. Search available providers using the [Company Autocomplete Search](/user-flow-endpoints/company-autocomplete-search) endpoint.
+
+<Info>
+Payroll Integration provides the richest data set and is the recommended method when comprehensive verification is required.
+</Info>
+
+[Learn more about Payroll Integration](/verification-methods/payroll-integration)
+
+## Bank Integration
+
+When payroll data is not available, bank account connections provide an alternative path to income verification. By analyzing deposit history and bank statements, Transcrypts can identify income patterns and verify earnings.
+
+**How it works:**
+
+1. Generate a [Bridge Token](/user-flow-endpoints/bridge-token) with the appropriate `data_sources` configuration
+2. The user connects their bank account through Transcrypts Bridge
+3. Transcrypts analyzes transaction history to identify recurring income deposits
+4. Income data is extracted from deposit patterns and bank statements
+
+**Available data:** Account information, transaction history, deposit patterns, and income reports.
+
+**Relevant endpoints:**
+- [Bank Income Report](/bank-income/income-report)
+- [Income Insights Reports](/user-reports/income-insights-reports)
+
+## Social Security Verification
+
+Social Security verification connects through the Social Security Administration (SSA) website to pull official employment history records. This method is useful for comprehensive historical employment verification spanning an individual's full work history.
+
+**How it works:**
+
+1. The user authenticates with their SSA credentials through Transcrypts Bridge
+2. Transcrypts retrieves official employment records from the SSA
+3. Historical employment data becomes available through the API
+
+**Available data:** Official SSA employment history, including employer names and earnings records across all reported employment.
+
+<Note>
+Social Security verification provides historical breadth but may not include the level of detail available through payroll integration, such as individual pay statements or tax documents.
+</Note>
+
+## Stored Credentials
+
+When a user has previously connected through Transcrypts, their stored credentials can be used to refresh and re-verify data without requiring the user to re-authenticate. This significantly reduces friction for repeat verifications.
+
+**How it works:**
+
+1. Retrieve the existing `access_token` from the original connection
+2. Pass the `access_token` into the [Bridge Token](/user-flow-endpoints/bridge-token) request to initiate a data refresh
+3. Transcrypts reconnects to the provider using stored credentials
+4. A new [Refresh Task](/user-flow-endpoints/refresh-task) is created to track the update
+5. Updated data becomes available through the same API endpoints
+
+**Available data:** The same data set as the original connection method, refreshed with current information.
+
+**Relevant endpoints:**
+- [Data Refresh](/user-flow-endpoints/data-refresh)
+- [Refresh Task](/user-flow-endpoints/refresh-task)
+
+<Info>
+Stored credentials are particularly useful for ongoing monitoring scenarios where periodic re-verification is needed without repeated user interaction.
+</Info>
+
+## Instant Verification
+
+Instant verification provides immediate employment and income data from the Transcrypts database without requiring the user to connect any accounts. The verifier supplies identifying information, and Transcrypts returns matching records.
+
+**How it works:**
+
+1. The verifier provides: full name, date of birth, and address history (last few years)
+2. Transcrypts searches its database for matching employment and income records
+3. Results are returned immediately without any user interaction
+
+**Available data:** Employment records and income data from the Transcrypts database.
+
+<Note>
+Instant verification coverage depends on the availability of records in the Transcrypts database. For the highest match rates, combine instant verification with other methods as a fallback.
+</Note>
+
+[Learn more about Instant Verification](/instant-verification/instant-verification)
+
+## Choosing a Verification Method
+
+| Method | Data Richness | User Friction | Speed | Best For |
+|--------|--------------|---------------|-------|----------|
+| Payroll Integration | Highest | Medium | Minutes | Comprehensive VOI/VOE |
+| Bank Integration | Medium | Medium | Minutes | Income verification without payroll access |
+| Social Security | Medium | Medium | Minutes | Historical employment verification |
+| Stored Credentials | Same as original | None | Minutes | Repeat verifications |
+| Instant Verification | Varies | None | Seconds | Quick checks, pre-screening |

@@ -72,16 +72,53 @@ Occur once per Link for each non-refresh Task completion. Multiple responses are
 
 Triggered after completing refresh Tasks.
 
-### Statements, Shifts, and Bank Accounts Created
+### Statements Created
 
-**Event Types:** `statements-created`, `shifts-created`, `bank-accounts-created`
+**Event Type:** `statements-created`
 
-Include an `objects_count` field indicating the number of associated objects created.
+Includes an `objects_count` field indicating the number of associated statement objects created.
 
-### Statements, Shifts, and Bank Accounts Updated
+### Statements Updated
 
-**Event Types:** `statements-updated`, `shifts-updated`, `bank-accounts-updated`
+**Event Type:** `statements-updated`
 
 <Note>
 Notifications only occur when the `objects_count` value changes from the previous refresh.
 </Note>
+
+### Instant Verification Completed
+
+**Event Type:** `instant-verification-completed`
+
+Fired when an instant verification request completes successfully.
+
+```json
+{
+  "webhook_id": "string",
+  "event": "instant-verification-completed",
+  "data": {
+    "verification_id": "string",
+    "status": "completed",
+    "timestamp": "datetime"
+  }
+}
+```
+
+### Instant Verification Failed
+
+**Event Type:** `instant-verification-failed`
+
+Fired when an instant verification request fails.
+
+```json
+{
+  "webhook_id": "string",
+  "event": "instant-verification-failed",
+  "data": {
+    "verification_id": "string",
+    "status": "failed",
+    "error": "string",
+    "timestamp": "datetime"
+  }
+}
+```

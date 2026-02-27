@@ -1,0 +1,123 @@
+---
+title: "List All Instant Verifications"
+description: "Retrieve a paginated list of all instant verification requests"
+api: "GET /v1/instant-verifications/"
+---
+
+## Description
+
+The endpoint returns a paginated list of all instant verification requests. Use query parameters to filter results by status or creation date.
+
+## Authentication
+
+This endpoint requires API credentials to be provided in the request header:
+- **X-Access-Client-ID** (header)
+- **X-Access-Secret** (header)
+
+## Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `status` | string | No | Filter by verification status: `pending`, `processing`, `completed`, `failed`, `partial` |
+| `created_after` | datetime | No | Return verifications created after this ISO 8601 timestamp |
+| `created_before` | datetime | No | Return verifications created before this ISO 8601 timestamp |
+
+## Response
+
+The endpoint returns a paginated response containing instant verification objects.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `count` | integer | Total number of matching verification records |
+| `next` | string | URL for the next page of results (null if no more pages) |
+| `previous` | string | URL for the previous page of results (null if on the first page) |
+| `results` | array | Array of Instant Verification objects |
+
+## Example Response
+
+```json
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "iv_8f3a2b1c4d5e6f7a8b9c0d1e2f3a4b5c",
+      "status": "completed",
+      "created_at": "2025-09-15T14:30:00.000000Z",
+      "completed_at": "2025-09-15T14:30:12.345678Z",
+      "subject": {
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "date_of_birth": "1990-05-14",
+        "ssn": "1234"
+      },
+      "addresses": [
+        {
+          "street": "742 Evergreen Terrace",
+          "city": "Springfield",
+          "state": "IL",
+          "zip": "62704",
+          "country": "US",
+          "from_date": "2021-03-01",
+          "to_date": null
+        }
+      ],
+      "results": {
+        "employments": [
+          {
+            "employer_name": "Acme Corporation",
+            "job_title": "Software Engineer",
+            "start_date": "2021-04-01",
+            "end_date": null,
+            "is_active": true,
+            "income": "95000.00",
+            "income_unit": "YEARLY",
+            "pay_frequency": "BW"
+          }
+        ],
+        "income_summary": {
+          "current_annual_income": "95000.00",
+          "previous_annual_income": null,
+          "currency": "USD"
+        },
+        "confidence_score": 0.95,
+        "sources": ["national_employment_database", "credit_bureau"]
+      },
+      "tracking_info": "app-ref-98765"
+    },
+    {
+      "id": "iv_1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+      "status": "processing",
+      "created_at": "2025-09-15T15:00:00.000000Z",
+      "completed_at": null,
+      "subject": {
+        "first_name": "John",
+        "last_name": "Smith",
+        "date_of_birth": "1985-11-22",
+        "ssn": null
+      },
+      "addresses": [
+        {
+          "street": "456 Oak Avenue",
+          "city": "Portland",
+          "state": "OR",
+          "zip": "97201",
+          "country": "US",
+          "from_date": "2020-01-15",
+          "to_date": null
+        }
+      ],
+      "results": null,
+      "tracking_info": null
+    }
+  ]
+}
+```
+
+## Related Endpoints
+
+- [Instant Verification object](instant-verification) - Object attributes and data structure
+- [Create an instant verification](instant-verification-create) - POST endpoint for creating a verification
+- [Retrieve an instant verification](instant-verification-retrieve) - GET endpoint for retrieving a verification
+- [Instant Verification webhooks](instant-verification-webhooks) - Webhook notifications for verification events
