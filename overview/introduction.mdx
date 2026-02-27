@@ -7,9 +7,8 @@ This documentation covers the API Reference sections with details and descriptio
 
 ## Supported Environments
 
-Transcrypts operates across three environments:
+Transcrypts operates across two environments:
 
-- **Sandbox**: For development with predefined sample payroll provider data
 - **Development**: For live credential testing; limited to 50 successful Tasks without billing
 - **Production**: For production use; each successful Task incurs charges
 
@@ -24,9 +23,9 @@ The Transcrypts API requires valid credentials consisting of:
 | Value | Description | Example |
 |-------|-------------|---------|
 | `client_id` | Private team identifier | `dd21ca23c12142b6a0970b1e0afedf16` |
-| `access_secret` | Environment-specific private key | `sandbox-a57b3109f1f4a8b3f2ebbc1c526950f1795464af` |
+| `access_secret` | Environment-specific private key | `dev-a57b3109f1f4a8b3f2ebbc1c526950f1795464af` |
 
-The `client_id` remains constant across environments. The `access_secret` differs for each environment with prefixes: `sandbox`, `dev`, or `prod`.
+The `client_id` remains constant across environments. The `access_secret` differs for each environment with prefixes: `dev` or `prod`.
 
 ### Required Headers
 

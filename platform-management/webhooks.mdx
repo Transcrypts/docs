@@ -37,14 +37,6 @@ All webhook requests contain common fields:
 Header field names are case-insensitive per HTTP/1.1 specifications.
 </Note>
 
-## Originating IP Addresses
-
-Verify webhook requests originate from these Transcrypts IP addresses:
-
-- `34.212.57.93`
-- `44.224.243.166`
-- `52.25.14.79`
-
 ## Timing
 
 Webhooks are processed in Task status update order. For example, `full_parse` events precede `done` events. External factors like network latency may cause delays. Use the `updated_at` field to monitor event sequences.

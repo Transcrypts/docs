@@ -30,7 +30,6 @@ To ensure secure access to Transcrypts's public APIs, mTLS is implemented for th
 | Environment | Endpoint |
 |-------------|----------|
 | Production | `api-mtls.transcrypts.com` |
-| Sandbox | `api-sandbox-mtls.transcrypts.com` |
 
 ### Steps to Connect
 
@@ -64,23 +63,7 @@ curl --cert $CERT.pem --key $PRIVATE_KEY.key $URL
 
 Complete setup and enable for your account.
 
-#### 5. Update Firewall Configuration
-
-Allow the following IP addresses for Transcrypts's mTLS endpoints:
-
-**Production:**
-
-- `35.167.32.174`
-- `35.165.53.192`
-- `54.71.147.242`
-
-**Sandbox:**
-
-- `44.235.37.104`
-- `35.83.220.165`
-- `52.38.209.190`
-
-#### 6. Use Transcrypts's Client ID and Access Key
+#### 5. Use Transcrypts's Client ID and Access Key
 
 Reference the API Keys documentation for details.
 
