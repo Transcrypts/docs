@@ -1,0 +1,87 @@
+---
+title: "Employment"
+description: "Employment object attributes and data structure for tracking user employment data"
+---
+
+## Overview
+
+Employment objects track the most recent user employment data, such as employer name, manager name, employer address, and other information. This data connects to the `link_id` from Transcrypts's Income and Employment product.
+
+## Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique ID of selected employee |
+| is_active | boolean | Status of active employment |
+| job_title | string | Job title of employee |
+| job_type | string | Job types: F (Full Time), P (Part Time), S (Seasonal), D (Daily), C (Contract) |
+| start_date | date | Date of employee's initial employment |
+| original_hire_date | date | Original hire date of employee |
+| end_date | date | Employee's employment end date |
+| income | string | Base income amount, excluding commission or bonuses |
+| income_unit | string | Pay interval: YEARLY, MONTHLY, WEEKLY, DAILY, HOURLY |
+| pay_rate | string | Payment rate per pay cycle |
+| pay_frequency | string | M (Monthly), SM (Semi-Monthly), W (Weekly), BW (Bi-Weekly), A (Annually), C (Commission) |
+| external_last_updated | date | Last update date from payroll provider |
+| derived_fields | array of strings | Array of derived fields |
+| missing_data_fields | array of strings | List of missing data fields from payroll response |
+| manager_name | string | Supervisor name of employee |
+| company | object | Company object details |
+
+## Company Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| name | string | Company name |
+| address | object | Address object |
+| phone | string | Company phone number |
+| ein | string | Employer Identification Number |
+
+### Address Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| street | string | Street address |
+| city | string | City |
+| state | string | State |
+| zip | string | Zip code |
+| country | string | Country |
+
+## Endpoints
+
+- [Retrieve an employment](/reference/link-last-employment)
+- [List all employments](/reference/link-employments)
+
+## Example Response
+
+```json
+{
+  "id": "24d7e80942ce4ad58a93f70ce4115f5c",
+  "income": "70000.00",
+  "income_unit": "YEARLY",
+  "pay_rate": "6500.00",
+  "pay_frequency": "M",
+  "is_active": false,
+  "job_title": "PR associate",
+  "job_type": "F",
+  "start_date": "2018-01-01",
+  "original_hire_date": "2017-06-21",
+  "end_date": "2022-12-11",
+  "external_last_updated": "2022-12-11",
+  "derived_fields": ["is_active"],
+  "missing_data_fields": ["w2s"],
+  "manager_name": "Jenny McDouglas",
+  "company": {
+    "name": "Facebook Demo",
+    "address": {
+      "street": "1 Morgan Ave",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip": "90210",
+      "country": "US"
+    },
+    "phone": "6503087300",
+    "ein": "12-345678"
+  }
+}
+```

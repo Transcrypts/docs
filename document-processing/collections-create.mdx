@@ -1,0 +1,215 @@
+---
+title: "Create Document Collection"
+description: "Create a new document collection and upload documents in a single request"
+api: "POST /v1/documents/collections/"
+---
+
+# Create a new document collection
+
+This endpoint establishes a fresh document collection and simultaneously uploads documents in a single request. Documents must be provided as base64-encoded content within JSON format. The system performs automatic validation and schedules files for AI-driven categorization.
+
+## Authentication
+
+Requires:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+Log in to [dashboard](https://dashboard.transcrypts.com/app/development/keys) to obtain credentials.
+
+## Request Body
+
+**Content-Type:** `application/json`
+
+### Schema
+
+```json
+{
+  "documents": [
+    {
+      "filename": "paystub.pdf",
+      "mime_type": "application/pdf",
+      "content": "JVBERi0xLjQKJeLjz9MK...",
+      "user_id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": "ext_user_789"
+    }
+  ],
+  "users": [
+    {
+      "id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": "ext_user_789",
+      "full_name": "John Doe",
+      "ssn": "991919991"
+    }
+  ]
+}
+```
+
+### Required Fields
+
+- **documents** (array, required): Array of documents to upload (maximum 10 files per request)
+  - **filename** (string, max 255 chars): Name of the file
+  - **mime_type** (string): One of:
+    - `application/pdf`
+    - `image/jpeg`
+    - `image/png`
+    - `image/tiff`
+    - `image/webp`
+    - `image/x-ms-bmp`
+    - `image/heic`
+    - `image/heif`
+  - **content** (string, base64): Encoded file content
+    - Minimum: 1 KB (1,000 bytes)
+    - Maximum: 10 MB (10,000,000 bytes)
+    - Note: maxLength accounts for base64 encoding overhead (4/3 ratio)
+
+### Optional Fields
+
+- **user_id** (string, max 64 chars, nullable): Transcrypts user ID (mutually exclusive with external_user_id)
+- **external_user_id** (string, max 512 chars, nullable): External system user ID (mutually exclusive with user_id)
+- **users** (array): Array of user objects to create/update in collection
+  - Either `id` or `external_user_id` required
+  - **full_name** (string, max 255 chars, nullable): Parsed into first/last names
+  - **ssn** (string, pattern: 4 or 9 digits, nullable)
+
+## Response (201 Created)
+
+```json
+{
+  "collection_id": "a1b2c3d4e5f6478899aabbccddeeff00",
+  "uploaded_files": [
+    {
+      "file_id": "f1234567890abcdef1234567890abcde",
+      "filename": "paystub.pdf",
+      "mime_type": "application/pdf",
+      "validations": {
+        "is_viable_size": true,
+        "is_supported_type": true,
+        "is_accessible": true,
+        "is_valid": true,
+        "is_readable": true,
+        "is_unique": true
+      },
+      "status": "validated",
+      "user_id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": "ext_user_789"
+    }
+  ],
+  "documents": [
+    {
+      "document_id": "d0c1234567890abcdef1234567890abc",
+      "file_id": "f1234567890abcdef1234567890abcde",
+      "document_type": "PAYSTUB",
+      "document_subtype": null,
+      "status": "successful",
+      "first_name": "John",
+      "last_name": "Doe",
+      "user_id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": "ext_user_789",
+      "start_page": 1,
+      "end_page": 2
+    }
+  ],
+  "users": [
+    {
+      "id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": "ext_user_789",
+      "first_name": "John",
+      "last_name": "Doe"
+    }
+  ]
+}
+```
+
+### Response Fields
+
+- **collection_id**: Unique identifier for the collection
+- **uploaded_files**: Array of processed files with validation status
+- **documents**: Recognized documents with categorization results
+- **users**: User information in the collection
+
+### File Status Values
+
+| Status | Description |
+|--------|-------------|
+| `pending` | Awaiting processing |
+| `validating` | Currently undergoing validation |
+| `validated` | Passed validation |
+| `invalid` | Failed validation |
+| `duplicate` | Duplicate file detected |
+| `processing` | Currently being categorized |
+| `successful` | Completed successfully |
+| `failed` | Processing failed |
+
+### Document Types
+
+Supported document types include:
+- `PAYSTUB`
+- `W2`
+- `F1099`
+- `F1040`
+- `BANK_STATEMENT`
+- `PASSPORT`
+- `GREEN_CARD`
+- `DRIVER_LICENSE`
+- `LETTER_OF_VERIFICATION`
+- `UTILITY_BILL`
+- `LEASE_AGREEMENT`
+- `INSURANCE_HOME_POLICY`
+- `INSURANCE_AUTO_POLICY`
+- `VOLUNTEER_LETTER`
+- `OTHER`
+
+### Document Subtypes
+
+- `F1099_MISC`
+- `F1099_NEC`
+- `F1099_DIV`
+- `F1099_INT`
+- `F1099_G`
+- `F1099_R`
+- `F_SSA1099`
+- `VOL_TRANSCRIPT`
+- `VOL_HOURS_LOG`
+
+## Error Responses
+
+### 400 Bad Request
+
+```json
+{
+  "error": {
+    "code": "incorrect_parameters",
+    "message": "Incorrect request parameters",
+    "extra": {
+      "invalid-params": [
+        {
+          "field": "documents",
+          "message": "This field is required."
+        }
+      ]
+    }
+  }
+}
+```
+
+### 401 Unauthorized
+
+```json
+{
+  "error": {
+    "code": "authentication_failed",
+    "message": "No such token"
+  }
+}
+```
+
+### 403 Forbidden
+
+```json
+{
+  "error": {
+    "code": "not_authenticated",
+    "message": "Authentication credentials were not provided."
+  }
+}
+```

@@ -1,0 +1,162 @@
+---
+title: "VOIE Reports"
+description: "Verification of Income and Employment (VOIE) reports containing information from user accounts"
+---
+
+Verification of Income and Employment (VOIE) reports contain information from user accounts, providing access to verified income and employment data.
+
+## Attributes
+
+### Main Report Object
+
+<ParamField body="report_id" type="string">
+  Unique identifier of the report.
+</ParamField>
+
+<ParamField body="created_at" type="date-time">
+  Timestamp when report was created.
+</ParamField>
+
+<ParamField body="completed_at" type="date-time">
+  Timestamp when report was completed.
+</ParamField>
+
+<ParamField body="links" type="array of objects">
+  List of employment links.
+</ParamField>
+
+### Links Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `link_id` | string | Unique identifier of the link |
+| `tracking_info` | string | Optional identifier passed by user |
+| `provider` | string | Data provider ID |
+| `provider_name` | string | Data provider name |
+| `employments` | array of objects | List of employee data |
+
+### Employments Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique ID |
+| `is_active` | boolean | Active employment status |
+| `job_title` | string | Employee's job title |
+| `job_type` | string | Job type: `F` (Full-time), `P` (Part-time), `S` (Seasonal), `D` (Daily), `C` (Contract) |
+| `start_date` | date | Hire date |
+| `original_hire_date` | date | Original hire date |
+| `end_date` | date | Employment end date |
+| `external_last_update` | date | Last data update from provider |
+| `income` | string | Income amount excluding commissions/bonuses |
+| `income_unit` | string | Pay interval: `YEARLY`, `MONTHLY`, `WEEKLY`, `DAILY`, `HOURLY` |
+| `pay_rate` | string | Payment rate per pay cycle |
+| `pay_frequency` | string | Frequency code: `M` (Monthly), `SM` (Semi-monthly), `W` (Weekly), `BW` (Bi-weekly), `A` (Annual), `SA` (Semi-annual), `C` (Commission) |
+| `manager_name` | string | Supervisor's name |
+| `derived_fields` | array of strings | Array of derived fields |
+| `missing_data_fields` | array of strings | Missing data fields from payroll |
+| `gse_accepted` | boolean | Provider eligibility status |
+| `statements` | array of objects | List of paystubs from payroll provider |
+| `annual_income_summary` | array of objects | Annual income summary by years |
+| `bank_accounts` | array of objects | Bank accounts linked to employment |
+| `w2s` | array of objects | W-2 forms linked to employment |
+| `profile` | object | Person's identity information |
+| `company` | object | Company details |
+
+### Company Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `name` | string | Company name |
+| `address` | object | Address details |
+| `phone` | string | Company phone number |
+| `ein` | string | Employer Identification Number |
+
+### Address Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `street` | string | Street address |
+| `city` | string | City |
+| `state` | string | State |
+| `zip` | string | Zip code |
+| `country` | string | Country |
+
+### Statements Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique ID |
+| `check_number` | string | External ID from payroll provider |
+| `pay_date` | date | Pay date |
+| `net_pay` | string | Net pay amount |
+| `net_pay_ytd` | string | Net pay year to date |
+| `gross_pay` | string | Gross pay amount |
+| `gross_pay_ytd` | string | Gross pay year to date |
+| `bonus` | string | Bonus amount |
+| `commission` | string | Commission amount |
+| `hours` | string | Work hours during pay period |
+| `basis_of_pay` | string | Basis code: `S` (Salary), `H` (Hourly), `D` (Daily), `W` (Weekly) |
+| `period_start` | date | Period start date |
+| `period_end` | date | Period end date |
+| `regular` | string | Regular pay |
+| `regular_ytd` | string | Regular salary year to date |
+| `overtime` | string | Overtime pay |
+| `overtime_ytd` | string | Overtime pay year to date |
+| `other_pay` | string | Other payment types |
+| `other_pay_ytd` | string | Other payment year to date |
+| `bonus_ytd` | string | Bonus year to date |
+| `commission_ytd` | string | Commission year to date |
+| `earnings` | array | Earnings by type for pay cycle |
+| `earnings_ytd` | array | Earnings year to date by type |
+| `deductions` | array | Deductions for pay cycle |
+| `deductions_ytd` | array | Deductions year to date |
+| `md5sum` | string | MD5 hash of file content |
+| `file` | uri | Link to pay stub file |
+| `derived_fields` | array of strings | Array of derived fields |
+| `missing_data_fields` | array of strings | Missing data fields |
+
+### Annual Income Summary Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique ID |
+| `year` | integer | Income report year |
+| `regular` | string | Regular salary |
+| `bonus` | string | Bonus amount |
+| `commission` | string | Commission amount |
+| `overtime` | string | Overtime pay |
+| `other_pay` | string | Other payment forms |
+| `net_pay` | string | Net pay |
+| `gross_pay` | string | Gross pay |
+
+### Bank Accounts Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `account_number` | string | Account number |
+| `routing_number` | string | Routing number |
+| `account_name` | string | User-friendly account name |
+| `account_type` | string | Account type: `C` (Checking), `S` (Savings) |
+| `deposit_type` | string | Deposit type: `E` (Entire), `P` (Percent), `A` (Amount) |
+| `deposit_value` | string | Deposit value |
+| `bank_name` | string | Bank name |
+
+### W2s Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `file` | uri | Link to W2 report file |
+| `md5sum` | string | MD5 hash of file content |
+| `year` | integer | Tax year |
+| `wages` | string | Wages, tips, other compensation |
+| `federal_tax` | string | Federal income tax withheld |
+| `social_security_wages` | string | Social security wages |
+| `social_security_tax` | string | Social security tax withheld |
+| `medicare_wages` | string | Medicare wages |
+| `medicare_tax` | string | Medicare tax withheld |
+| `gross_pay` | string | Gross pay |
+
+## Endpoints
+
+- [Create an income and employment report](/docs/user-reports/voie-reports-create)
+- [Retrieve an income and employment report](/docs/user-reports/voie-reports-retrieve)

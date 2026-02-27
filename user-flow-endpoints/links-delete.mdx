@@ -1,0 +1,35 @@
+---
+title: "Delete a Link"
+description: "Remove a link and all associated data"
+api: "DELETE /v1/links/{link_id}"
+---
+
+## Description
+
+The endpoint removes a link and all associated data. This permanently removes a connection link and its associated employment or financial data from the Transcrypts system.
+
+## Authentication
+
+The endpoint requires API credentials:
+- Client ID (header)
+- Access Key (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the link to be deleted |
+
+## Response
+
+### Success Response (204 No Content)
+
+Returns an empty response body confirming the link has been removed.
+
+### Error Responses
+
+**401 Unauthorized:** Invalid or missing authentication credentials.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.
+
+**404 Not Found:** The specified link ID does not exist.

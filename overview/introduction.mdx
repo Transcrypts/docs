@@ -1,0 +1,103 @@
+---
+title: "Introduction"
+description: "Overview of the Transcrypts API platform, authentication, protocols, security, error handling, and rate limiting."
+---
+
+This documentation covers the API Reference sections with details and descriptions for the Transcrypts platform. For inquiries, contact support@transcrypts.com or access the Dashboard.
+
+## Supported Environments
+
+Transcrypts operates across three environments:
+
+- **Sandbox**: For development with predefined sample payroll provider data
+- **Development**: For live credential testing; limited to 50 successful Tasks without billing
+- **Production**: For production use; each successful Task incurs charges
+
+All API requests use the base URL `https://prod.transcrypts.com/v1/` regardless of environment. The Access secret determines which environment processes each request.
+
+## Authentication
+
+### API Keys
+
+The Transcrypts API requires valid credentials consisting of:
+
+| Value | Description | Example |
+|-------|-------------|---------|
+| `client_id` | Private team identifier | `dd21ca23c12142b6a0970b1e0afedf16` |
+| `access_secret` | Environment-specific private key | `sandbox-a57b3109f1f4a8b3f2ebbc1c526950f1795464af` |
+
+The `client_id` remains constant across environments. The `access_secret` differs for each environment with prefixes: `sandbox`, `dev`, or `prod`.
+
+### Required Headers
+
+Every API request requires:
+
+- `X-Access-Client-ID`: Contains the Client ID
+- `X-Access-Secret`: Contains the Access secret
+
+<Warning>
+API keys provide access to sensitive data. Store these values securely within your application backend.
+</Warning>
+
+## Protocols
+
+Transcrypts uses REST API frameworks with these specifications:
+
+- Responses in standard JSON format
+- HTTPS TLS v1.2+ required (HTTP and earlier TLS versions unsupported)
+- Requests must include `Content-Type: application/json` header with valid JSON body only
+
+## Security
+
+Manage identifier values from Transcrypts Bridge and API endpoints to maximize security. These values associate API and provider events with requests and assist support teams with issue resolution.
+
+<Warning>
+Ensure `access_token` values remain backend-only and never exposed client-side. Store tokens securely and associate them with application users.
+</Warning>
+
+### Additional Access Tokens
+
+Users with multiple data provider accounts and Links may create multiple `access_token`s.
+
+## Errors
+
+### HTTP Status Codes
+
+- `2xx`: Successful requests
+- `4xx`: Invalid inputs or state violations
+- `5xx`: Rare server errors
+
+### Response Code Reference
+
+| Code | Title | Description |
+|------|-------|-------------|
+| 200 | OK | Request successful |
+| 201 | Created | Resource created successfully |
+| 400 | Bad Request | Unacceptable request |
+| 401 | Unauthorized | Missing or invalid credentials |
+| 403 | Forbidden | Permission denied |
+| 404 | Not Found | Resource unavailable |
+| 405 | Method Not Allowed | Unsupported request method |
+| 406 | Not Acceptable | Server cannot match acceptable values |
+| 410 | Gone | Bridge token expired |
+| 415 | Unsupported Media Type | Invalid payload format |
+| 429 | Too Many Requests | Rate limit exceeded; `access_token` allows one initial and three refresh requests per 24 hours |
+| 50x | Internal Server Error | API error |
+
+### Error Message Format
+
+Response bodies contain:
+
+- `code`: Error source
+- `message`: User-facing issue description
+- `invalid-params`: Form field errors with `field` parameter for UI display
+
+### Error Code Types
+
+- `validation_error`: Invalid input format or missing required fields
+- `expired_token`: Public token expired after 6 hours
+- `incorrect_token`: Public or access token cannot be matched in storage
+
+## Rate Limiting
+
+The API allows up to 300 requests per minute per Access secret key. Exceeding this limit returns a `429 Too Many Requests` error. Contact support@transcrypts.com to request limit increases.

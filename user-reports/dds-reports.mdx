@@ -1,0 +1,77 @@
+---
+title: "DDS Reports"
+description: "Direct Deposit Switch (DDS) reports providing financial institution information from user accounts"
+---
+
+Direct Deposit Switch (DDS) reports provide financial institution information from user accounts, allowing access to bank details and deposit configuration data.
+
+## Attributes
+
+### Main Report Object
+
+<ParamField body="completed_at" type="date-time">
+  Timestamp when report was completed.
+</ParamField>
+
+<ParamField body="links" type="array of objects">
+  List of account links containing deposit information.
+</ParamField>
+
+### Links Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `link_id` | string | Unique identifier of Link |
+| `tracking_info` | string | Additional optional identifier passed by user |
+| `access_token` | string | Access token of existing Link |
+| `provider` | object | Provider information and supported actions |
+| `deposit_details` | object | Bank account information for DDS and PLL |
+
+### Provider Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Data provider identifier |
+| `supported_bank_account_actions` | array of strings | List of supported bank account actions |
+
+### Deposit Details Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `account_number` | string | Account number |
+| `account_type` | string | `checking` or `savings` |
+| `routing_number` | string | Routing number |
+| `bank_name` | string | Bank name |
+| `deposit_type` | string | `entire`, `percent`, or `amount` |
+| `deposit_value` | string | Deposit value amount |
+
+## Example Response
+
+```json
+{
+  "completed_at": "2022-05-04T11:30:00Z",
+  "links": [
+    {
+      "link_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "tracking_info": "string",
+      "access_token": "99dd17074ac94aa9ace2621d657c7610",
+      "provider": {
+        "id": "adp",
+        "supported_bank_account_actions": ["create"]
+      },
+      "deposit_details": {
+        "account_number": "16002600",
+        "account_type": "checking",
+        "routing_number": "123456789",
+        "bank_name": "TD Bank",
+        "deposit_type": "entire",
+        "deposit_value": "50.00"
+      }
+    }
+  ]
+}
+```
+
+## Endpoints
+
+- [Retrieve a deposit switch report](/docs/user-reports/dds-report-retrieve)

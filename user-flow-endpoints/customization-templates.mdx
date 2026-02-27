@@ -1,0 +1,58 @@
+---
+title: "Customization Templates"
+description: "Configure Transcrypts Bridge and order flow designs for specific product types"
+---
+
+## Overview
+
+Customization templates can be found in the Customization section of your Dashboard. They allow configuration of Transcrypts Bridge and order flow designs for specific product types. Your template configurations take priority over other settings, such as universal branding or those from Transcrypts Bridge and Orders.
+
+## Attributes
+
+The following table outlines customizable template attributes:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique identifier of template |
+| name | string | Template name |
+| products | array | List of products with applied customizable templates |
+| default_for_products | boolean | Status of customizable template as product default |
+| bridge | object | Configuration object for Transcrypts Bridge template |
+| branding | object | Configuration object for branding template |
+| orders | object | Configuration object for Orders template |
+| document_upload | object | Configuration object for Document upload template |
+| created_at | datetime | Timestamp for created customizable template |
+| updated_at | datetime | Timestamp for updated customizable template |
+
+## Endpoints
+
+Five core endpoints manage customization templates:
+
+- [List all customization templates](/user-flow-endpoints/templates-list) - GET `/v1/templates/`
+- [Create a customization template](/user-flow-endpoints/templates-create) - POST `/v1/templates/`
+- [Retrieve a customization template](/user-flow-endpoints/templates-read) - GET `/v1/templates/{template_id}/`
+- [Update a customization template](/user-flow-endpoints/templates-update) - PATCH `/v1/templates/{template_id}/`
+- [Delete a customization template](/user-flow-endpoints/templates-delete) - DELETE `/v1/templates/{template_id}/`
+
+## Example Response
+
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "My Template",
+  "products": ["employment", "income"],
+  "default_for_products": false,
+  "bridge": {},
+  "branding": {},
+  "orders": {},
+  "document_upload": {
+    "paystubs": {},
+    "w2s": {},
+    "1099s": {},
+    "1040s": {},
+    "insurance_policies": {}
+  },
+  "created_at": "2022-05-04T11:30:00Z",
+  "updated_at": "2022-05-04T12:00:00Z"
+}
+```

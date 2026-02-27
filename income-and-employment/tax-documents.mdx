@@ -1,0 +1,67 @@
+---
+title: "Tax Documents"
+description: "Tax document attributes and data structure"
+---
+
+## Attributes
+
+The table below outlines the values for Tax Document fields:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique identifier |
+| document_type | string | Type of document |
+| document_subtype | string | Subtype of document |
+| file | uri | Link to tax document file, format is specified in the content-type (up to 2048 characters long) |
+| md5sum | string | MD5 hash value computed based on file content |
+| year | integer | Tax document year |
+| fields | object | Additional metadata for a specific document type |
+
+## Endpoints
+
+- [List all tax documents](/reference/tax-documents-list)
+- [Retrieve tax document](/reference/tax-document)
+
+## Example Responses
+
+### Generic Response Format
+
+```json
+[
+  {
+    "id": "string",
+    "document_type": "W2",
+    "file": "string",
+    "md5sum": "string",
+    "year": 2024,
+    "fields": {}
+  }
+]
+```
+
+### W2 Example
+
+This payload example represents a W-2 form response:
+
+```json
+{
+  "federal_tax": "4102.75",
+  "medicare_tax": "816.43",
+  "medicare_wages": "58805.40",
+  "social_security_tax": "3490.93",
+  "social_security_wages": "58805.40",
+  "wages": "56269.25"
+}
+```
+
+### 1099 Example
+
+For all 1099 forms, the document year alongside user information is provided.
+
+### 1040 Example
+
+```json
+{
+  "total_income": "1000.00"
+}
+```

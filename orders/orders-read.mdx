@@ -1,0 +1,41 @@
+---
+title: "Retrieve an Order"
+description: "Retrieve order details from the Transcrypts system"
+api: "GET /v1/orders/{id}/"
+---
+
+## Endpoint Overview
+
+**GET** `https://prod.transcrypts.com/v1/orders/{id}/`
+
+This endpoint retrieves order details from the Transcrypts API system.
+
+## Authentication
+
+The endpoint requires API credentials passed via headers:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The order identifier to retrieve |
+
+## Response
+
+The endpoint returns order information in JSON format.
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Get list of orders by SSN](/docs/orders/orders-list-lookup)
+- [Create a data refresh order](/docs/orders/orders-refresh)
+- [Update an order](/docs/orders/orders-update)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Retrieve self-certification results](/docs/orders/orders-certifications)

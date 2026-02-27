@@ -1,0 +1,92 @@
+---
+title: "Webhook Endpoints"
+description: "Manage webhook configurations for real-time event notifications"
+---
+
+## Overview
+
+Webhooks enable real-time notifications from the Transcrypts platform to your application. When specific events occur -- such as successful account connections or newly added pay statements -- the system sends POST requests to your configured URL with event payload information.
+
+To use webhooks, you need a publicly accessible URL endpoint. Create a webhook configuration using that URL to begin receiving event notifications.
+
+## Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique webhook configuration identifier |
+| name | string | Public webhook configuration name |
+| webhook_url | string | URL where event data is sent |
+| events | string | Connected event types list |
+| env_type | bool | Environment: `production`, `development`, or `sandbox` |
+| created_at | string | ISO 8601 creation timestamp |
+| updated_at | string | ISO 8601 update timestamp |
+
+## Endpoints
+
+Available webhook management endpoints:
+
+- [List all webhooks](/user-flow-endpoints/webhooks-list) - GET `/v1/webhooks/`
+- [Create a webhook](/user-flow-endpoints/webhooks-create) - POST `/v1/webhooks/`
+- [Retrieve a webhook](/user-flow-endpoints/webhooks-read) - GET `/v1/webhooks/{webhook_id}/`
+- [Update a webhook](/user-flow-endpoints/webhooks-update) - PATCH `/v1/webhooks/{webhook_id}/`
+- [Delete a webhook](/user-flow-endpoints/webhooks-delete) - DELETE `/v1/webhooks/{webhook_id}/`
+
+## Example Response
+
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "string",
+  "webhook_url": "http://example.com/",
+  "events": [
+    "task-status-updated",
+    "order-status-updated"
+  ],
+  "env_type": "dev",
+  "created_at": "2022-05-04T11:30:00Z",
+  "updated_at": "2022-05-04T12:00:00Z"
+}
+```
+
+## Webhook Request History
+
+### Overview
+
+Review and debug webhook delivery attempts using the request history endpoint. This helps you confirm delivery attempts, investigate failures, correlate attempts with internal logs, and audit recent activity.
+
+<Note>
+Only requests from the last 30 days are available.
+</Note>
+
+### Endpoints
+
+- [List webhook request history](/user-flow-endpoints/webhook-requests-list) - GET `/v1/webhook-requests/`
+
+### Example Response
+
+```json
+{
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "webhook_id": "48427a36d43c4d5aa6324bc06c692456",
+      "event_type": "task-status-updated",
+      "event_created_at": "2024-01-15T10:30:00Z",
+      "status_code": 200,
+      "error_message": null,
+      "webhook_payload": {
+        "webhook_id": "a3f5b7c9d1e2f4a6b8c0d2e4f6a8b0c2",
+        "event_type": "order-status-updated",
+        "event_created_at": "2026-01-27T00:00:16.279921Z",
+        "product": "assets",
+        "link_id": null,
+        "user_id": "b4c6d8e0f2a4b6c8d0e2f4a6b8c0d2e4",
+        "order_id": "c5d7e9f1a3b5c7d9e1f3a5b7c9d1e3f5",
+        "status": "expired"
+      },
+      "webhook_url": "https://example.com/webhooks/transcrypts"
+    }
+  ]
+}
+```

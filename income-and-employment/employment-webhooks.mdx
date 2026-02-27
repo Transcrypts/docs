@@ -1,0 +1,68 @@
+---
+title: "Employment Webhooks"
+description: "Webhook payload examples for employment data events"
+---
+
+## Overview
+
+Webhook events that occur during employment data operations. These webhooks notify systems when employment information is created or updated through the Transcrypts API.
+
+## Employment Created
+
+**Event Type:** `employment-created`
+
+This webhook triggers upon successful employment creation. It fires once per Link for each non-refresh Task completion. Additional webhooks may be sent when discovering multiple employments for a single connection.
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "984e2cf9b69e4bc29acea714f1d5a554",
+  "task_id": "c32fb957ec7246828da56be7516da765",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "employment-created",
+  "event_created_at": "2022-08-23T17:32:19.307951Z",
+  "object_id": "427abebd8590457e8332fdff77fc412f",
+  "template_id": null
+}
+```
+
+## Employment Updated
+
+**Event Type:** `employment-updated`
+
+This webhook is triggered following completion of refresh Tasks, indicating that existing employment information has been refreshed or modified.
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "984e2cf9b69e4bc29acea714f1d5a554",
+  "task_id": "c32fb957ec7246828da56be7516da765",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "employment-updated",
+  "event_created_at": "2022-08-23T17:32:19.307951Z",
+  "object_id": "427abebd8590457e8332fdff77fc412f",
+  "template_id": null
+}
+```
+
+## Common Webhook Fields
+
+| Field | Description |
+|-------|-------------|
+| `webhook_id` | Unique identifier for the webhook |
+| `task_id` | Associated task identifier |
+| `link_id` | Connection identifier |
+| `product` | Data category ("employment") |
+| `data_source` | Origin system ("payroll") |
+| `event_type` | Webhook event classification |
+| `event_created_at` | ISO timestamp of event occurrence |
+| `object_id` | Employment record identifier |
+| `template_id` | Optional customization template reference |

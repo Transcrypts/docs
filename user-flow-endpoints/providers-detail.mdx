@@ -1,0 +1,52 @@
+---
+title: "Retrieve a Data Provider"
+description: "Retrieve information about a specific data provider."
+api: "GET /v1/providers/{id}/"
+---
+
+## Overview
+
+This endpoint retrieves information about a specific data provider from the Transcrypts API.
+
+## Request
+
+### Endpoint
+
+```
+GET https://prod.transcrypts.com/v1/providers/{id}/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | string | Yes | The identifier of the data provider to retrieve |
+
+## Response
+
+### Success Response (HTTP 200)
+
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "ADP",
+  "is_supported": true
+}
+```
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 401 | Unauthorized - Missing or invalid authentication credentials |
+| 403 | Forbidden - Insufficient permissions |
+| 404 | Not Found - Data provider does not exist |

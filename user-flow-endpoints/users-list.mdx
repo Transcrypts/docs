@@ -1,0 +1,66 @@
+---
+title: "List All Users"
+description: "Retrieve a complete list of users from the Transcrypts API."
+api: "GET /v1/users/"
+---
+
+## Overview
+
+The List all users endpoint retrieves a complete list of users from the Transcrypts API system.
+
+## Request
+
+### Endpoint
+
+```
+GET https://prod.transcrypts.com/v1/users/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `cursor` | string | Pagination cursor value for traversing results |
+| `page_size` | integer | Number of results per page |
+
+## Response
+
+The endpoint returns a paginated list of users in JSON format.
+
+### Response Format
+
+```json
+{
+  "next": "Link to next page",
+  "previous": "Link to previous page",
+  "results": [
+    {
+      "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "external_user_id": "12345",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "+14155554193",
+      "ssn": "222233333",
+      "created_at": "2022-05-04T11:30:00Z",
+      "updated_at": "2022-05-04T12:00:00Z"
+    }
+  ]
+}
+```
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 401 | Unauthorized - Missing or invalid authentication credentials |
+| 403 | Forbidden - Insufficient permissions |

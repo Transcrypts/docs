@@ -1,0 +1,49 @@
+---
+title: "Account Links"
+description: "Overview of Account Links and their properties"
+---
+
+## Overview
+
+Links have an ID value and an `access_token`. Together, these retrieve data from a user's account. Exchange the `public_token` value during authentication while implementing Transcrypts Bridge. Access tokens are for sensitive operations, such as generating reports.
+
+## Link Attributes
+
+The following table describes Account Link properties:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique ID of Link |
+| created_at | string | ISO 8601 value for when Link was created |
+| updated_at | string | ISO 8601 value for when Link was last updated |
+| tracking_info | string | Optional tracking information provided by a partner |
+| status | string | Status from Connection Lifecycle related to account Link |
+| user_external_id | bool | External ID of user provided by a partner |
+| provider_id | string | Data provider ID |
+| link_hash | string | Unique hash for user credentials when creating link |
+
+## Available Endpoints
+
+The Account Links API provides these endpoints:
+
+- [Retrieve a link token](/user-flow-endpoints/link-exchange-token)
+- [List all links](/user-flow-endpoints/links-list)
+- [Retrieve a link](/user-flow-endpoints/links-item)
+- [Delete a link](/user-flow-endpoints/links-delete)
+
+## Example Response
+
+The following JSON shows a sample response from the Get Link endpoint:
+
+```json
+{
+  "id": "48427a36d43c4d5aa6324bc06c692456",
+  "created_at": "2022-06-07T15:00:00Z",
+  "updated_at": "2022-06-31T15:00:00Z",
+  "tracking_info": "user123456",
+  "status": "new",
+  "user_external_id": "user123456",
+  "provider_id": "adp",
+  "link_hash": "bc917458a3da4b2c8cc8282aa1707aaa"
+}
+```

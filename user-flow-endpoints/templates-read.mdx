@@ -1,0 +1,35 @@
+---
+title: "Retrieve a Customization Template"
+description: "Retrieve details for a specific customization template"
+api: "GET /v1/templates/{template_id}"
+---
+
+## Description
+
+This endpoint retrieves a customization template.
+
+## Authentication
+
+This endpoint requires API credentials:
+- Client ID (header)
+- Access Key (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `template_id` | string | Yes | The unique identifier of the customization template to retrieve |
+
+## Response
+
+### Success Response (200 OK)
+
+Returns the template details in JSON format including all configuration properties.
+
+### Error Responses
+
+**401 Unauthorized:** Authentication credentials are invalid or missing.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.
+
+**404 Not Found:** The specified template ID does not exist.

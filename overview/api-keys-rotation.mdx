@@ -1,0 +1,48 @@
+---
+title: "API Keys Rotation"
+description: "Guide for creating new keys, removing outdated keys, and implementing rotation procedures for Transcrypts API credentials."
+---
+
+Transcrypts credentials enable you to access provider data from connected users. API keys are sensitive values that require secure management. This guide covers creating new keys, removing outdated keys, and implementing rotation procedures.
+
+## Dashboard Keys
+
+The Transcrypts Dashboard provides tools for creating and managing API keys. This section applies to integrations that generate Orders through the dashboard interface.
+
+### Dashboard Steps
+
+**1. Create a new key**
+
+Generate a fresh key in the [Transcrypts Dashboard](http://dashboard.transcrypts.com/app/development/keys).
+
+**2. Delete the old key**
+
+Remove unnecessary `access_token` values to reduce vulnerability exposure. Transactions already in pending status with the original key will continue processing normally.
+
+## Transcrypts API Keys
+
+The Transcrypts API enables programmatic credential creation and deletion. Follow these steps for embedded solutions or Orders managed via API.
+
+### Transcrypts API Steps
+
+**1. Create a new key**
+
+Generate a fresh key in the [Transcrypts Dashboard](http://dashboard.transcrypts.com/app/development/keys).
+
+<Info>
+Create a sandbox key first to validate your integration before updating production credentials.
+</Info>
+
+**2. Update the key in all applicable locations**
+
+Search your codebase for the `X-Access-Secret` request header to identify all places requiring updates.
+
+**3. Delete the previous key**
+
+Remove outdated access keys to reduce security risk.
+
+<Warning>
+Key deletion is irreversible. Verify completion of all preceding steps before removing former keys.
+</Warning>
+
+Confirm all previous keys have been rotated and the new key functions successfully within your integration. The trash bin icon removes keys. Pending transactions with original keys continue processing.

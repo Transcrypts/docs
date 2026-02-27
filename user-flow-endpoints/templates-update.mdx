@@ -1,0 +1,40 @@
+---
+title: "Update a Customization Template"
+description: "Modify an existing customization template configuration"
+api: "PATCH /v1/templates/{template_id}"
+---
+
+## Description
+
+This endpoint modifies an existing customization template configuration.
+
+## Authentication
+
+Requires API credentials via header:
+- Client ID (header)
+- Access Key (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `template_id` | string | Yes | The unique identifier of the template to update |
+
+## Request Body
+
+JSON format containing template customization properties to update.
+
+## Response
+
+### Success Response (200 OK)
+
+Returns the updated template object with all current properties.
+
+### Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 400 | Bad Request - Invalid parameters provided |
+| 401 | Unauthorized - Authentication credentials invalid |
+| 403 | Forbidden - Insufficient permissions |
+| 404 | Not Found - Template ID does not exist |

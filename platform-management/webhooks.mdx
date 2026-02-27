@@ -1,0 +1,110 @@
+---
+title: "Webhooks"
+description: "Configure and verify webhooks for real-time Task status updates and platform event notifications"
+---
+
+## Overview
+
+Webhooks are automated HTTP POST messages from Transcrypts sent to predefined URLs when platform events occur. They track Task status changes during processing, providing real-time updates as payroll connections process data and documents from providers.
+
+## Subscribing
+
+Add webhook URLs through the Transcrypts Dashboard at **Development > Webhooks**. Each environment requires a separate, specific URL.
+
+## Testing
+
+Test webhooks using:
+
+- Transcrypts Bridge in the Transcrypts Emulator
+- ngrok for local environment testing
+- MockBin for browser-based payload testing
+
+## Payload Response
+
+All webhook requests contain common fields:
+
+| Name | Location | Description |
+|------|----------|-------------|
+| `user-agent` | header | Always `Transcrypts-Webhook-Service/2.0` |
+| `x-webhook-sign` | header | HMAC hash using Access secret |
+| `webhook_id` | body | Unique request identifier |
+| `event_type` | body | Webhook event ID |
+| `updated_at` | body | Event occurrence time |
+| `user_id` | body | User unique identifier |
+| `template_id` | body | Template unique identifier |
+
+<Note>
+Header field names are case-insensitive per HTTP/1.1 specifications.
+</Note>
+
+## Originating IP Addresses
+
+Verify webhook requests originate from these Transcrypts IP addresses:
+
+- `34.212.57.93`
+- `44.224.243.166`
+- `52.25.14.79`
+
+## Timing
+
+Webhooks are processed in Task status update order. For example, `full_parse` events precede `done` events. External factors like network latency may cause delays. Use the `updated_at` field to monitor event sequences.
+
+## Security
+
+Each request includes an `X-WEBHOOK-SIGN` header containing an HMAC-SHA256 hash using your Access secret as the key.
+
+### Verification Steps
+
+1. Create an HMAC hash of the raw request body using SHA-256 with your Access secret as the key, converting to hexadecimal.
+2. Compare this hash to the `X-WEBHOOK-SIGN` header value; matching values confirm Transcrypts origin.
+
+## HTTP Timeouts and Retries
+
+Endpoints must return a successful `2xx` status code within 10 seconds. Unsuccessful requests receive three retry attempts with 30-second intervals between each. After three failed attempts, further delivery is blocked.
+
+### Status Codes
+
+| Code | Result |
+|------|--------|
+| `2xx` | Success within 10 seconds |
+| `3xx` | Valid redirects accepted |
+| `4xx` | Results in error |
+| `5xx` | Results in error |
+
+## Webhook Event: Task Status Change
+
+The `task-status-updated` event fires when Task status changes. Upon receiving `status: done`, all data is downloaded and processing is complete.
+
+Example payload:
+
+```json
+{
+  "webhook_id": "488f424096d3461aa0e4cf11a985f6df",
+  "task_id": "521442a087604e599c637db310d07402",
+  "link_id": "d39d86dcc20c46e0ae75ba9ab1311a21",
+  "product": "income",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "task-status-updated",
+  "event_created_at": "2022-08-24T13:55:12.845645Z",
+  "updated_at": "2022-08-24T13:55:12.845666+00:00",
+  "status": "parse",
+  "user_id": "88fef4cea64c40b5ad6727cc9b0b9fdc",
+  "template_id": null
+}
+```
+
+### Field Definitions
+
+| Field | Description |
+|-------|-------------|
+| `task_id` | Task identifier |
+| `link_id` | Associated Link identifier |
+| `product` | Task product type (`employment`, `income`, or `admin`) |
+| `data_source` | Data origin (`payroll`, `docs`, `insurance`, `financial_accounts`, `tax`) |
+| `tracking_info` | Info passed to `bridge_token`, nullable |
+| `status` | Connection Lifecycle status update |
+
+<Info>
+Use `link_id` to locate the `access_token` for retrieving latest payroll data from respective endpoints.
+</Info>

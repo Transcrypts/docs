@@ -1,0 +1,32 @@
+---
+title: "Retrieve Employment History Report"
+description: "Get the VOE (Verification of Employment) report for a link"
+api: "GET /v1/links/{link_id}/employment/report/"
+---
+
+## Description
+
+The endpoint delivers the VOE (Verification of Employment) report for a link.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the account link |
+
+## Response
+
+The endpoint returns an employment verification report containing VOE data associated with the specified link.
+
+## Related Endpoints
+
+- [Employment](/reference/employment) - Employment object attributes
+- [List all employments](/reference/link-employments) - List employment records
+- [Retrieve current employment](/reference/link-last-employment) - Get most recent employment
+- [Income and employment report](/reference/income_verification) - VOIE report

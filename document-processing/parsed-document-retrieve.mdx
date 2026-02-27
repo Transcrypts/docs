@@ -1,0 +1,72 @@
+---
+title: "Retrieve Parsed Document"
+description: "Retrieve a parsed document with extracted structured data"
+api: "GET /v1/links/{link_id}/parsed-documents/{doc_id}/"
+---
+
+# Retrieve Parsed Document
+
+This endpoint retrieves a parsed document containing extracted data. The `parsed_data` field provides structured information from the document.
+
+<Note>
+Currently, only volunteer letters are supported through this endpoint.
+</Note>
+
+## Authentication
+
+This endpoint requires authentication using:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `link_id` | string | The unique identifier for the link (required) |
+| `doc_id` | string | The unique identifier for the document (required) |
+
+## Response
+
+The endpoint returns a JSON response containing parsed document details with extracted data fields structured according to the document type.
+
+For volunteer letters, the `parsed_data` includes:
+- **total_volunteer_hours**: Total volunteer hours
+- **start_date**: Start date of volunteer period
+- **end_date**: End date of volunteer period
+- **position_title**: Position title
+- **detailed_entries** (optional): Array of detailed hour entries with:
+  - **date**: Date of activity
+  - **hours**: Number of hours
+  - **activity_description**: Description of the activity
+
+## Error Responses
+
+### 401 Unauthorized
+
+```json
+{
+  "error": {
+    "code": "authentication_failed",
+    "message": "No such token"
+  }
+}
+```
+
+### 403 Forbidden
+
+```json
+{
+  "error": {
+    "code": "not_authenticated",
+    "message": "Authentication credentials were not provided."
+  }
+}
+```
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Not Found."
+}
+```

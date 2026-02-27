@@ -1,0 +1,117 @@
+---
+title: "Create a Bridge Token"
+description: "Generate a bridge token required to initialize the Transcrypts Bridge widget."
+api: "POST /v1/users/{user_id}/tokens/"
+---
+
+## Overview
+
+This endpoint generates a bridge token required to initialize the Transcrypts Bridge widget. The token must be created before launching the user-facing integration.
+
+## Request
+
+### Endpoint
+
+```
+POST https://prod.transcrypts.com/v1/users/{user_id}/tokens/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `user_id` | string | Yes | The unique identifier for the user |
+
+### Request Body
+
+#### Core Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `product_type` | string | Yes | Specifies product: `income`, `employment`, `deposit_switch`, `pll`, `insurance`, `transactions`, or `assets` |
+
+#### Optional Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `tracking_info` | string | Custom data to associate with the user |
+| `client_name` | string | Display name for the Bridge interface |
+| `color_primary` | string | Primary color in HEX format (e.g., `#000000`) |
+| `allowed_products` | array | List of permitted products; defaults to `product_type` only |
+| `company_mapping_id` | string | Pre-selected company mapping ID |
+| `provider_id` | string | Direct login for specific data provider |
+| `access_token` | string | Token for existing link refresh operations |
+| `locale` | string | Language preference (ISO 639): `en`, `es`, `ar`, `zh`, `ja`, `ru`, etc. |
+| `data_sources` | array | Specify data source priority: `payroll`, `docs`, `insurance`, `financial_accounts`, `tax` |
+
+#### Account Object (for deposit_switch and pll)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `account_number` | string | Yes* | Account digits only; leading zeros preserved |
+| `routing_number` | string | Yes* | Routing digits; leading zeros preserved |
+| `bank_name` | string | Yes* | Financial institution name |
+| `account_type` | string | Yes* | Either `checking` or `savings` |
+| `action` | string | No | Operation: `create`, `update`, or `delete` |
+| `bank_address` | string | No | Bank location |
+| `deposit_type` | string | No | `entire`, `percent`, or `amount` |
+| `deposit_value` | string | No | Value depends on deposit_type |
+
+<Note>
+Account fields marked with * are required when `action` is `create`.
+</Note>
+
+### Example Request
+
+```json
+{
+  "product_type": "income",
+  "tracking_info": "any data for tracking current user",
+  "client_name": "Transcrypts Demo",
+  "allowed_products": ["income", "deposit_switch"],
+  "company_mapping_id": "99dd17074ac94aa9ace2621d657c7610"
+}
+```
+
+## Response
+
+### Success Response (HTTP 201)
+
+```json
+{
+  "bridge_token": "2f67984a110747d190c39e1022c81837",
+  "tracking_info": "any data for tracking current user",
+  "client_name": "Transcrypts Demo",
+  "product_type": "income",
+  "allowed_products": ["income", "deposit_switch"],
+  "company_mapping_id": "99dd17074ac94aa9ace2621d657c7610",
+  "access_token": "99dd17074ac94aa9ace2621d657c7610",
+  "user_id": "99dd17074ac94aa9ace2621d657c7610",
+  "template_id": "99dd17074ac94aa9ace2621d657c7610",
+  "data_sources": ["payroll", "docs"]
+}
+```
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 400 | Bad Request - Invalid or incomplete request parameters |
+| 401 | Unauthorized - Missing or invalid authentication credentials |
+| 403 | Forbidden - Insufficient permissions |
+
+## Key Notes
+
+- The returned `bridge_token` must be passed to `TranscryptsBridge.init()` on the client side.
+- The `product_type` field determines available verification options.
+- Bank account information is only relevant for deposit switching and paycheck-linked lending workflows.
+- Locale selection enables regional customization of the user interface.

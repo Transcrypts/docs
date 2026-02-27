@@ -1,0 +1,27 @@
+---
+title: "List All Tasks"
+description: "Retrieve a list of all tasks"
+api: "GET /v1/tasks"
+---
+
+## Description
+
+The endpoint returns a list of Tasks. This is a read-only operation for retrieving task information associated with user account connections. Tasks track the status and progress of data retrieval operations within the Transcrypts platform.
+
+## Authentication
+
+This endpoint requires API credentials:
+- Client ID (header)
+- Access Key (header)
+
+## Response
+
+### Success Response (200 OK)
+
+Returns a list of Task objects in JSON format.
+
+### Error Responses
+
+**401 Unauthorized:** Authentication credentials are invalid or missing.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.

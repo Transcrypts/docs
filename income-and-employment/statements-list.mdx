@@ -1,0 +1,43 @@
+---
+title: "List All Statements"
+description: "Retrieve a list of pay statements associated with a specific link"
+api: "GET /v1/links/{link_id}/statements/"
+---
+
+## Description
+
+This endpoint retrieves a comprehensive list of pay statements associated with a specific link. The response includes statement dates, gross pay, net pay, and a detailed breakdown of earnings with corresponding deductions.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the account link |
+
+## Response Format
+
+The endpoint returns a paginated list of pay statement objects containing:
+- Statement dates
+- Gross pay amounts
+- Net pay amounts
+- Earnings breakdown
+- Deductions breakdown
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 400 | Incorrect request parameters |
+| 401 | Authentication failed (invalid or missing credentials) |
+| 403 | Forbidden (insufficient permissions) |
+
+## Related Endpoints
+
+- [Retrieve a statement](/reference/retrieve-statement) - GET endpoint for individual statement details
+- [Pay Statements Webhooks](/reference/pay-statements-webhook) - Webhook notifications for statement events

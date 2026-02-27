@@ -1,0 +1,30 @@
+---
+title: "Retrieve Tax Document"
+description: "Get a specific tax document by ID"
+api: "GET /v1/links/{link_id}/tax/{tax_id}/"
+---
+
+## Description
+
+The endpoint retrieves a specific tax document associated with a link.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the user link |
+| `tax_id` | string | Yes | The unique identifier for the specific tax document |
+
+## Response
+
+The endpoint returns tax document data in JSON format.
+
+## Related Endpoints
+
+- [List all tax documents](/reference/tax-documents-list) - GET endpoint for listing all tax documents

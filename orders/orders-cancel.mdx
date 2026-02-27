@@ -1,0 +1,42 @@
+---
+title: "Cancel an Order"
+description: "Cancel an existing order in the Transcrypts system"
+api: "POST /v1/orders/{id}/cancel/"
+---
+
+## Endpoint Overview
+
+**POST** `https://prod.transcrypts.com/v1/orders/{id}/cancel/`
+
+The endpoint cancels the order.
+
+## Authentication
+
+This endpoint requires API credentials provided via headers:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The order identifier to be cancelled |
+
+## Response
+
+| Status Code | Description |
+|-------------|-------------|
+| `201` | Success - Order cancelled |
+| `400` | Bad Request |
+| `401` | Unauthorized |
+| `403` | Forbidden |
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Update an order](/docs/orders/orders-update)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Orders webhooks](/docs/orders/orders-webhooks)

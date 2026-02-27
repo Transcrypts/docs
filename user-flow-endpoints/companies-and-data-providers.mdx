@@ -1,0 +1,52 @@
+---
+title: "Companies and Data Providers"
+description: "Companies represent organizations where users work. Data Providers represent user data storage systems."
+---
+
+## Overview
+
+A **Company** represents an organization where a user works and receives income. Transcrypts Bridge prompts users with company search as a default after opening. The complete list of supported companies is available on [the Transcrypts Coverage page](https://transcrypts.com/coverage/).
+
+Company search functions independently when a company ID is passed into Transcrypts Bridge, allowing users to bypass the search process entirely.
+
+**Data Providers** represent user data storage systems. Each company has one Data Provider in mapping use cases.
+
+## Company Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `company_mapping_id` | string | Company unique ID |
+| `name` | string | Company name |
+| `domain` | string | Web domain of company, unique value |
+| `logo_url` | string | Company logo URL |
+| `confidence_level` | float | Confidence level for company success rate (0-1 range, 0.5+ indicates high success) |
+| `success_rate` | string \| null | Success indicator: `high`, `low`, `unsupported`, or `null` if insufficient data |
+| `mapping_status` | string | Mapping status: `verified`, `mapped`, or `unmapped` |
+
+## Data Provider Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Data provider unique ID |
+| `name` | string | Data provider name |
+| `is_supported` | Boolean | Support status for product |
+
+## Endpoints
+
+- [Search companies](/docs/user-flow-endpoints/company-mapping)
+- [Search companies with autocomplete](/docs/user-flow-endpoints/company-autocomplete-search)
+- [Get company information](/docs/user-flow-endpoints/company-info)
+- [List all data providers](/docs/user-flow-endpoints/providers-list)
+- [Retrieve a data provider](/docs/user-flow-endpoints/providers-detail)
+
+## Example Company Response
+
+```json
+{
+  "company_mapping_id": "48427a36d43c4d5aa6324bc06c692456",
+  "name": "Facebook Demo",
+  "domain": "facebook.com",
+  "logo_url": "https://citadelid-resources.s3-us-west-2.amazonaws.com/facebook.png",
+  "confidence_level": "0.9"
+}
+```

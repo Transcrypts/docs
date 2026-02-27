@@ -1,0 +1,43 @@
+---
+title: "Create a Data Refresh Task"
+description: "Initiate a data refresh for an existing user link"
+api: "POST /v1/refresh/tasks"
+---
+
+## Description
+
+This endpoint allows you to initiate a data refresh for an existing user link. The operation triggers the system to re-fetch current employment and income information from connected data sources.
+
+## Authentication
+
+This endpoint requires API authentication:
+- Client ID (header)
+- Access Key (header)
+
+## Request Body
+
+The request body should contain the parameters needed to specify which link to refresh and what data to update.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `access_token` | string | Yes | The access token from the original connection |
+
+## Response
+
+### Success Response (201 Created)
+
+Upon successful creation, the endpoint returns a task object containing the task ID for tracking the refresh operation.
+
+```json
+{
+  "task_id": "48427a36d43c4d5aa6324bc06c692456"
+}
+```
+
+### Error Responses
+
+**400 Bad Request:** Returned when request parameters are invalid or missing required fields.
+
+**401 Unauthorized:** Returned when authentication credentials are missing or invalid.
+
+**403 Forbidden:** Returned when authentication credentials are provided but lack necessary permissions.

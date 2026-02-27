@@ -1,0 +1,301 @@
+---
+title: "Income Insights Reports"
+description: "Income Insights report containing information on income that a user receives to their bank account(s) across all connected institutions"
+---
+
+The Income Insights report contains information on income that a user receives to their bank account(s) across all connected institutions.
+
+## Report-Level Attributes
+
+<ParamField body="report_id" type="string">
+  Unique identifier of the report.
+</ParamField>
+
+<ParamField body="created_at" type="date-time">
+  Timestamp when report was created.
+</ParamField>
+
+<ParamField body="completed_at" type="date-time">
+  Timestamp when report was completed.
+</ParamField>
+
+<ParamField body="days_requested" type="integer">
+  Number of days for requested transactions history.
+</ParamField>
+
+<ParamField body="links" type="array of objects">
+  List of financial institutions connected.
+</ParamField>
+
+<ParamField body="bank_income_summary" type="object">
+  Summary of income over all accounts.
+</ParamField>
+
+## Link Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `link_id` | string | Unique identifier of the link |
+| `created_at` | date-time | Timestamp when the link was first created |
+| `updated_at` | date-time | Timestamp of the most recent update |
+| `provider` | string | ID of the financial institution |
+| `provider_name` | string | Name of the financial institution |
+| `tracking_info` | string | Additional (optional) identifier passed by user |
+| `accounts` | array of objects | List of demand-deposit accounts connected |
+| `bank_income_sources` | array of objects | List of income sources |
+
+### Account Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier of the account |
+| `mask` | string | The masked banking account number |
+| `nickname` | string | An alternate name for the account |
+| `type` | enum | The type of account |
+| `subtype` | string | The sub-type of the account |
+| `owners` | array of objects | List of owners on the account |
+
+### Owner Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier of the owner |
+| `full_name` | string | Account owner's full name |
+| `email` | string | Account owner's email address |
+| `phone` | string | Account owner's phone number |
+| `address` | object | Account owner's physical address |
+| `relation_type` | string | The relationship this person has to the account |
+
+### Bank Income Source Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `start_date` | date | Earliest transaction date for this source |
+| `end_date` | date | Latest transaction date for this source |
+| `account_id` | string | Unique identifier of the associated account |
+| `income_description` | string | Human-readable shorthand for transaction descriptions |
+| `income_category` | string | The category of the income source |
+| `pay_frequency` | enum | The rate at which income is deposited |
+| `total_amount` | string | Sum of earnings for this income source |
+| `iso_currency_code` | string | The ISO 4217 currency code |
+| `transaction_count` | integer | Number of income transactions for this source |
+| `historical_summary` | array of objects | List of monthly summaries |
+| `historical_average_monthly_income` | string | Historical average income deposited per month |
+| `historical_average_monthly_gross_income` | string | Historical average gross payment amount per month |
+| `forecasted_average_monthly_income` | string | Forecasted income deposited per month |
+| `employer` | object | The normalized employer for the income source |
+
+### Historical Summary Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `start_date` | date | The first date of this monthly period |
+| `end_date` | date | The last date of this monthly period |
+| `total_amount` | string | Total amount of earnings for this monthly period |
+| `iso_currency_code` | string | The ISO 4217 currency code |
+| `transactions` | array of objects | List of transactions |
+
+### Transaction Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `transaction_id` | string | Unique identifier for the transaction |
+| `amount` | string | Deposit amount |
+| `iso_currency_code` | string | The ISO 4217 currency code for this transaction |
+| `date` | date | Date the amount was posted to the account |
+| `check_number` | string | The check number for the transaction |
+| `description` | string | A human-readable description for the transaction |
+| `pending` | boolean | True if transaction status is pending or not set |
+
+### Employer Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier for the employer |
+| `name` | string | Name of the employer |
+| `logo_url` | string | URL for the employer's logo image |
+
+## Bank Income Summary Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `start_date` | string | Earliest transaction date among all income sources |
+| `end_date` | string | Latest transaction date among all income sources |
+| `income_sources_count` | integer | Number of income sources for this user |
+| `income_categories_count` | integer | Number of income categories for this user |
+| `income_transactions_count` | integer | Number of income transactions for this user |
+| `total_amounts` | array of objects | Total income observed in transaction history |
+| `historical_average_monthly_income` | array of objects | Total monthly average income earned historically |
+| `historical_average_monthly_gross_income` | array of objects | Total monthly average gross income (estimated) |
+| `forecasted_average_monthly_income` | array of objects | Total forecasted monthly average income |
+| `historical_annual_gross_income` | array of objects | Annualized gross income earned historically |
+| `historical_annual_income` | array of objects | Annualized income earned historically |
+| `forecasted_annual_income` | array of objects | Annualized forecasted income |
+
+### Total Amount Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `amount` | string | Total amount |
+| `iso_currency_code` | string | The ISO 4217 currency code for the amount |
+
+## Enumerated Types
+
+### Account Type
+
+| Value | Description |
+|-------|-------------|
+| `CHECKING` | Checking account |
+| `SAVINGS` | Savings account |
+| `PREPAID` | Prepaid account |
+
+### Pay Frequency
+
+| Value | Description |
+|-------|-------------|
+| `MONTHLY` | Monthly payments |
+| `SEMIMONTHLY` | Semi-monthly payments |
+| `BIWEEKLY` | Bi-weekly payments |
+| `WEEKLY` | Weekly payments |
+| `ANNUAL` | Annual payments |
+| `SEMIANNUAL` | Semi-annual payments |
+| `COMMISSION` | Commission-based |
+
+## Example Response
+
+```json
+{
+  "report_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "created_at": "2022-05-04T11:30:00Z",
+  "completed_at": "2022-05-04T12:00:00Z",
+  "days_requested": 61,
+  "links": [
+    {
+      "link_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "created_at": "2022-05-04T11:30:00Z",
+      "updated_at": "2022-05-04T12:00:00Z",
+      "provider": "Chase",
+      "tracking_info": "string",
+      "accounts": [
+        {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "mask": "****1234",
+          "nickname": "My account",
+          "type": "CHECKING",
+          "subtype": "MONEY_MARKET",
+          "owners": [
+            {
+              "id": "2b623fa2fa9e49cea17d9692caa884c5",
+              "full_name": "John Doe",
+              "email": "john.doe@example.com",
+              "phone": "14155554193",
+              "address": {
+                "street": "1 Morgan Ave",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip": "90210",
+                "country": "US"
+              },
+              "relation_type": "AUTHORIZED_USER"
+            }
+          ]
+        }
+      ],
+      "bank_income_sources": [
+        {
+          "start_date": "2022-05-04",
+          "end_date": "2022-05-04",
+          "account_id": "24d7e80942ce4ad58a93f70ce4115f5c",
+          "income_description": "Paycheck",
+          "income_category": "Income: Paycheck",
+          "pay_frequency": "SM",
+          "total_amount": "200.31",
+          "iso_currency_code": "USD",
+          "transaction_count": 1,
+          "historical_summary": [
+            {
+              "start_date": "2022-05-04",
+              "end_date": "2022-05-04",
+              "total_amount": "200.31",
+              "iso_currency_code": "USD",
+              "transactions": [
+                {
+                  "amount": "200.31",
+                  "iso_currency_code": "USD",
+                  "date": "2022-05-04",
+                  "check_number": "string",
+                  "description": "string",
+                  "pending": true,
+                  "transaction_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+              ]
+            }
+          ],
+          "historical_average_monthly_income": "10000.00",
+          "historical_average_monthly_gross_income": "12000.00",
+          "forecasted_average_monthly_income": "10000.00",
+          "employer": {
+            "id": "meta",
+            "name": "Meta",
+            "logo_url": "string"
+          }
+        }
+      ]
+    }
+  ],
+  "bank_income_summary": {
+    "start_date": "2022-05-04",
+    "end_date": "2022-05-04",
+    "income_sources_count": 1,
+    "income_categories_count": 1,
+    "income_transactions_count": 1,
+    "total_amounts": [
+      {
+        "amount": "200.31",
+        "iso_currency_code": "USD"
+      }
+    ],
+    "historical_average_monthly_gross_income": [
+      {
+        "amount": "200.31",
+        "iso_currency_code": "USD"
+      }
+    ],
+    "historical_average_monthly_income": [
+      {
+        "amount": "200.31",
+        "iso_currency_code": "USD"
+      }
+    ],
+    "forecasted_average_monthly_income": [
+      {
+        "amount": "200.31",
+        "iso_currency_code": "USD"
+      }
+    ],
+    "historical_annual_gross_income": [
+      {
+        "amount": "200.31",
+        "iso_currency_code": "USD"
+      }
+    ],
+    "historical_annual_income": [
+      {
+        "amount": "200.31",
+        "iso_currency_code": "USD"
+      }
+    ],
+    "forecasted_annual_income": [
+      {
+        "amount": "200.31",
+        "iso_currency_code": "USD"
+      }
+    ]
+  }
+}
+```
+
+## Endpoints
+
+- [Create a user bank income insights report](/docs/user-reports/income-insights-create)
+- [Retrieve a user bank income insights report](/docs/user-reports/income-insights-retrieve)

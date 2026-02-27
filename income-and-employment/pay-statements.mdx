@@ -1,0 +1,184 @@
+---
+title: "Pay Statements"
+description: "Pay statement attributes and data structure for income and employment verification"
+---
+
+## Overview
+
+The pay statement endpoints retrieve information from pay statements including dates, gross pay, net pay, and earnings with deductions. These statements are associated with a `link_id` from Transcrypts's Income and Employment API.
+
+## Attributes
+
+The following table describes pay statement values:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique ID of selected statement |
+| check_number | string | External ID of pay stub from payroll provider |
+| pay_date | date | Pay date |
+| net_pay | string | Net pay |
+| net_pay_ytd | string | Net pay year to date |
+| gross_pay | string | Gross pay |
+| gross_pay_ytd | string | Gross pay year to date |
+| bonus | string | Bonus amount |
+| commission | string | Commission amount |
+| hours | string | Total work hours during a pay period |
+| basis_of_pay | string | Pay plan type: S (Salary), H (Hourly), D (Daily), W (Weekly) |
+| period_start | date | Pay period start |
+| period_end | date | Pay period end |
+| regular | string | Regular salary |
+| regular_ytd | string | Regular salary year to date |
+| other_pay_ytd | string | All other pay forms year to date |
+| bonus_ytd | string | Bonus year to date |
+| commission_ytd | string | Commission year to date |
+| overtime | string | Overtime pay |
+| overtime_ytd | string | Overtime pay year to date |
+| other_pay | string | Other pay |
+| earnings | array of objects | Earnings for pay cycle by type |
+| earnings_ytd | array of objects | Earnings year to date |
+| deductions | array of objects | Deductions for the pay cycle by type |
+| deductions_ytd | array of objects | Deductions by type year to date |
+| md5sum | string | MD5 hash value computed based on file content |
+| file | url | Link to pay stub file (up to 2048 characters long) |
+| derived_fields | array of strings | Array of derived fields |
+| missing_data_fields | array of strings | List of missing data fields from payroll response |
+
+## Endpoints
+
+Available endpoints for pay statements:
+
+- [List all statements](/reference/link-statements)
+- [Retrieve a statement](/reference/retrieve-statement)
+
+## Example Response
+
+```json
+{
+  "id": "970c13c479b14f41b0b6a991ee8819f6",
+  "pay_date": "2021-10-22",
+  "net_pay": "1515.61",
+  "net_pay_ytd": "35398.31",
+  "gross_pay": "2153.85",
+  "gross_pay_ytd": "45500.00",
+  "bonus": null,
+  "commission": null,
+  "hours": "80.00",
+  "basis_of_pay": "S",
+  "period_start": "2021-10-03",
+  "period_end": "2021-10-16",
+  "regular": "2153.85",
+  "regular_ytd": "42000.00",
+  "bonus_ytd": "500.00",
+  "commission_ytd": null,
+  "overtime": null,
+  "overtime_ytd": null,
+  "other_pay": null,
+  "other_pay_ytd": "3000.00",
+  "earnings": [
+    {
+      "name": "Regular",
+      "category": "regular",
+      "amount": "2153.85",
+      "rate": "2153.85",
+      "units": "72.00"
+    }
+  ],
+  "earnings_ytd": [
+    {
+      "name": "Regular",
+      "category": "regular",
+      "amount": "42000.00",
+      "rate": null,
+      "units": null
+    },
+    {
+      "name": "Spot Award",
+      "category": "other_pay",
+      "amount": "3000.00",
+      "rate": null,
+      "units": null
+    },
+    {
+      "name": "Bonus",
+      "category": "bonus",
+      "amount": "500.00",
+      "rate": null,
+      "units": null
+    }
+  ],
+  "deductions": [
+    {
+      "name": "Blue Ash Income Tax",
+      "amount": "-26.94",
+      "category": "local"
+    },
+    {
+      "name": "Medicare Tax",
+      "amount": "-31.25",
+      "category": "medicare"
+    },
+    {
+      "name": "CA State Income Tax",
+      "amount": "-54.68",
+      "category": "state"
+    },
+    {
+      "name": "Social Security Tax",
+      "amount": "-133.63",
+      "category": "socialsec"
+    },
+    {
+      "name": "Federal Income Tax",
+      "amount": "-154.37",
+      "category": "federal"
+    },
+    {
+      "name": "401K Dollars",
+      "amount": "-237.37",
+      "category": "retirement"
+    }
+  ],
+  "deductions_ytd": [
+    {
+      "name": "Federal Income Tax",
+      "amount": "3639.64",
+      "category": "federal"
+    },
+    {
+      "name": "Social Security Tax",
+      "amount": "3090.03",
+      "category": "socialsec"
+    },
+    {
+      "name": "401K Dollars",
+      "amount": "2148.46",
+      "category": "retirement"
+    },
+    {
+      "name": "CA State Income Tax",
+      "amount": "1275.75",
+      "category": "state"
+    },
+    {
+      "name": "Medicare Tax",
+      "amount": "722.67",
+      "category": "medicare"
+    },
+    {
+      "name": "Blue Ash Income Tax",
+      "amount": "623.01",
+      "category": "local"
+    },
+    {
+      "name": "Exp Repay",
+      "amount": "-1397.87",
+      "category": "benefit"
+    }
+  ],
+  "md5sum": null,
+  "file": null,
+  "derived_fields": [],
+  "missing_data_fields": [],
+  "check_number": null
+}
+```

@@ -1,0 +1,45 @@
+---
+title: "Uploaded Documents from Bridge"
+description: "Document attributes and structure for documents uploaded through the Bridge"
+---
+
+# Uploaded Documents from Bridge
+
+## Attributes
+
+The response for uploaded documents contains an array of objects with the following attributes:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Document ID |
+| `type` | string | Document type: `PAYSTUB`, `W2`, `F1099`, `F1040`, `INSURANCE_HOME_POLICY`, `INSURANCE_AUTO_POLICY` |
+| `subtype` | string, null | Document subtype: `F1099_DIV`, `F1099_G`, `F1099_INT`, `F1099_MISC`, `F1099_NEC`, `F1099_R`, `F_SSA1099` |
+| `file` | uri | Document file link (up to 2048 characters; may be absent or partially uploaded) |
+| `filename` | string | Document file name |
+| `mimetype` | string | Document mimetype |
+| `created_at` | date-time | Date when document was uploaded |
+| `updated_at` | date-time | Date when document was updated |
+
+## Endpoints
+
+Two endpoints retrieve information on uploaded documents:
+
+- **List all documents** - retrieves multiple documents
+- **Retrieve document** - retrieves a single document
+
+## Example Response
+
+```json
+[
+  {
+    "id": "24d7e80942ce4ad58a93f70ce4115f5c",
+    "type": "W2",
+    "subtype": null,
+    "file": "https://citadelid-resources.s3.us-west-2.amazonaws.com/doc_upload/w2.pdf",
+    "filename": "most.recent.paystub.pdf",
+    "mimetype": "application/pdf",
+    "created_at": "2023-08-03T23:52:12.751Z",
+    "updated_at": "2023-08-03T23:52:12.751Z"
+  }
+]
+```

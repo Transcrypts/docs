@@ -1,0 +1,44 @@
+---
+title: "Postman Collection"
+description: "Get started with the Transcrypts API integration using the Postman Collection with little to no code needed."
+---
+
+The Transcrypts Postman Collection offers a solution for getting started with your integration with little to no code needed.
+
+## Setting Up Postman
+
+### Initial Steps
+
+1. **Install Postman** - Download from [Postman's official site](https://www.postman.com/downloads/)
+
+2. **Import the Collection** - Fork the Transcrypts API collection using the "Run in Postman" button available in the documentation
+
+3. **Configuration** - After importing both the collection and environment variables, proceed to configure your API credentials
+
+## Configuring Postman
+
+The collection utilizes Postman's environment variables feature to streamline API requests.
+
+### Configuration Steps
+
+1. Select the Sandbox environment from the top-right corner
+2. Click the eye icon to access environment settings
+3. Enter your credentials from the Transcrypts Dashboard:
+   - `client_id`
+   - `access_key`
+4. Save your changes to begin making API requests
+
+## Making Requests
+
+The collection includes pre-configured scripts for both request setup and response handling to facilitate data flow between sequential calls.
+
+### Recommended Workflow
+
+1. **Create an Order** (VOIE Basic)
+   - Response includes a `shareURL` for completing the order
+
+2. **Retrieve Order Details**
+   - Uses the `orderId` variable from the initial request
+
+3. **Fetch VOIE Report**
+   - Automatically passes through `user_id` and `voie_report_id` variables from previous responses

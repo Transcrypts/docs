@@ -1,0 +1,74 @@
+---
+title: "Account Links Webhooks"
+description: "Webhook payloads for Account Link lifecycle events"
+---
+
+## Overview
+
+This page documents webhook payloads for Account Links, covering three primary event types that occur during the link lifecycle.
+
+## Link Connected
+
+**Event Type:** `link-connected`
+
+The `link-connected` event is triggered when a Link object is initially created. It displays the status of the first related Task once that status reaches `done`.
+
+### Sample Payload
+
+```json
+{
+  "webhook_id": "ae53152c8c4c4636bda7f22f2cf6b0a5",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "user_id": "88fef4cea64c40b5ad6727cc9b0b9fdc",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "link-connected",
+  "event_created_at": "2022-08-23T17:32:30.217980Z",
+  "template_id": null
+}
+```
+
+## Link Disconnected
+
+**Event Type:** `link-disconnected`
+
+The `link-disconnected` event fires when refresh Tasks associated with a Link fail or return with an error condition.
+
+### Sample Payload
+
+```json
+{
+  "webhook_id": "ae53152c8c4c4636bda7f22f2cf6b0a5",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "user_id": "88fef4cea64c40b5ad6727cc9b0b9fdc",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "link-disconnected",
+  "event_created_at": "2022-08-23T17:32:30.217980Z",
+  "template_id": null
+}
+```
+
+## Link Deleted
+
+**Event Type:** `link-deleted`
+
+The `link-deleted` event occurs when Links are deleted and all personal data from the connection, including credentials, are permanently removed.
+
+### Sample Payload
+
+```json
+{
+  "webhook_id": "ae53152c8c4c4636bda7f22f2cf6b0a5",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "user_id": "88fef4cea64c40b5ad6727cc9b0b9fdc",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "link-deleted",
+  "event_created_at": "2022-08-23T17:32:30.217980Z",
+  "template_id": null
+}
+```

@@ -1,0 +1,41 @@
+---
+title: "Retrieve Events for an Order"
+description: "Returns a list of events for the specified order"
+api: "GET /v1/orders/{id}/events/"
+---
+
+## Endpoint Overview
+
+**GET** `https://prod.transcrypts.com/v1/orders/{id}/events/`
+
+Returns a list of events for the specified order.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The order identifier |
+
+## Response
+
+The endpoint returns event data associated with a particular order, providing a history of actions and status changes.
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Get list of orders by SSN](/docs/orders/orders-list-lookup)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Create a data refresh order](/docs/orders/orders-refresh)
+- [Update an order](/docs/orders/orders-update)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Retrieve self-certification results](/docs/orders/orders-certifications)

@@ -1,0 +1,29 @@
+---
+title: "Retrieve a Statement"
+description: "Get a specific pay statement by ID"
+api: "GET /v1/links/{link_id}/statements/{statement_id}/"
+---
+
+## Description
+
+Get the pay statement for a specific statement ID associated with a link.
+
+## Authentication
+
+This endpoint requires API credentials to be provided in the request header.
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The identifier for the user's account link |
+| `statement_id` | string | Yes | The specific pay statement identifier to retrieve |
+
+## Response
+
+The endpoint returns the requested pay statement data including dates, gross pay, net pay, earnings breakdown, and deductions.
+
+## Related Endpoints
+
+- [List all statements](/reference/link-statements) - GET endpoint for listing all statements
+- [Pay Statements Webhooks](/reference/pay-statements-webhook) - Webhook notifications for statement events

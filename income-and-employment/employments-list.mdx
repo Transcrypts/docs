@@ -1,0 +1,31 @@
+---
+title: "List All Employments"
+description: "Retrieve a list of all employment records associated with a specific link"
+api: "GET /v1/links/{link_id}/employments/"
+---
+
+## Description
+
+The endpoint returns a list of all employments associated with a specific account link. This allows you to access complete employment history data for a linked user account.
+
+## Authentication
+
+This endpoint requires authentication credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the account link |
+
+## Response
+
+The endpoint returns employment records in JSON format containing employment history details for the specified link.
+
+## Related Endpoints
+
+- [Employment reference](/reference/employment) - Employment object attributes
+- [Retrieve single employment](/reference/link-last-employment) - Get the most recent employment
+- [Employment webhooks](/reference/employment-1) - Webhook notifications for employment events

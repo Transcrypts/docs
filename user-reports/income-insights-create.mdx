@@ -1,0 +1,37 @@
+---
+title: "Create a User Bank Income Insights Report"
+description: "Creates a bank income insights report for a specified user"
+api: "POST /v1/users/{user_id}/income_insights/reports/"
+---
+
+## Overview
+
+This endpoint creates a bank income insights report for the user, enabling analysis of income patterns derived from bank account data.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Path Parameters
+
+<ParamField path="user_id" type="string" required>
+  Unique identifier for the user.
+</ParamField>
+
+## Response
+
+The endpoint returns a success response (HTTP 201) upon successful report creation.
+
+### Error Responses
+
+| Status Code | Error Code | Description |
+|-------------|------------|-------------|
+| **400** | `incorrect_parameters` | Invalid or missing request parameters |
+| **401** | `authentication_failed` | Authentication credentials invalid or missing |
+| **403** | `not_authenticated` | Insufficient permissions |
+
+<Note>
+  Users must be authenticated and provisioned before creating reports. The report creation is asynchronous; check the report status separately for completion details.
+</Note>

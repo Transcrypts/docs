@@ -1,0 +1,27 @@
+---
+title: "List All Customization Templates"
+description: "Retrieve a list of all customization templates"
+api: "GET /v1/templates"
+---
+
+## Description
+
+The endpoint returns a list of all customization templates for user.
+
+## Authentication
+
+The endpoint requires API credentials passed as headers:
+- Client ID (header)
+- Access Key (header)
+
+## Response
+
+### Success Response (200 OK)
+
+Returns a list of template objects with their properties.
+
+### Error Responses
+
+**401 Unauthorized:** Authentication credentials are invalid or missing.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.

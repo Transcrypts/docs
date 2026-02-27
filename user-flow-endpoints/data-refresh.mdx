@@ -1,0 +1,63 @@
+---
+title: "Data Refresh"
+description: "Refresh data from an existing Link without re-entering payroll credentials"
+---
+
+## Overview
+
+Refresh data from an existing Link with the data refresh endpoints. These let the user bypass entering their payroll credentials a second time.
+
+## Steps to Perform a Data Refresh
+
+1. **Optional**: Subscribe to webhooks for completed tasks with `done` status, then retrieve payroll data from the refresh information.
+2. Use the [Create a data refresh task](/user-flow-endpoints/refresh-task-create) endpoint with the `access_token` from the original connection.
+3. Monitor refresh status using webhooks, the [Retrieve a data refresh status](/user-flow-endpoints/refresh-task) endpoint, or both.
+
+## Rate Limiting
+
+Transcrypts enforces strict rate limits on `access_token` values. Within any 24-hour period, only one initial request and three subsequent refreshes are permitted. Exceeding this threshold triggers the error: "Refresh limit for the access_token exceeded."
+
+<Note>
+Each data refresh Task is billed individually.
+</Note>
+
+## Data Refresh Task Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| task_id | string | Unique identifier for Link data refresh task |
+
+## Data Refresh Status Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique refresh task identifier |
+| created_at | string | Timestamp when refresh task was created |
+| refresh_date | string | *(Deprecated)* Date of data refresh |
+| status | string | Data refresh task status |
+
+## Available Endpoints
+
+- [Create a data refresh task](/user-flow-endpoints/refresh-task-create) (POST)
+- [Retrieve a data refresh status](/user-flow-endpoints/refresh-task) (GET)
+
+## Example Responses
+
+**Create Response:**
+
+```json
+{
+  "task_id": "48427a36d43c4d5aa6324bc06c692456"
+}
+```
+
+**Retrieve Response:**
+
+```json
+{
+  "id": "24d7e80942ce4ad58a93f70ce4115f5c",
+  "created_at": "2021-04-06T11:30:00Z",
+  "refresh_date": "2020-03-10",
+  "status": "new"
+}
+```

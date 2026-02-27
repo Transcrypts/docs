@@ -1,0 +1,74 @@
+---
+title: "Search Companies with Autocomplete"
+description: "Search for companies using prefix-based matching with autocomplete support."
+api: "GET /v1/company-mappings-search/"
+---
+
+## Overview
+
+The endpoint provides company search using prefix-based matching. This functionality enables users to locate companies through autocomplete-style queries that support partial matching and fuzzy matching for handling typos.
+
+## Request
+
+### Endpoint
+
+```
+GET https://prod.transcrypts.com/v1/company-mappings-search/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `query` | string | Yes | Search query to find companies. Searches across company names, domains, and synonyms. Supports partial matching and fuzzy matching for typos. |
+| `product_type` | string | No | Product type for success rate calculation. Allowed values: `income`, `employment`, `deposit_switch`, `pll` |
+
+## Response
+
+### Success Response (HTTP 200)
+
+The endpoint returns an array of company objects.
+
+```json
+[
+  {
+    "company_mapping_id": "48427a36d43c4d5aa6324bc06c692456",
+    "name": "Facebook Demo",
+    "domain": "facebook.com",
+    "logo_url": "https://citadelid-resources.s3-us-west-2.amazonaws.com/facebook.png",
+    "success_rate": "high",
+    "confidence_level": "0.9",
+    "sso": {
+      "name": "Microsoft"
+    }
+  }
+]
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `company_mapping_id` | string | Company to Payroll Provider mapping ID |
+| `name` | string | Company name |
+| `domain` | string (nullable) | Company domain |
+| `logo_url` | string (nullable) | URL to company logo |
+| `success_rate` | string | Values: `low`, `high`, `unsupported`, or `null` |
+| `confidence_level` | string | Range 0 to 1; values >= 0.5 indicate high success rate |
+| `sso` | object (nullable) | SSO provider information with `name` field |
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 401 | Unauthorized - Authentication failed |
+| 403 | Forbidden - Insufficient permissions |

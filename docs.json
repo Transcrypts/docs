@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Transcrypts SDK",
+  "name": "Transcrypts",
   "colors": {
     "primary": "#6366F1",
     "light": "#818CF8",
@@ -11,36 +11,259 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Overview",
             "pages": [
-              "index",
-              "quickstart",
-              "framework-examples"
+              "overview/introduction",
+              "overview/api-keys-rotation",
+              "overview/postman-collection"
             ]
           },
           {
-            "group": "Widget",
+            "group": "Platform Management",
             "pages": [
-              "widget/lifecycle",
-              "widget/events",
-              "widget/customization"
+              "platform-management/connection-lifecycle",
+              "platform-management/data-structure",
+              "platform-management/webhooks",
+              "platform-management/webhook-event-descriptions",
+              "platform-management/advanced-security-and-mtls"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "SDK Reference",
-        "groups": [
+          },
           {
-            "group": "SDK",
+            "group": "Bridge Token",
             "pages": [
-              "sdk/overview",
-              "sdk/transcrypts-class",
-              "sdk/types",
-              "sdk/error-handling"
+              "user-flow-endpoints/bridge-token",
+              "user-flow-endpoints/bridge-token-create"
+            ]
+          },
+          {
+            "group": "Users",
+            "pages": [
+              "user-flow-endpoints/users",
+              "user-flow-endpoints/users-create",
+              "user-flow-endpoints/users-read",
+              "user-flow-endpoints/users-list",
+              "user-flow-endpoints/users-update",
+              "user-flow-endpoints/users-delete"
+            ]
+          },
+          {
+            "group": "Account Links",
+            "pages": [
+              "user-flow-endpoints/account-links",
+              "user-flow-endpoints/link-exchange-token",
+              "user-flow-endpoints/links-list",
+              "user-flow-endpoints/links-item",
+              "user-flow-endpoints/links-delete",
+              "user-flow-endpoints/links-webhooks"
+            ]
+          },
+          {
+            "group": "Companies & Data Providers",
+            "pages": [
+              "user-flow-endpoints/companies-and-data-providers",
+              "user-flow-endpoints/company-autocomplete-search",
+              "user-flow-endpoints/company-info",
+              "user-flow-endpoints/company-mapping",
+              "user-flow-endpoints/providers-list",
+              "user-flow-endpoints/providers-detail"
+            ]
+          },
+          {
+            "group": "Data Refresh",
+            "pages": [
+              "user-flow-endpoints/data-refresh",
+              "user-flow-endpoints/refresh-task",
+              "user-flow-endpoints/refresh-task-create",
+              "user-flow-endpoints/tasks-list",
+              "user-flow-endpoints/tasks-read"
+            ]
+          },
+          {
+            "group": "Customization Templates",
+            "pages": [
+              "user-flow-endpoints/customization-templates",
+              "user-flow-endpoints/templates-create",
+              "user-flow-endpoints/templates-read",
+              "user-flow-endpoints/templates-list",
+              "user-flow-endpoints/templates-update",
+              "user-flow-endpoints/templates-delete"
+            ]
+          },
+          {
+            "group": "Webhook Endpoints",
+            "pages": [
+              "user-flow-endpoints/webhook-endpoints",
+              "user-flow-endpoints/webhooks-create",
+              "user-flow-endpoints/webhooks-read",
+              "user-flow-endpoints/webhooks-list",
+              "user-flow-endpoints/webhooks-update",
+              "user-flow-endpoints/webhooks-delete",
+              "user-flow-endpoints/webhook-requests-list"
+            ]
+          },
+          {
+            "group": "Employment",
+            "pages": [
+              "income-and-employment/employment",
+              "income-and-employment/employment-retrieve",
+              "income-and-employment/employments-list",
+              "income-and-employment/employment-webhooks",
+              "income-and-employment/employment-history-report"
+            ]
+          },
+          {
+            "group": "Identity",
+            "pages": [
+              "income-and-employment/identity",
+              "income-and-employment/identity-retrieve",
+              "income-and-employment/identity-webhooks"
+            ]
+          },
+          {
+            "group": "Pay Statements",
+            "pages": [
+              "income-and-employment/pay-statements",
+              "income-and-employment/statement-retrieve",
+              "income-and-employment/statements-list",
+              "income-and-employment/pay-statements-webhooks"
+            ]
+          },
+          {
+            "group": "Tax Documents",
+            "pages": [
+              "income-and-employment/tax-documents",
+              "income-and-employment/tax-document-retrieve",
+              "income-and-employment/tax-documents-list"
+            ]
+          },
+          {
+            "group": "Shifts",
+            "pages": [
+              "income-and-employment/shifts",
+              "income-and-employment/shifts-list",
+              "income-and-employment/shifts-webhooks"
+            ]
+          },
+          {
+            "group": "Income & Employment Reports",
+            "pages": [
+              "income-and-employment/reports",
+              "income-and-employment/income-employment-report"
+            ]
+          },
+          {
+            "group": "Uploaded Documents",
+            "pages": [
+              "document-processing/uploaded-documents",
+              "document-processing/documents-list",
+              "document-processing/document-retrieve"
+            ]
+          },
+          {
+            "group": "Parsed Documents",
+            "pages": [
+              "document-processing/parsed-documents",
+              "document-processing/parsed-document-retrieve"
+            ]
+          },
+          {
+            "group": "Document Collections",
+            "pages": [
+              "document-processing/document-collections",
+              "document-processing/collections-create",
+              "document-processing/collections-list",
+              "document-processing/collections-retrieve",
+              "document-processing/collections-upload",
+              "document-processing/collections-finalize",
+              "document-processing/collections-finalize-retrieve",
+              "document-processing/collections-file-retrieve",
+              "document-processing/collections-file-delete",
+              "document-processing/collections-delete"
+            ]
+          },
+          {
+            "group": "Financial Accounts",
+            "pages": [
+              "financial-accounts/accounts",
+              "financial-accounts/auth",
+              "financial-accounts/transactions",
+              "financial-accounts/liabilities",
+              "financial-accounts/income-report"
+            ]
+          },
+          {
+            "group": "Orders",
+            "pages": [
+              "orders/orders",
+              "orders/orders-create",
+              "orders/orders-read",
+              "orders/orders-list-lookup",
+              "orders/orders-update",
+              "orders/orders-add-employer",
+              "orders/orders-refresh",
+              "orders/orders-cancel",
+              "orders/orders-invoice",
+              "orders/orders-certifications",
+              "orders/orders-events",
+              "orders/orders-webhooks"
+            ]
+          },
+          {
+            "group": "VOA Reports",
+            "pages": [
+              "user-reports/voa-reports"
+            ]
+          },
+          {
+            "group": "VOIE Reports",
+            "pages": [
+              "user-reports/voie-reports",
+              "user-reports/voie-reports-create",
+              "user-reports/voie-reports-retrieve"
+            ]
+          },
+          {
+            "group": "DDS Reports",
+            "pages": [
+              "user-reports/dds-reports",
+              "user-reports/dds-report-retrieve"
+            ]
+          },
+          {
+            "group": "Assets Reports",
+            "pages": [
+              "user-reports/assets-report-create",
+              "user-reports/assets-report-retrieve"
+            ]
+          },
+          {
+            "group": "Income Insights",
+            "pages": [
+              "user-reports/income-insights-reports",
+              "user-reports/income-insights-create",
+              "user-reports/income-insights-retrieve"
+            ]
+          },
+          {
+            "group": "Direct Deposit Switching",
+            "pages": [
+              "direct-deposit-switching/bank-accounts",
+              "direct-deposit-switching/deposit-switch-reports"
+            ]
+          },
+          {
+            "group": "Insurance",
+            "pages": [
+              "insurance/insurance-reports"
+            ]
+          },
+          {
+            "group": "Scoring Attributes",
+            "pages": [
+              "scoring-attributes/report"
             ]
           }
         ]

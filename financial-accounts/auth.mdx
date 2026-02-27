@@ -1,0 +1,107 @@
+---
+title: "Auth"
+description: "Account details available from financial institutions through the Transcrypts API"
+---
+
+## Overview
+
+The Auth section documents account details available from financial institutions through the Transcrypts API.
+
+## Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| accounts | array of objects | List of accounts (see Accounts object below) |
+
+## Accounts Object
+
+This object represents individual financial accounts with the following properties:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique identifier |
+| created_at | date-time | Timestamp when account was created in Transcrypts |
+| updated_at | date-time | Timestamp when account last updated in Transcrypts |
+| type | string | Account type |
+| subtype | string | Account subtype |
+| mask | string | Last 4 digits of account number |
+| nickname | string | Account description |
+| provider | string | Data provider ID |
+| provider_name | string | Data provider name |
+| balances | object | Balance information (see Balances object) |
+| numbers | object | Account numbers (see Numbers object) |
+
+## Balances Object
+
+Financial balance information for accounts:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| currency_code | string | Currency type |
+| balance | string | Current balance amount |
+| available_balance | string | Available balance amount |
+| credit_limit | string | Credit limit |
+
+## Numbers Object
+
+Account routing and identification details organized by transaction type (ACH, RTP, OTHERS):
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| account_number | string | A unique identifier assigned to a financial account for tracking and managing transactions |
+| routing_number | string | A unique identifier for a financial institution used to route and process transactions |
+| is_tokenized_account_number | boolean | Indicates whether the account number has been tokenized by the institution |
+
+## Endpoints
+
+- **Retrieve auth data** - Fetch account authentication information
+
+## Example Response
+
+```json
+{
+  "accounts": [
+    {
+      "id": "24d7e80942ce4ad58a93f70ce4115f5c",
+      "created_at": "2022-05-04T11:30:00Z",
+      "updated_at": "2022-05-04T12:00:00Z",
+      "type": "CHECKING",
+      "subtype": "MONEY_MARKET",
+      "mask": "6789",
+      "nickname": "My account",
+      "is_open": true,
+      "balances": {
+        "currency_code": "USD",
+        "balance": "100.00",
+        "available_balance": "50.99",
+        "credit_limit": "200.00"
+      },
+      "provider": "transcrypts",
+      "provider_name": "Transcrypts Bank",
+      "numbers": {
+        "ACH": [
+          {
+            "account_number": "16002600",
+            "routing_number": "123456789",
+            "is_tokenized_account_number": true
+          }
+        ],
+        "RTP": [
+          {
+            "account_number": "16002600",
+            "routing_number": "123456789",
+            "is_tokenized_account_number": true
+          }
+        ],
+        "OTHERS": [
+          {
+            "account_number": "16002600",
+            "routing_number": "123456789",
+            "is_tokenized_account_number": true
+          }
+        ]
+      }
+    }
+  ]
+}
+```

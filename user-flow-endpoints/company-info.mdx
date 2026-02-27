@@ -1,0 +1,105 @@
+---
+title: "Get Company Information"
+description: "Retrieve detailed information for a specific company mapping."
+api: "GET /v1/companies/{company_mapping_id}/"
+---
+
+## Overview
+
+The endpoint returns detailed information for a specific company mapping, including basic company details, success rate, and bank account information.
+
+## Request
+
+### Endpoint
+
+```
+GET https://prod.transcrypts.com/v1/companies/{company_mapping_id}/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Path Parameters
+
+| Parameter | Type | Required | Description | Example |
+|-----------|------|----------|-------------|---------|
+| `company_mapping_id` | string | Yes | Company to Payroll Provider mapping ID | `c55a0d9f49554a60ad467d070b4e1ad0` |
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `product_type` | string | No | Product type for success rate calculation. Allowed values: `income`, `employment`, `deposit_switch`, `pll` |
+
+## Response
+
+### Success Response (HTTP 200)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `company_mapping_id` | string | Company mapping ID |
+| `name` | string | Company name |
+| `domain` | string | Company domain |
+| `logo_url` | string (nullable) | URL to company logo |
+| `success_rate` | string | `low`, `high`, `unsupported`, or `null` |
+| `confidence_level` | string | Range 0 to 1; 0.5+ indicates high success rate |
+| `mapping_status` | string | `verified`, `mapped`, or `unmapped` |
+
+### Features Object
+
+**deposit_switch:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `max_number` | integer (nullable) | Maximum bank accounts allowed |
+| `deposit_types` | array | Supported types: `entire`, `percent`, `amount` |
+| `amount_precision` | integer | Precision level for amount allocations |
+| `percent_precision` | integer | Precision level for percentage allocations |
+
+**fill_rates:** Data availability rates (0 to 1 scale):
+
+| Field | Description |
+|-------|-------------|
+| `job_title` | Job title availability rate |
+| `job_type` | Job type availability rate |
+| `is_active` | Active status availability rate |
+| `start_date` | Start date availability rate |
+| `original_hire_date` | Original hire date availability rate |
+| `income` | Income availability rate |
+| `income_unit` | Income unit availability rate |
+| `pay_frequency` | Pay frequency availability rate |
+| `w2s` | W-2 availability rate |
+| `paystubs` | Paystubs availability rate |
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 401 | Unauthorized - Missing or invalid authentication credentials |
+| 403 | Forbidden - Insufficient permissions |
+| 404 | Not Found - Company mapping does not exist |
+
+### Example Error Response (401)
+
+```json
+{
+  "error": {
+    "code": "authentication_failed",
+    "message": "No such token"
+  }
+}
+```
+
+### Example Error Response (404)
+
+```json
+{
+  "detail": "Not Found."
+}
+```

@@ -1,0 +1,163 @@
+---
+title: "Reports"
+description: "Report object attributes and data structure for income and employment verification reports"
+---
+
+## Attributes
+
+The report response includes the following core fields:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique identifier |
+| status | string | Connection status from lifecycle |
+| finished_at | string | Report completion timestamp |
+| completed_at | string | Time when report was completed (Deprecated, invalid datetime format) |
+| access_token | string | Token for payroll provider access |
+| tracking_info | string | Partner-provided tracking information |
+| refresh_status | string | Most recent refresh task status |
+| employments | array | Employment records list |
+| pdf_report | uri | Verification report in PDF |
+| provider | string | Payroll provider name |
+| data_source | string | "payroll" or "docs" |
+
+## Employments Object
+
+Contains employment and income details:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| income | string | Annual income excluding bonuses/commissions |
+| income_unit | string | YEARLY, MONTHLY, WEEKLY, DAILY, or HOURLY |
+| pay_rate | string | Payment per cycle amount |
+| pay_frequency | string | M, SM, W, BW, A, SA, C values |
+| statements | array | Pay stub records |
+| annual_income_summary | array | Yearly income breakdown |
+| bank_accounts | array | Direct deposit accounts |
+| w2s | array | W-2 tax forms |
+| id | string | Unique identifier |
+| is_active | boolean | Employment status |
+| job_title | string | Position title |
+| job_type | string | F, P, S, D, or C |
+| start_date | date | Hire date |
+| original_hire_date | date | Initial employment date |
+| end_date | date | Termination date |
+| external_last_update | date | Indicates date of last updated employment data from Payroll Provider |
+| manager_name | string | Supervisor name |
+| profile | object | Identity information |
+| company | object | Employer details |
+| gse_accepted | boolean | Fannie Mae eligibility status |
+
+### Company Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| name | string | Company name |
+| address | object | Location details |
+| phone | string | Contact number |
+| ein | string | Employer Identification Number |
+
+### Address Object
+
+| Attribute | Type |
+|-----------|------|
+| street | string |
+| city | string |
+| state | string |
+| zip | string |
+| country | string |
+
+## Statements Object
+
+Pay stub information structure:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique identifier |
+| check_number | string | External ID from provider |
+| pay_date | date | Payment date |
+| net_pay | string | Amount after deductions |
+| gross_pay | string | Total compensation |
+| bonus | string | Bonus amount |
+| commission | string | Commission amount |
+| hours | string | Work hours during pay period |
+| basis_of_pay | string | S, H, D, or W |
+| period_start | date | Pay period beginning |
+| period_end | date | Pay period ending |
+| earnings | array | Earnings by type |
+| earnings_ytd | array | Year-to-date earnings |
+| deductions | array | Paycheck deductions |
+| deductions_ytd | array | Year-to-date deductions |
+| file | uri | Pay stub document link |
+
+## Annual Income Summary Object
+
+| Attribute | Type |
+|-----------|------|
+| year | integer |
+| regular | string |
+| bonus | string |
+| commission | string |
+| overtime | string |
+| other_pay | string |
+| net_pay | string |
+| gross_pay | string |
+
+## Bank Accounts Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| account_number | string | Account identifier |
+| routing_number | string | Bank routing number |
+| account_name | string | User-friendly name |
+| account_type | string | C (Checking) or S (Savings) |
+| deposit_type | string | E, P, or A |
+| deposit_value | string | Amount or percentage |
+| bank_name | string | Financial institution |
+
+## W2s Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| file | uri | W-2 document link |
+| year | integer | Tax year |
+| wages | string | Wages, tips, other compensation (Section 1) |
+| federal_tax | string | Federal withholding amount |
+| social_security_wages | string | Social Security taxable wages |
+| medicare_wages | string | Medicare taxable wages |
+| gross_pay | string | Total compensation |
+
+## Earnings Object
+
+Earnings array structure with supported categories: `regular`, `bonus`, `commission`, `overtime`, `other_pay`.
+
+```json
+[
+  {
+    "name": "Regular",
+    "amount": "38072.0",
+    "category": "regular",
+    "rate": "475.9",
+    "units": "80"
+  }
+]
+```
+
+## Deductions Object
+
+Deductions array with categories: `memo`, `medicare`, `retirement`, `benefit`, `socialsec`, `federal`, `state`, `garnishment`, `local`, `other`.
+
+```json
+[
+  {
+    "amount": "127.01",
+    "category": "socialsec",
+    "name": "Social Security Tax"
+  }
+]
+```
+
+## Endpoints
+
+- [Retrieve employment history report](/reference/employment_verification)
+- [Retrieve income and employment report](/reference/income_verification)

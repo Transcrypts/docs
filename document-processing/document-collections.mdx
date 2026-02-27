@@ -1,0 +1,224 @@
+---
+title: "Document Collections"
+description: "Upload, process, and manage multiple documents using AI-powered categorization"
+---
+
+# Document Collections
+
+Document Collections provide a mechanism to upload, process, and manage multiple documents in a single workflow. Documents are automatically validated and processed using AI-powered categorization to identify document types such as paystubs, W2s, 1099s, and more.
+
+## Quickstart
+
+### Python Setup
+
+Save this as `prepare_request.py`:
+
+```python
+import base64, json, sys
+
+with open(sys.argv[1], 'rb') as f:
+    content = base64.b64encode(f.read()).decode()
+
+json.dump({
+    "documents": [{
+        "mime_type": "application/pdf",
+        "content": content,
+        "filename": sys.argv[1]
+    }]
+}, open('request.json', 'w'))
+```
+
+### Execution
+
+```bash
+python prepare_request.py mydocument.pdf
+curl -X POST https://prod.transcrypts.com/v1/documents/collections/ \
+    -H "Content-Type: application/json" \
+    -d @request.json
+```
+
+## Collection Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `collection_id` | string | Unique identifier for the collection |
+| `created_at` | date-time | Creation timestamp |
+| `updated_at` | date-time | Last update timestamp |
+| `files_count` | integer | Number of uploaded files |
+| `documents_count` | integer | Number of recognized documents |
+| `users_count` | integer | Associated user count |
+
+## Uploaded File Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `file_id` | string | Unique file identifier |
+| `filename` | string | Name of uploaded file |
+| `mime_type` | string | File MIME type (pdf, jpeg, png, tiff, webp, bmp, heic, heif) |
+| `status` | string | Processing status: `pending`, `validating`, `validated`, `invalid`, `duplicate`, `processing`, `successful`, `failed` |
+| `validations` | object/null | Validation results (`is_viable_size`, `is_supported_type`, `is_accessible`, `is_valid`, `is_readable`, `is_unique`) |
+| `user_id` | string/null | Associated Transcrypts user ID |
+| `external_user_id` | string/null | External system user ID |
+
+## Recognized Document Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `document_id` | string | Document identifier |
+| `file_id` | string | Parent file ID |
+| `document_type` | string | Type classification (see Document Types below) |
+| `document_subtype` | string/null | Subtype (see Document Subtypes below) |
+| `status` | string | Processing status: `successful`, `failed`, `rejected` |
+| `first_name` | string/null | Extracted first name |
+| `last_name` | string/null | Extracted last name |
+| `user_id` | string/null | Associated user ID |
+| `external_user_id` | string/null | External user ID |
+| `start_page` | integer | Starting page number |
+| `end_page` | integer | Ending page number |
+
+### Document Types
+
+- `PAYSTUB`
+- `W2`
+- `F1099`
+- `F1040`
+- `BANK_STATEMENT`
+- `PASSPORT`
+- `GREEN_CARD`
+- `DRIVER_LICENSE`
+- `LETTER_OF_VERIFICATION`
+- `UTILITY_BILL`
+- `LEASE_AGREEMENT`
+- `INSURANCE_HOME_POLICY`
+- `INSURANCE_AUTO_POLICY`
+- `VOLUNTEER_LETTER`
+- `OTHER`
+
+### Document Subtypes
+
+- `F1099_MISC`
+- `F1099_NEC`
+- `F1099_DIV`
+- `F1099_INT`
+- `F1099_G`
+- `F1099_R`
+- `F_SSA1099`
+- `VOL_TRANSCRIPT`
+- `VOL_HOURS_LOG`
+
+## Finalization Process
+
+After documents are processed and categorized, use the finalize endpoint to create links for the recognized documents. This converts pre-processed documents into usable Transcrypts links for retrieving income and employment data.
+
+### User Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Transcrypts user ID |
+| `external_user_id` | string/null | External system user ID |
+| `links` | array | Associated links created/updated |
+
+### Link Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `link_id` | string | Transcrypts link ID |
+| `status` | string | Link status (`new`, `parse`, `full_parse`, `done`, `no_data`, `config_error`, `error`, `unavailable`) |
+| `documents` | array | Associated documents |
+
+### Document Object (Finalization Response)
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Document ID |
+| `document_type` | string | Document type (uppercase) |
+| `document_subtype` | string/null | Document subtype (uppercase, optional) |
+
+## Example Response: Collection Detail
+
+```json
+{
+  "collection_id": "a1b2c3d4e5f6478899aabbccddeeff00",
+  "created_at": "2025-11-11T10:00:00Z",
+  "updated_at": "2025-11-11T10:05:00Z",
+  "uploaded_files": [
+    {
+      "file_id": "f1234567890abcdef1234567890abcde",
+      "filename": "paystub.pdf",
+      "mime_type": "application/pdf",
+      "status": "successful",
+      "validations": {
+        "is_viable_size": true,
+        "is_supported_type": true,
+        "is_accessible": true,
+        "is_valid": true,
+        "is_readable": true,
+        "is_unique": true
+      },
+      "user_id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": null
+    }
+  ],
+  "documents": [
+    {
+      "document_id": "d0c1234567890abcdef1234567890abc",
+      "file_id": "f1234567890abcdef1234567890abcde",
+      "document_type": "PAYSTUB",
+      "document_subtype": null,
+      "status": "successful",
+      "first_name": "John",
+      "last_name": "Doe",
+      "user_id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": null,
+      "start_page": 1,
+      "end_page": 2
+    }
+  ],
+  "users": [
+    {
+      "id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": "ext_user_789",
+      "first_name": "John",
+      "last_name": "Doe"
+    }
+  ]
+}
+```
+
+## Example Response: Finalization
+
+```json
+{
+  "users": [
+    {
+      "id": "a1b2c3d4e5f6478899aabbccddeeff00",
+      "external_user_id": "ext_user_789",
+      "links": [
+        {
+          "link_id": "c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9",
+          "status": "done",
+          "documents": [
+            {
+              "id": "d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6",
+              "document_type": "PAYSTUB",
+              "document_subtype": null
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Available Endpoints
+
+- [Create a new document collection](/docs/document-processing/collections-create) - POST
+- [Get document collection details](/docs/document-processing/collections-retrieve) - GET
+- [List all document collections](/docs/document-processing/collections-list) - GET
+- [Delete a document collection](/docs/document-processing/collections-delete) - DELETE
+- [Upload files to existing collection](/docs/document-processing/collections-upload) - POST
+- [Get uploaded file details](/docs/document-processing/collections-file-retrieve) - GET
+- [Delete an uploaded file](/docs/document-processing/collections-file-delete) - DELETE
+- [Finalize a collection](/docs/document-processing/collections-finalize) - POST
+- [Get collection finalization results](/docs/document-processing/collections-finalize-retrieve) - GET

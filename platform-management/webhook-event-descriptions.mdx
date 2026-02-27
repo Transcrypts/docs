@@ -1,0 +1,87 @@
+---
+title: "Webhook Event Descriptions"
+description: "Detailed descriptions and example payloads for all Transcrypts webhook events"
+---
+
+## Overview
+
+Transcrypts sends webhook events to notify your application of changes to Tasks, Links, Orders, and data objects. Each event includes a JSON payload with relevant identifiers and metadata.
+
+## Webhook Events
+
+### Task Status Updated
+
+**Event Type:** `task-status-updated`
+
+Triggered when a Task status changes.
+
+```json
+{
+  "webhook_id": "17a80437ce23411dbfd656694d19a8c6",
+  "event_type": "task-status-updated",
+  "event_created_at": "2024-07-11T21:43:08.073930Z",
+  "product": "income",
+  "link_id": "d8a8945ee2b049b193110cfba643f5df",
+  "user_id": "adbe707dddee4334bffaeb5866272740",
+  "data_source": "payroll",
+  "task_id": "871fef2e79ea444ea2019c8845305d31",
+  "status": "parse",
+  "updated_at": "2024-07-11T21:43:08.075540+00:00"
+}
+```
+
+### Order Status Updated
+
+**Event Type:** `order-status-updated`
+
+Occurs for each change to Order status when related to a Task.
+
+### Order Refresh Failed
+
+**Event Type:** `order-refresh-failed`
+
+Fires when a refresh task fails for an Order, allowing detection of refresh failures with order context.
+
+### Link Connected
+
+**Event Type:** `link-connected`
+
+Triggered when a Link connection is successful.
+
+### Link Disconnected
+
+**Event Type:** `link-disconnected`
+
+Occurs as a Link connection error when a refresh task fails.
+
+### Link Deleted
+
+**Event Type:** `link-deleted`
+
+Triggered when removing personal data and credentials from a Link.
+
+### Employment and Profile Created
+
+**Event Types:** `employment-created`, `profile-created`
+
+Occur once per Link for each non-refresh Task completion. Multiple responses are available when finding additional employments.
+
+### Employment and Profile Updated
+
+**Event Types:** `employment-updated`, `profile-updated`
+
+Triggered after completing refresh Tasks.
+
+### Statements, Shifts, and Bank Accounts Created
+
+**Event Types:** `statements-created`, `shifts-created`, `bank-accounts-created`
+
+Include an `objects_count` field indicating the number of associated objects created.
+
+### Statements, Shifts, and Bank Accounts Updated
+
+**Event Types:** `statements-updated`, `shifts-updated`, `bank-accounts-updated`
+
+<Note>
+Notifications only occur when the `objects_count` value changes from the previous refresh.
+</Note>

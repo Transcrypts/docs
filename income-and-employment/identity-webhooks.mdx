@@ -1,0 +1,69 @@
+---
+title: "Identity Webhooks"
+description: "Webhook payload examples for identity profile events"
+---
+
+## Overview
+
+Webhook payloads for Identity endpoints within the Transcrypts API.
+
+## Identity Profile Created
+
+**Event Type:** `profile-created`
+
+These webhooks are triggered when successfully creating an identity and profile. The event occurs once per Link for each non-refresh Task completion, with multiple responses available when additional employments are discovered.
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "81e4552a215d4f4695bc6fae2675aeee",
+  "task_id": "c32fb957ec7246828da56be7516da765",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "profile-created",
+  "event_created_at": "2022-08-23T17:32:19.295569Z",
+  "object_id": "25d588c7cc1c43178375bdc1bc9852ac",
+  "template_id": null
+}
+```
+
+## Identity Profile Updated
+
+**Event Type:** `profile-updated`
+
+Transcrypts sends these webhooks for identity and profile data following completion of refresh Tasks.
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "81e4552a215d4f4695bc6fae2675aeee",
+  "task_id": "c32fb957ec7246828da56be7516da765",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "profile-updated",
+  "event_created_at": "2022-08-23T17:32:19.295569Z",
+  "object_id": "25d588c7cc1c43178375bdc1bc9852ac",
+  "template_id": null
+}
+```
+
+## Payload Field Descriptions
+
+| Field | Description |
+|-------|-------------|
+| `webhook_id` | Unique identifier for the webhook event |
+| `task_id` | Associated Task identifier |
+| `link_id` | Associated Link identifier |
+| `product` | Data product type (employment) |
+| `data_source` | Source of the data (payroll) |
+| `tracking_info` | Optional tracking information |
+| `event_type` | Type of event triggered |
+| `event_created_at` | ISO timestamp of event creation |
+| `object_id` | Unique identifier for the profile object |
+| `template_id` | Optional customization template identifier |

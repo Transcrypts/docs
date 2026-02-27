@@ -1,0 +1,50 @@
+---
+title: "Update a Webhook"
+description: "Modify the configuration of an existing webhook"
+api: "PATCH /v1/webhooks/{webhook_id}"
+---
+
+## Description
+
+This endpoint enables you to modify the configuration of an existing webhook.
+
+## Authentication
+
+The endpoint requires API credentials provided via request headers:
+- Client ID (header)
+- Access Key (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `webhook_id` | string | Yes | The unique identifier of the webhook to update |
+
+## Request Body
+
+The request accepts JSON-formatted webhook configuration updates. Specific fields that can be modified should be included in the request payload.
+
+## Response
+
+### Success Response (200 OK)
+
+Upon successful update, the endpoint returns the modified webhook object with all current configuration details.
+
+### Error Responses
+
+**400 Bad Request:** Returned when request parameters are incorrect or invalid.
+
+**401 Unauthorized:** Returned when authentication credentials are missing or invalid.
+
+```json
+{
+  "error": {
+    "code": "authentication_failed",
+    "message": "No such token"
+  }
+}
+```
+
+**403 Forbidden:** Returned when the user lacks permission to perform this action.
+
+**404 Not Found:** Returned when the specified webhook does not exist.

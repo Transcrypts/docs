@@ -1,0 +1,77 @@
+---
+title: "Connection Lifecycle"
+description: "Task status lifecycle, data processing stages, and connection timing for Transcrypts payroll connections"
+---
+
+## Overview
+
+Transcrypts utilizes Tasks on connected accounts to gather user information. Tasks leverage Link connections with providers to execute actions such as data retrieval and modification. When interfacing with providers, Transcrypts processes user data through multiple stages.
+
+Key topics covered:
+
+- Task status lifecycle with sequencing and error descriptions
+- Data processing stages including approximate timeframes and durations
+
+## Task Status Lifecycle
+
+When users connect payroll accounts through Transcrypts Bridge, a Link is established. This provider connection receives a unique identifier -- the link ID or `access_token` -- which enables data collection and refresh initiation.
+
+The `access_token` works with Links to retrieve reports and trigger data refreshes. Each action creates a Task, which Transcrypts then processes through the payroll provider.
+
+### Task Statuses
+
+Tasks progress sequentially through these statuses:
+
+`new` -> `login` -> `mfa` -> `parse` -> `full_parse` -> `done`
+
+| Status | Description |
+|--------|-------------|
+| `new` | Task created |
+| `login` | Attempting payroll provider authentication |
+| `mfa` | Attempting multi-factor authentication completion |
+| `parse` | Attempting payroll data parsing |
+| `full_parse` | Initial parsing complete; slow object parsing ongoing |
+| `switch_deposit` | Direct deposit switching begins |
+| `done` | Task complete |
+
+### Task Errors
+
+Unsuccessful Task actions include:
+
+| Error | Description |
+|-------|-------------|
+| `login_error` | Failed authentication attempt |
+| `mfa_error` | Incomplete authentication |
+| `config_error` | Configuration issues must be resolved by the user or developer before completing payroll connection |
+| `account_locked` | Locked payroll account |
+| `unable_to_reset` | Incomplete credential reset |
+| `no_data` | No available data from provider |
+| `unavailable` | Payroll provider unavailable |
+| `error` | Generic connection error |
+| `not_supported` | Unsupported provider or HRIS |
+
+## Data Processing Stages
+
+Transcrypts processes data through various stages. Larger documents and specific formats may require extended median times. Webhooks or status update API endpoints track Tasks.
+
+### Processing Stages
+
+| Name | Approximate Time | Description |
+|------|------------------|-------------|
+| `login` | < 10 seconds | User authentication with payroll provider |
+| `mfa` | 10-30 seconds | Multi-factor authentication request |
+| `parse` | ~30 seconds | Collecting all basic information about identity, employment, and list of paystubs with pay dates |
+| `full_parse` | < 45 seconds to 5 minutes | Downloading and parsing paystubs, W2s, income sources; background processing occurs after authentication and Bridge closure |
+| `switch_deposit` | ~30 seconds | Updating pay allocations and distributions within user account |
+
+### Median Stage Times
+
+Processing durations are approximations and subject to variation:
+
+- **Login:** 5 to 15 seconds
+- **Parse:** 30 to 60 seconds (base parsing)
+- **Full parse:** 1 to 5 minutes
+
+<Note>
+Each task has a maximum 20-minute completion limit.
+</Note>

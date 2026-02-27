@@ -1,0 +1,30 @@
+---
+title: "Retrieve an Identity"
+description: "Get the identity data for a user associated with a specific link"
+api: "GET /v1/links/{link_id}/identity/"
+---
+
+## Description
+
+Get the identity data for the user associated with a specific link ID.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the account link |
+
+## Response
+
+The API returns identity data in JSON format for the specified link.
+
+## Related Endpoints
+
+- [Identity reference](/reference/identity) - Identity object attributes
+- [Identity webhooks](/reference/identity-1) - Webhook notifications for identity events

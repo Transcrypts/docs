@@ -1,0 +1,68 @@
+---
+title: "List All Data Providers"
+description: "Retrieve a filtered list of data providers by product type."
+api: "GET /v1/providers/"
+---
+
+## Overview
+
+The endpoint returns a list of data providers filtered by the query parameter `product_type`.
+
+## Request
+
+### Endpoint
+
+```
+GET https://prod.transcrypts.com/v1/providers/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `product_type` | string | No | Filter by product type. Allowed values: `employment`, `income`, `deposit_switch`, `pll`, `insurance`, `financial_accounts`, `assets` |
+
+## Response
+
+### Success Response (HTTP 200)
+
+The endpoint returns a JSON array of provider objects.
+
+```json
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "name": "ADP",
+    "is_supported": true
+  },
+  {
+    "id": "4fb96g75-6828-5673-c4gd-3d074g77bgb7",
+    "name": "Gusto",
+    "is_supported": true
+  }
+]
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Data provider unique ID |
+| `name` | string | Data provider name |
+| `is_supported` | boolean | Support status for the specified product |
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 401 | Unauthorized - Missing or invalid authentication credentials |
+| 403 | Forbidden - Insufficient permissions |

@@ -1,0 +1,34 @@
+---
+title: "Create an Income and Employment Report"
+description: "Creates a verification report for a user showing income and employment details"
+api: "POST /v1/users/{user_id}/reports/"
+---
+
+## Endpoint Overview
+
+Creates a verification report for a user showing income and employment details.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Path Parameters
+
+<ParamField path="user_id" type="string" required>
+  The unique Transcrypts identifier for the user.
+</ParamField>
+
+## Response
+
+Upon successful report creation, the API returns HTTP 201 status with report details.
+
+### Response Status Codes
+
+| Status Code | Description |
+|-------------|-------------|
+| **201** | Report created successfully |
+| **400** | Bad request (incorrect parameters) |
+| **401** | Unauthorized (authentication failed) |
+| **403** | Forbidden (insufficient permissions) |

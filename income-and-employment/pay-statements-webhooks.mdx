@@ -1,0 +1,72 @@
+---
+title: "Pay Statements Webhooks"
+description: "Webhook payload examples for pay statement events"
+---
+
+## Overview
+
+Webhook payloads for Pay Statements endpoints in the Transcrypts API.
+
+## Pay Statement Created
+
+This webhook event occurs when an initial Task successfully completes with new objects.
+
+**Event Type:** `statements-created`
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "f82ab0a92ddd4bb7b6117635159b366a",
+  "task_id": "c32fb957ec7246828da56be7516da765",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "statements-created",
+  "event_created_at": "2022-08-23T17:32:24.812306Z",
+  "objects_count": 9,
+  "employment_id": "427abebd8590457e8332fdff77fc412f",
+  "user_id": "88fef4cea64c40b5ad6727cc9b0b9fdc",
+  "template_id": null
+}
+```
+
+### Key Fields
+
+| Field | Description |
+|-------|-------------|
+| `webhook_id` | Unique identifier for the webhook |
+| `task_id` | Unique identifier for the Task |
+| `link_id` | Unique identifier for the account link |
+| `objects_count` | Number of new pay statements retrieved |
+| `employment_id` | Employment record identifier |
+| `user_id` | User identifier |
+| `event_created_at` | Timestamp when event occurred |
+
+## Pay Statement Updated
+
+This webhook event fires during any refresh Task completion. It indicates changes in statement quantity from a previous Task.
+
+**Event Type:** `statements-updated`
+
+### Example Payload
+
+```json
+{
+  "webhook_id": "f82ab0a92ddd4bb7b6117635159b366a",
+  "task_id": "c32fb957ec7246828da56be7516da765",
+  "link_id": "9915c50cc047413bb810767f218390f8",
+  "product": "employment",
+  "data_source": "payroll",
+  "tracking_info": null,
+  "event_type": "statements-updated",
+  "event_created_at": "2022-08-23T17:32:24.812306Z",
+  "objects_count": 10,
+  "employment_id": "427abebd8590457e8332fdff77fc412f",
+  "user_id": "88fef4cea64c40b5ad6727cc9b0b9fdc",
+  "template_id": null
+}
+```
+
+This reflects scenarios where statement counts change between Tasks, such as when a user previously had 31 pay stubs but now has 32.

@@ -1,0 +1,48 @@
+---
+title: "Update an Order"
+description: "Modify an existing order when all employers are in pending or sent status"
+api: "PATCH /v1/orders/{id}/"
+---
+
+## Endpoint Overview
+
+**PATCH** `https://prod.transcrypts.com/v1/orders/{id}/`
+
+This endpoint modifies an existing order. Updates are only permitted when all employers maintain one of these statuses: `pending` or `sent`.
+
+## Authentication
+
+The endpoint requires API credentials passed via headers:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The order identifier to update |
+
+## Key Constraint
+
+<Warning>
+Update is only available if all employers are in one of the following statuses: `pending` or `sent`. This means the order can only be modified while employers are in an early stage of the verification process.
+</Warning>
+
+## Request Body
+
+The request accepts a JSON payload with the order fields to update. Only the fields provided in the request body will be modified.
+
+## Response
+
+Returns the updated order object in JSON format.
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Retrieve order events](/docs/orders/orders-events)

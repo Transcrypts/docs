@@ -1,0 +1,52 @@
+---
+title: "Orders Webhooks"
+description: "Webhook events for order status changes"
+---
+
+## Order Status Change
+
+The `order-status-updated` event triggers when an Order's status changes. Receiving this event with a status of "completed" indicates successful processing and linked payroll accounts.
+
+### Sample Webhook Payload
+
+```json
+{
+  "webhook_id": "00d265a8919447fb8bfc9da5a6f10fbd",
+  "order_id": "abef776738194af389870fa20219ddf1",
+  "order_number": "4138538",
+  "employer_id": "31e2fdc5bf0c42d4bd2eb16f49066b0d",
+  "product": "income",
+  "data_source": null,
+  "link_id": null,
+  "event_type": "order-status-updated",
+  "event_created_at": "2022-08-24T13:54:00.798978Z",
+  "updated_at": "2022-08-24T13:54:00.799000+00:00",
+  "status": "expired",
+  "user_id": "88fef4cea64c40b5ad6727cc9b0b9fdc",
+  "template_id": null
+}
+```
+
+### Field Reference
+
+| Field Name | Type | Description |
+|---|---|---|
+| `order_id` | string | Order identifier |
+| `order_number` | string | Information passed into the order_number field; nullable |
+| `employer_id` | string | Unique Employer ID of the Order |
+| `link_id` | string | Identifier of associated Link; nullable |
+| `product` | string | Task related to specific product (e.g., "employment" or "income") |
+| `data_source` | string | Source of data: payroll, docs, insurance, financial_accounts, tax |
+| `status` | string | Order status following the status lifecycle |
+| `user_id` | string | Unique user identifier |
+| `template_id` | string | Unique template identifier |
+
+### Important Notes
+
+<Note>
+**Tracking Connection Attempts:** Order status webhooks reflect successful connections only. To monitor all attempts, reference "task status updated" webhooks where the `tracking_info` field matches the Order's `employer_id`.
+</Note>
+
+<Note>
+**Report ID Generation:** A new VOIE or VOA report identifier is generated after each additional connection reaches "completed" status.
+</Note>

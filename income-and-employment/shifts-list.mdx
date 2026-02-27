@@ -1,0 +1,34 @@
+---
+title: "List All Shifts"
+description: "Retrieve a list of work shifts associated with a specific link"
+api: "GET /v1/links/{link_id}/shifts/"
+---
+
+## Description
+
+This endpoint retrieves a comprehensive list of work shifts associated with a specific link. The response includes ongoing and completed work shifts, time entries (clock in/clock out), the type of work, and earnings.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the link |
+
+## Response
+
+The endpoint returns shift data in JSON format including:
+- Clock in/out timestamps
+- Work type classifications
+- Associated earnings data
+- Shift completion status (ongoing vs. completed)
+
+## Related Endpoints
+
+- [Shifts reference](/reference/shifts) - Shifts object attributes
+- [Shifts webhooks](/reference/webhooks-3) - Webhook notifications for shift events

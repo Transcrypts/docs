@@ -1,0 +1,60 @@
+---
+title: "List Webhook Request History"
+description: "Retrieve a paginated list of webhook requests filtered by criteria"
+api: "GET /v1/webhook-requests"
+---
+
+## Description
+
+This endpoint returns a paginated list of webhook requests filtered by provided criteria. Only webhook requests from the last 30 days are available.
+
+## Authentication
+
+This endpoint requires API key credentials provided in the request header:
+- Client ID (header)
+- Access Key (header)
+
+## Key Features
+
+- Filters webhook requests by specified criteria
+- Implements pagination for result sets
+- Provides 30-day historical data window
+
+## Response
+
+### Success Response (200 OK)
+
+Returns a paginated list of webhook request objects.
+
+```json
+{
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "webhook_id": "48427a36d43c4d5aa6324bc06c692456",
+      "event_type": "task-status-updated",
+      "event_created_at": "2024-01-15T10:30:00Z",
+      "status_code": 200,
+      "error_message": null,
+      "webhook_payload": {
+        "webhook_id": "a3f5b7c9d1e2f4a6b8c0d2e4f6a8b0c2",
+        "event_type": "order-status-updated",
+        "event_created_at": "2026-01-27T00:00:16.279921Z",
+        "product": "assets",
+        "link_id": null,
+        "user_id": "b4c6d8e0f2a4b6c8d0e2f4a6b8c0d2e4",
+        "order_id": "c5d7e9f1a3b5c7d9e1f3a5b7c9d1e3f5",
+        "status": "expired"
+      },
+      "webhook_url": "https://example.com/webhooks/transcrypts"
+    }
+  ]
+}
+```
+
+### Error Responses
+
+**401 Unauthorized:** Authentication failed or credentials are missing.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.

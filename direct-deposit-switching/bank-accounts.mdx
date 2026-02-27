@@ -1,0 +1,53 @@
+---
+title: "Bank Accounts"
+description: "Manage bank account information for Direct Deposit Switching and Paycheck Linked Loans products"
+---
+
+## Overview
+
+The Bank Accounts endpoints manage bank account information for Direct Deposit Switching (DDS) and Paycheck Linked Loans (PLL) products. These endpoints allow you to access information from bank accounts connected to a user's payroll account during income and employment verification before making deposit switches.
+
+## Attributes
+
+Bank account objects contain the following attributes:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `account_number` | string | Bank account number |
+| `routing_number` | string | Routing number |
+| `account_name` | string | User-friendly account name for bank account |
+| `account_type` | string | Account type: **C** (Checking) or **S** (Savings) |
+| `deposit_type` | string | Deposit type: **E** (Entire paycheck), **P** (Percentage), or **A** (Fixed amount) |
+| `deposit_value` | string | Deposit value of selected bank account |
+| `bank_name` | string | Bank name |
+
+## Endpoints
+
+The available endpoint for bank account management:
+
+- List all bank accounts
+
+## Example Response
+
+```json
+[
+  {
+    "account_number": "11114623",
+    "routing_number": "101014378",
+    "account_name": null,
+    "account_type": "C",
+    "deposit_type": "A",
+    "deposit_value": "1604.98",
+    "bank_name": "Sandbox Bank"
+  },
+  {
+    "account_number": "11111308",
+    "routing_number": "101013399",
+    "account_name": null,
+    "account_type": "C",
+    "deposit_type": "A",
+    "deposit_value": "25.00",
+    "bank_name": "Sandbox Bank"
+  }
+]
+```

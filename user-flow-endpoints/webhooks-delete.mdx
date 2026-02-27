@@ -1,0 +1,36 @@
+---
+title: "Delete a Webhook"
+description: "Remove a webhook configuration from your account"
+api: "DELETE /v1/webhooks/{webhook_id}"
+---
+
+## Description
+
+This endpoint removes a webhook configuration from your Transcrypts account. When executed, the specified webhook will no longer receive event notifications.
+
+## Authentication
+
+This endpoint requires API credentials:
+- Client ID (header)
+- Access Key (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `webhook_id` | string | Yes | The unique identifier of the webhook to be removed |
+
+## Response
+
+### Success Response (204 No Content)
+
+The endpoint returns no response body upon successful deletion.
+
+### Error Responses
+
+| Status Code | Error | Description |
+|-------------|-------|-------------|
+| 400 | `incorrect_parameters` | Request parameters were invalid |
+| 401 | `authentication_failed` | No such token |
+| 403 | `not_authenticated` | Authentication credentials not provided |
+| 404 | Not Found | The webhook ID does not exist |

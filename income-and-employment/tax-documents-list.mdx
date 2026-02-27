@@ -1,0 +1,29 @@
+---
+title: "List All Tax Documents"
+description: "Retrieve a list of tax documents associated with a specific link"
+api: "GET /v1/links/{link_id}/tax/"
+---
+
+## Description
+
+The endpoint returns a list of tax documents associated with a specific user link. Tax documents are financial records that support income and employment verification.
+
+## Authentication
+
+This endpoint requires API key credentials for access:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the account link |
+
+## Response
+
+The endpoint returns a list of tax document objects in JSON format.
+
+## Related Endpoints
+
+- [Retrieve tax document](/reference/tax-document) - Fetches individual document details

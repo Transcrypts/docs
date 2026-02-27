@@ -1,0 +1,46 @@
+---
+title: "Get List of Orders by SSN"
+description: "Returns a list of orders by an applicant SSN"
+api: "POST /v1/orders/lookup/"
+---
+
+## Endpoint Overview
+
+**POST** `https://prod.transcrypts.com/v1/orders/lookup/`
+
+The endpoint returns a list of orders by an applicant SSN.
+
+## Authentication
+
+This endpoint requires API credentials passed as headers:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Request Body
+
+The endpoint accepts a POST request with parameters related to applicant information for order lookup purposes.
+
+## Response
+
+Returns a list of orders matching the provided SSN.
+
+## Code Examples
+
+Available in multiple languages:
+- Shell
+- Node
+- Ruby
+- PHP
+- Python
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Create a data refresh order](/docs/orders/orders-refresh)
+- [Update an order](/docs/orders/orders-update)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Retrieve self-certification results](/docs/orders/orders-certifications)

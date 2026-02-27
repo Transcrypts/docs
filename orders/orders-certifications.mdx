@@ -1,0 +1,45 @@
+---
+title: "Retrieve Self-Certification Results"
+description: "Retrieve self-certification results for employments and accounts reviewed by the user"
+api: "GET /v1/orders/{id}/certifications/"
+---
+
+## Endpoint Overview
+
+**GET** `https://prod.transcrypts.com/v1/orders/{id}/certifications/`
+
+The endpoint retrieves self-certification results for employments and accounts that have been reviewed and certified by the user.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The order identifier |
+
+## Response
+
+The response contains certification results for:
+- Employments that have been reviewed and certified
+- Accounts that have been reviewed and certified
+
+## Implementation Notes
+
+- This is a read-only operation (GET request)
+- Response includes only items explicitly certified by the user
+- Requires a valid order ID in the path
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Orders webhooks](/docs/orders/orders-webhooks)

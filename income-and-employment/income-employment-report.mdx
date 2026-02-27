@@ -1,0 +1,32 @@
+---
+title: "Retrieve Income and Employment Report"
+description: "Get the VOIE (Verification of Income and Employment) report for a link"
+api: "GET /v1/links/{link_id}/income/report/"
+---
+
+## Description
+
+This endpoint retrieves the VOIE (Verification of Income and Employment) report for a specific account link.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the account link |
+
+## Response
+
+The endpoint returns a VOIE report containing income and employment verification information for the specified link. The exact response structure depends on the data available from the connected payroll or employment data source.
+
+## Related Endpoints
+
+- [Employment history report](/reference/employment_verification) - VOE report
+- [Reports reference](/reference/reports) - Report object attributes
+- [Pay statements](/reference/pay-statements) - Pay statement data
+- [Tax documents](/reference/tax-documents) - Tax document data

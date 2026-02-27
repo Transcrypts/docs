@@ -1,0 +1,40 @@
+---
+title: "Create a Webhook"
+description: "Create a new webhook for receiving event notifications"
+api: "POST /v1/webhooks"
+---
+
+## Description
+
+This endpoint establishes a webhook for receiving notifications about events within the Transcrypts platform. Webhooks support the broader platform lifecycle by enabling real-time notifications for connection status changes, data refresh completion, and employment verification events.
+
+## Authentication
+
+The endpoint requires API credentials passed via request headers:
+- Client ID (header)
+- Access Key (header)
+
+## Request Body
+
+The request body accepts webhook configuration parameters in JSON format.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes | Public webhook configuration name |
+| `webhook_url` | string | Yes | URL where event data is sent |
+| `events` | array | Yes | List of event types to subscribe to |
+| `env_type` | string | No | Environment: `production`, `development`, or `sandbox` |
+
+## Response
+
+### Success Response (201 Created)
+
+The API returns a 201 status code upon successful webhook creation, confirming the webhook has been registered.
+
+### Error Responses
+
+**400 Bad Request:** Returned when request parameters are malformed or incomplete.
+
+**401 Unauthorized:** Authentication credentials missing or invalid.
+
+**403 Forbidden:** Insufficient permissions for webhook creation.

@@ -1,0 +1,39 @@
+---
+title: "Create an Order"
+description: "Create an order within the Transcrypts system"
+api: "POST /v1/orders/"
+---
+
+## Endpoint Overview
+
+**POST** `https://prod.transcrypts.com/v1/orders/`
+
+The endpoint creates an order within the Transcrypts system.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Request Body
+
+The request accepts a JSON payload with order creation parameters. The complete request schema includes fields for applicant information, product type, and employer details.
+
+## Response
+
+**Status Code: 201 (Created)**
+
+Successful requests return order creation data in JSON format.
+
+## Related Operations
+
+- [Get list of orders by SSN](/docs/orders/orders-list-lookup)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Create a data refresh order](/docs/orders/orders-refresh)
+- [Update an order](/docs/orders/orders-update)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Retrieve self-certification results](/docs/orders/orders-certifications)

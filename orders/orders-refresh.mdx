@@ -1,0 +1,52 @@
+---
+title: "Create a Data Refresh Order"
+description: "Create a new order with data populated from an existing order"
+api: "POST /v1/orders/{id}/"
+---
+
+## Endpoint Overview
+
+**POST** `https://prod.transcrypts.com/v1/orders/{id}/`
+
+The endpoint creates a new order with data populated from the existing order, eliminating the need to re-enter all details manually.
+
+## Authentication
+
+The endpoint requires API credentials passed via headers:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The ID of the existing order to refresh from |
+
+## Request Body
+
+The endpoint accepts an order ID in the URL path. The request body schema follows the standard order creation parameters, with data pre-populated from the source order.
+
+## Response
+
+**Status Code: 201 (Created)**
+
+Upon successful execution, the API returns the newly created refresh order with populated data fields carried over from the source order.
+
+## Error Handling
+
+| Status Code | Description |
+|-------------|-------------|
+| `201` | Resource created successfully |
+| `400` | Invalid request parameters provided |
+| `401` | Authentication credentials missing or invalid |
+| `403` | Insufficient permissions for the action |
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Update an order](/docs/orders/orders-update)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)

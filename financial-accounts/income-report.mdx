@@ -1,0 +1,218 @@
+---
+title: "Income Report"
+description: "Bank income reports providing detailed information about income sources identified in user bank accounts"
+---
+
+## Overview
+
+This page documents bank income reports available through the Transcrypts API, providing detailed information about income sources identified in user bank accounts.
+
+## Attributes
+
+The bank income report response includes the following primary attributes:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| status | string | Report status: `success` or `processing` |
+| completed_at | date-time | Timestamp when report was completed |
+| days_requested | int32 | Requested number of days for transactions |
+| tracking_info | string | Optional user-provided identifier |
+| provider | string | Data provider identifier |
+| access_token | string | Unique token for the Link |
+| companies | array of strings | List of employers |
+| accounts | array of objects | Bank accounts (see Accounts object) |
+| income | array of objects | Income sources (see Income object) |
+| summary | array of objects | Account summary (see Summary object) |
+| is_suspicious | Boolean | Fraud detection flag |
+
+## Accounts Object
+
+Represents individual bank accounts with these attributes:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique account identifier |
+| created_at | date-time | Account creation timestamp |
+| updated_at | date-time | Last update timestamp |
+| type | string | Account category (e.g., CHECKING, SAVINGS) |
+| subtype | string | Specific account type (e.g., PLAN_401_K, MONEY_MARKET) |
+| mask | string | Masked account number |
+| nickname | string | Alternate account name |
+| owners | array of objects | Account owner information |
+
+## Owner Object
+
+Account owners include these details:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Owner identifier |
+| full_name | string | Owner's full name |
+| email | string | Owner's email address |
+| phone | string | Owner's phone number |
+| address | object | Owner's address |
+| relation_type | string | Relationship to account |
+
+## Income Object
+
+Income sources contain detailed earnings data:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| start_date | date | Earliest transaction date in dataset |
+| end_date | date | Latest transaction date in dataset |
+| account_id | string | Associated account identifier |
+| income_description | string | Original transaction description |
+| income_category | string | Categorized income type |
+| avg_deposit_amount | number | Average net deposit per transaction |
+| avg_gross_deposit_amount | number | Predicted average gross payment |
+| pay_frequency | string | Deposit frequency (M/SM/W/BW/A/SA/C) |
+| next_payment_date | date | Projected next payment date |
+| total_amount | number | Total earnings in period |
+| iso_currency_code | string | ISO 4217 currency code |
+| transaction_count | integer | Number of income transactions |
+| historical_summary | array of objects | Monthly summaries with transactions |
+
+### Pay Frequency Codes
+
+- **M** - Monthly
+- **SM** - Semi-monthly
+- **W** - Weekly
+- **BW** - Bi-weekly
+- **A** - Annually
+- **SA** - Semi-annually
+- **C** - Commission
+
+### Historical Summary Object
+
+Monthly breakdowns include:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| start_date | date | Period start (first day of month unless partial) |
+| end_date | date | Period end (last day of month unless partial) |
+| total_amount | number | Monthly earnings total |
+| iso_currency_code | string | Currency code |
+| transactions | array of objects | Monthly transactions |
+
+<Note>Partial months occur when the requested date range doesn't align with calendar month boundaries.</Note>
+
+### Transactions Object
+
+Individual transactions show:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| amount | string | Settled transaction value |
+| iso_currency_code | string | Transaction currency |
+| date | date | Transaction occurrence date |
+| check_number | string | Check identifier if applicable |
+| description | string | Human-readable transaction label |
+| pending | Boolean | Pending status indicator |
+| transaction_id | string | Unique transaction identifier |
+
+## Summary Object
+
+Account-level summary metrics:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| start_date | date | Minimum date across all income sources |
+| end_date | date | Maximum date across all income sources |
+| income_sources_count | integer | Number of distinct income sources |
+| income_categories_count | integer | Number of income categories |
+| income_transactions_count | integer | Total income transactions |
+| total_amount | string | Combined earnings total |
+| iso_currency_code | string | Currency code |
+
+## Endpoints
+
+Two primary operations support bank income reports:
+
+1. Creates a bank income report
+2. Retrieves a bank income report
+
+## Example Response
+
+```json
+{
+  "access_token": "a1685cadf2fe4e179cf883d2c166efd0",
+  "accounts": [
+    {
+      "created_at": "2024-11-25T15:46:30.668062Z",
+      "id": "3aed25abdbc246138b84a2afd46cb05b",
+      "mask": "******0685",
+      "nickname": null,
+      "owners": [
+        {
+          "address": {
+            "city": "Redwood City",
+            "country": null,
+            "state": "CA",
+            "street": "35 Dry Ridge Rd",
+            "zip": "94062"
+          },
+          "email": "john.doe@example.com",
+          "full_name": "John Doe",
+          "id": "a43909f402f84f2392257d1e6eaf715b",
+          "phone": "14155554193",
+          "relation_type": null
+        }
+      ],
+      "subtype": null,
+      "type": "CHECKING",
+      "updated_at": "2024-11-25T15:46:30.668073Z"
+    }
+  ],
+  "companies": ["string"],
+  "completed_at": "2024-11-25T15:46:47.498456Z",
+  "days_requested": 61,
+  "income": [
+    {
+      "account_id": "3aed25abdbc246138b84a2afd46cb05b",
+      "avg_deposit_amount": "1327.84",
+      "avg_gross_deposit_amount": "1765.19",
+      "end_date": "2024-11-24",
+      "historical_summary": [
+        {
+          "end_date": "2024-09-30",
+          "iso_currency_code": "USD",
+          "start_date": "2024-09-25",
+          "total_amount": "1327.84",
+          "transactions": [
+            {
+              "amount": "1327.84",
+              "check_number": null,
+              "date": "2024-09-27",
+              "description": "string",
+              "iso_currency_code": "USD",
+              "pending": false,
+              "transaction_id": "c08230e3b20c4cd0b319bc5c3062ae1d"
+            }
+          ]
+        }
+      ],
+      "income_category": "Income: Paycheck",
+      "income_description": "string",
+      "iso_currency_code": "USD",
+      "pay_frequency": "BW",
+      "start_date": "2024-09-25",
+      "total_amount": "6639.20",
+      "transaction_count": 5
+    }
+  ],
+  "is_suspicious": false,
+  "provider": "9f732f7a-b6e2-4c60-81eb-af6274f411dc",
+  "status": "success",
+  "summary": {
+    "end_date": "2024-11-24",
+    "income_categories_count": 1,
+    "income_sources_count": 1,
+    "income_transactions_count": 5,
+    "iso_currency_code": "USD",
+    "start_date": "2024-09-25",
+    "total_amount": "6639.20"
+  },
+  "tracking_info": null
+}
+```

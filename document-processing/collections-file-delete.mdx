@@ -1,0 +1,60 @@
+---
+title: "Delete an Uploaded File"
+description: "Soft-delete a specific uploaded file within a collection"
+api: "DELETE /v1/documents/collections/{collection_id}/upload/{uploaded_file_id}/"
+---
+
+# Delete an Uploaded File
+
+This endpoint performs a soft deletion on a specific uploaded file within a collection. The file receives a deleted status marker but remains stored in the system rather than being physically removed.
+
+## Authentication
+
+This endpoint requires API credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `collection_id` | string | The unique identifier for the document collection (required) |
+| `uploaded_file_id` | string | The unique identifier for the file to delete (required) |
+
+## Response
+
+### 204 No Content
+
+Successful deletion. No response body is returned.
+
+## Error Responses
+
+### 401 Unauthorized
+
+```json
+{
+  "error": {
+    "code": "authentication_failed",
+    "message": "No such token"
+  }
+}
+```
+
+### 403 Forbidden
+
+```json
+{
+  "error": {
+    "code": "not_authenticated",
+    "message": "Authentication credentials were not provided."
+  }
+}
+```
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Not Found."
+}
+```

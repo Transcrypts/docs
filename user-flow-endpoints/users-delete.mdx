@@ -1,0 +1,68 @@
+---
+title: "Delete a User"
+description: "Permanently remove a user from the Transcrypts system."
+api: "DELETE /v1/users/{user_id}/"
+---
+
+## Overview
+
+This endpoint removes a user from the system. The operation permanently deletes the specified user record.
+
+## Request
+
+### Endpoint
+
+```
+DELETE https://prod.transcrypts.com/v1/users/{user_id}/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `user_id` | string | Yes | The unique identifier of the user to be removed |
+
+## Response
+
+### Success Response (HTTP 204)
+
+A successful deletion returns an HTTP 204 No Content status, indicating the user has been removed.
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 401 | Unauthorized - Missing or invalid authentication credentials |
+| 403 | Forbidden - Insufficient permissions |
+| 404 | Not Found - User does not exist |
+
+### Example Error Response (401)
+
+```json
+{
+  "error": {
+    "code": "authentication_failed",
+    "message": "No such token"
+  }
+}
+```
+
+### Example Error Response (403)
+
+```json
+{
+  "error": {
+    "code": "not_authenticated",
+    "message": "Authentication credentials were not provided."
+  }
+}
+```

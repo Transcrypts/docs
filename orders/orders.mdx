@@ -1,0 +1,268 @@
+---
+title: "Orders API"
+description: "Overview of the Orders API for creating customized landing pages and managing verification orders"
+---
+
+## Overview
+
+An **Order** represents a customized landing page created for users to connect their accounts. These personalized invitations can be sent via email, text message, or both. Orders are customizable across three key components:
+
+- Landing page
+- Text message
+- Email
+
+Users access their personalized landing pages through invitation links, and Orders can be created either through the Transcrypts Dashboard or programmatically using API endpoints.
+
+## Core Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique order identifier |
+| `products` | array | Selected products for the order |
+| `source` | string | Platform type: `internal`, `accio`, `tazworks`, `encompass`, `simplenexus`, `external_webpage` |
+| `order_number` | string | External client ID |
+| `custom_field` | string | Client-provided field for email, SMS, or landing page (dashboard-enabled only) |
+| `client_name` | string | Verification agency name |
+| `first_name` | string | User first name |
+| `last_name` | string | User last name |
+| `user_id` | string | Unique user identifier |
+| `share_url` | string | Landing page URL for sharing |
+| `created_at` | string | ISO 8601 creation timestamp |
+| `updated_at` | string | ISO 8601 last update timestamp |
+| `canceled_at` | string | ISO 8601 cancellation timestamp |
+| `expired_at` | string | ISO 8601 expiration timestamp |
+| `is_expired` | bool | Expiration status |
+| `initial_order` | string | Origin order ID from refresh action |
+| `refresh_order` | string | Latest refresh order ID |
+| `employers` | array | User employer list (see Employers object) |
+| `insurance` | array | Insurance metadata (see Insurance object) |
+| `bank` | array | Bank transaction metadata (see Bank object) |
+| `manager` | array | Order manager info (see Manager object) |
+| `loan` | array | Loan information (see Loan object) |
+| `template_id` | string | Template identifier |
+| `voie_report_id` | string | Income/employment report ID (Fannie Mae DU, Freddie Mac LPA compatible) |
+| `voa_report_id` | string | Asset verification report ID |
+| `income_insights_report_id` | string | Bank income insights report ID |
+| `aim_check_report_id` | string | AIM check report ID for income from uploaded documents |
+
+## Company Address Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `street` | string | Street address |
+| `city` | string | City |
+| `state` | string | State |
+| `zip` | string | Zip code |
+| `country` | string | Country |
+
+## Employers Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier |
+| `product_type` | string | `income`, `employment`, `deposit_switch`, `pll` |
+| `status` | string | `pending`, `sent`, `completed`, `error`, `canceled`, `expired`, `no_data`, `skipped` |
+| `suborder_number` | string | External ID |
+| `created_at` | string | Creation timestamp |
+| `bridge_token` | string | Bridge token UUID |
+| `link_id` | string | Connected account link ID |
+| `access_token` | string | Data refresh access token |
+| `pdf_report` | uri | PDF verification report |
+| `data_source` | string | `payroll`, `docs`, `insurance`, `financial_accounts`, `tax`, `scoring_attributes` |
+| `provider` | object | Payroll/insurance provider details |
+| `is_suspicious` | Boolean | Suspicious data flag |
+| `start_date` | string | Employment start date |
+| `end_date` | string | Employment end date |
+| `company_name` | string | Employer name |
+| `company_address` | object | Company address details |
+| `company_domain` | string | Company website domain |
+| `employments` | array | Employment records (see Employments object) |
+
+### Provider Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique provider identifier |
+| `name` | string | Provider name |
+| `logo_url` | uri | Provider logo URL |
+
+### Employments Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `income` | string | Income excluding commission/bonuses (income product only) |
+| `income_unit` | string | `YEARLY`, `MONTHLY`, `WEEKLY`, `DAILY`, `HOURLY` |
+| `pay_rate` | string | Payment per cycle |
+| `pay_frequency` | string | `M`, `SM`, `W`, `BW`, `A`, `SA`, `C` (Monthly, Semi-Monthly, Weekly, Bi-Weekly, Annual, Semiannual, Commission) |
+| `statements` | array | Paystubs from payroll provider |
+| `annual_income_summary` | array | Annual income by year |
+| `bank_accounts` | array | Linked bank accounts |
+| `w2s` | array | Linked W-2 forms |
+| `id` | string | Unique identifier |
+| `is_active` | Boolean | Active employment status |
+| `job_title` | string | Employee job title |
+| `job_type` | string | `F`, `P`, `S`, `D`, `C` (Full-Time, Part-Time, Seasonal, Daily, Contract) |
+| `start_date` | date | Hire date |
+| `original_hire_date` | date | Original hire date |
+| `end_date` | date | Employment end date |
+| `external_last_update` | date | Last payroll provider data update date |
+| `derived_fields` | array | Derived field list |
+| `missing_data_fields` | array | Missing payroll response fields |
+| `manager_name` | string | Supervisor name |
+| `profile` | object | Identity information |
+| `company` | object | Company details (see Company object) |
+| `gse_accepted` | Boolean | Fannie Mae Desktop Underwriter provider eligibility |
+
+### Statements Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier |
+| `check_number` | string | Payroll provider pay stub ID |
+| `pay_date` | date | Payment date |
+| `net_pay` | string | Net pay amount |
+| `net_pay_ytd` | string | Year-to-date net pay |
+| `gross_pay` | string | Gross pay amount |
+| `gross_pay_ytd` | string | Year-to-date gross pay |
+| `bonus` | string | Bonus amount |
+| `commission` | string | Commission amount |
+| `hours` | string | Work hours during period |
+| `basis_of_pay` | string | `S`, `H`, `D`, `W` (Salary, Hourly, Daily, Weekly) |
+| `period_start` | date | Pay period start |
+| `period_end` | date | Pay period end |
+| `regular` | string | Regular pay |
+| `regular_ytd` | string | Year-to-date regular salary |
+| `other_pay_ytd` | string | Year-to-date other payments |
+| `bonus_ytd` | string | Year-to-date bonus |
+| `commission_ytd` | string | Year-to-date commission |
+| `overtime` | string | Overtime pay |
+| `overtime_ytd` | string | Year-to-date overtime |
+| `other_pay` | string | Other payment types |
+| `earnings` | array | Pay cycle earnings by type |
+| `earnings_ytd` | array | Year-to-date earnings by type |
+| `deductions` | array | Pay cycle deductions by type |
+| `deductions_ytd` | array | Year-to-date deductions by type |
+| `md5sum` | string | File content MD5 hash |
+| `file` | uri | Pay stub file link |
+| `derived_fields` | array | Derived field list |
+| `missing_data_fields` | array | Missing payroll response fields |
+
+### Annual Income Summary Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier |
+| `year` | integer | Income report year |
+| `regular` | string | Regular salary |
+| `bonus` | string | Bonus amount |
+| `commission` | string | Commission amount |
+| `overtime` | string | Overtime pay |
+| `other_pay` | string | Other payment forms |
+| `net_pay` | string | Net pay |
+| `gross_pay` | string | Gross pay |
+
+### Bank Accounts Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `account_number` | string | Bank account number |
+| `routing_number` | string | Routing number |
+| `account_name` | string | User-friendly account name |
+| `account_type` | string | `C`, `S` (Checking, Savings) |
+| `deposit_type` | string | `E`, `P`, `A` (Entire Paycheck, Percentage, Fixed Amount) |
+| `deposit_value` | string | Deposit amount |
+| `bank_name` | string | Bank institution name |
+
+### W2s Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `file` | uri | W-2 report file link |
+| `md5sum` | string | File content MD5 hash |
+| `year` | integer | Tax year |
+| `wages` | string | Wages, tips, other compensation (Section 1) |
+| `federal_tax` | string | Federal income tax withheld (Section 2) |
+| `social_security_wages` | string | Social security wages (Section 3) |
+| `social_security_tax` | string | Social security tax withheld (Section 4) |
+| `medicare_wages` | string | Medicare wages (Section 5) |
+| `medicare_tax` | string | Medicare tax withheld (Section 6) |
+| `gross_pay` | string | Gross pay |
+
+### Company Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `name` | string | Company name |
+| `address` | object | Company address details |
+| `phone` | string | Company phone number |
+| `ein` | string | Employer Identification Number |
+
+## Insurance Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier |
+| `product_type` | string | Product type |
+| `status` | string | Order status |
+| `suborder_number` | string | External ID |
+| `created_at` | string | Creation timestamp |
+| `bridge_token` | string | Bridge token UUID |
+| `link_id` | string | Connected account link ID |
+| `access_token` | string | Data refresh access token |
+| `pdf_report` | uri | PDF verification report |
+| `data_source` | string | `payroll`, `docs`, `insurance`, `financial_accounts`, `tax`, `scoring_attributes` |
+| `provider` | object | Payroll/insurance provider |
+| `is_suspicious` | Boolean | Suspicious data flag |
+| `provider_id` | string | Pre-selected insurance provider ID |
+
+## Bank Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique identifier |
+| `product_type` | string | Product type |
+| `status` | string | Order status |
+| `suborder_number` | string | External ID |
+| `created_at` | string | Creation timestamp |
+| `bridge_token` | string | Bridge token UUID |
+| `link_id` | string | Connected account link ID |
+| `access_token` | string | Data refresh access token |
+| `pdf_report` | uri | PDF verification report |
+| `data_source` | string | `payroll`, `docs`, `insurance`, `financial_accounts`, `tax`, `scoring_attributes` |
+| `provider` | object | Payroll/insurance provider |
+| `is_suspicious` | Boolean | Suspicious data flag |
+
+## Manager Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `email` | string | Order manager email |
+| `name` | string | Order manager name |
+
+## Loan Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `loan_number` | string | Loan identifier |
+| `external_id` | string | External loan ID (from POS) |
+| `originator_name` | string | Loan originator name |
+| `originator_email` | string | Loan originator email |
+| `loan_processor_name` | string | Loan processor name |
+| `loan_processor_email` | string | Loan processor email |
+
+## Available Endpoints
+
+- [Create an order](/docs/orders/orders-create)
+- [Get list of orders by SSN](/docs/orders/orders-list-lookup)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Create a data refresh order](/docs/orders/orders-refresh)
+- [Update an order](/docs/orders/orders-update)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Retrieve self-certification results](/docs/orders/orders-certifications)
+
+<Note>
+To retrieve a PDF version of the report, use the corresponding `report_id` with the GET endpoint in the User Reports section.
+</Note>

@@ -1,0 +1,76 @@
+---
+title: "List All Parsed Documents"
+description: "Retrieve a paginated list of parsed documents with extracted structured data"
+api: "GET /v1/links/{link_id}/parsed-documents/"
+---
+
+# List All Parsed Documents
+
+This endpoint retrieves a paginated list of parsed documents associated with a specific link. Parsed documents contain structured data extracted from uploaded documents through AI-powered processing.
+
+<Note>
+Currently, only volunteer letters are available through this endpoint. Support for additional document types (paystubs, etc.) will be added in future releases.
+</Note>
+
+## Authentication
+
+This endpoint requires authentication credentials:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `link_id` | string | The unique identifier for the link (required) |
+
+## Query Parameters
+
+The endpoint supports filtering, ordering, and pagination through query parameters.
+
+## Response
+
+The endpoint returns structured JSON containing parsed document data, including:
+- Document metadata
+- Extracted structured information
+- Processing status indicators
+
+## Available Document Types
+
+| Type | Status |
+|------|--------|
+| Volunteer Letters | Currently supported |
+| Paystubs | Coming in future releases |
+| Additional types | Coming in future releases |
+
+## Error Responses
+
+### 401 Unauthorized
+
+```json
+{
+  "error": {
+    "code": "authentication_failed",
+    "message": "No such token"
+  }
+}
+```
+
+### 403 Forbidden
+
+```json
+{
+  "error": {
+    "code": "not_authenticated",
+    "message": "Authentication credentials were not provided."
+  }
+}
+```
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Not Found."
+}
+```

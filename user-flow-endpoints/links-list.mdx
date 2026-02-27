@@ -1,0 +1,27 @@
+---
+title: "List All Links"
+description: "Retrieve a list of all account links"
+api: "GET /v1/links"
+---
+
+## Description
+
+This endpoint returns a list of Links.
+
+## Authentication
+
+This endpoint requires API key credentials passed in the request header:
+- Client ID (header)
+- Access Key (header)
+
+## Response
+
+### Success Response (200 OK)
+
+Returns a list of Link objects with their properties including `id`, `created_at`, `updated_at`, `tracking_info`, `status`, `user_external_id`, `provider_id`, and `link_hash`.
+
+### Error Responses
+
+**401 Unauthorized:** Authentication credentials are invalid or missing.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.

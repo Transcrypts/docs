@@ -1,0 +1,30 @@
+---
+title: "Retrieve an Employment"
+description: "Get the most recent employment data for a specific link"
+api: "GET /v1/links/{link_id}/employment/"
+---
+
+## Description
+
+Get the most recent employment data associated with a specific link ID.
+
+## Authentication
+
+This endpoint requires API credentials to be provided in the request header:
+- **ClientID** (header)
+- **AccessKey** (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `link_id` | string | Yes | The unique identifier for the link from which to retrieve employment data |
+
+## Response
+
+The endpoint returns employment data in JSON format containing the most recent employment record associated with the provided link.
+
+## Related Endpoints
+
+- [List all employments](/reference/link-employments) - GET endpoint for listing all employments
+- [Employment webhooks](/reference/employment-1) - Webhook notifications for employment events

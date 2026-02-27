@@ -1,0 +1,62 @@
+---
+title: "Identity"
+description: "Identity object attributes and data structure for user personal information"
+---
+
+## Overview
+
+The Identity endpoint provides access to user personal identifiable information including names, addresses, contact details, and other identity-related data. This information is connected to the `link_id` within Transcrypts's product ecosystem.
+
+## Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique user identifier |
+| created_at | string | ISO 8601 timestamp for initial identity data retrieval |
+| updated_at | string | ISO 8601 timestamp for most recent identity data retrieval |
+| first_name | string | User's first name |
+| last_name | string | User's last name |
+| full_name | string | Complete name |
+| middle_initials | string | Middle name initials |
+| email | string | Email address |
+| ssn | string | Social Security Number |
+| date_of_birth | date | Birth date |
+| home_address | object | Address information (see Address Object) |
+
+### Address Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| street | string | Street address |
+| city | string | City name |
+| state | string | State abbreviation |
+| zip | string | Postal code |
+| country | string | Country identifier |
+
+## Endpoints
+
+- [Retrieve an identity](/reference/link-identity)
+
+## Example Response
+
+```json
+{
+  "id": "710097b33ec14f898df3644b563430e1",
+  "created_at": "2022-08-10T09:30:48.520089Z",
+  "updated_at": "2022-08-10T09:30:48.520114Z",
+  "first_name": "John",
+  "last_name": "Doe",
+  "full_name": "John Doe",
+  "middle_initials": null,
+  "email": "john.doe@gmail.com",
+  "ssn": "221122112",
+  "date_of_birth": "1992-03-03",
+  "home_address": {
+    "zip": "94062",
+    "city": "Redwood City",
+    "state": "CA",
+    "street": "35 Dry Ridge Rd",
+    "country": "US"
+  }
+}
+```

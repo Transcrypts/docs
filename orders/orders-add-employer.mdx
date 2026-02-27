@@ -1,0 +1,47 @@
+---
+title: "Add New Employer to Existing Order"
+description: "Add a new employer to an order that is already in progress"
+api: "POST /v1/orders/{id}/employers/"
+---
+
+## Endpoint Overview
+
+**POST** `https://prod.transcrypts.com/v1/orders/{id}/employers/`
+
+This endpoint enables you to add a new employer to an order that is already in progress. The order must be active (not expired or canceled).
+
+## Authentication
+
+This endpoint requires API credentials passed via headers:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The order identifier to add an employer to |
+
+## Prerequisites
+
+Before using this endpoint, ensure:
+- You have obtained valid API credentials
+- The target order exists and remains active
+- The order has not expired or been canceled
+
+## Response
+
+Returns the updated order with the newly added employer information.
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Update an order](/docs/orders/orders-update)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Create a data refresh order](/docs/orders/orders-refresh)
+- [Retrieve order invoice](/docs/orders/orders-invoice)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Retrieve self-certification results](/docs/orders/orders-certifications)

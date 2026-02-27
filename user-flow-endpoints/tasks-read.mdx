@@ -1,0 +1,35 @@
+---
+title: "Retrieve a Task"
+description: "Retrieve details for a specific task"
+api: "GET /v1/tasks/{id}"
+---
+
+## Description
+
+The endpoint retrieves task information and returns a Task object.
+
+## Authentication
+
+This endpoint requires API credentials:
+- Client ID (header)
+- Access Key (header)
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | string | Yes | The task identifier to retrieve |
+
+## Response
+
+### Success Response (200 OK)
+
+Returns a Task object containing the requested task details.
+
+### Error Responses
+
+**401 Unauthorized:** Invalid or missing authentication credentials.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.
+
+**404 Not Found:** The specified task ID does not exist.

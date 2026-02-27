@@ -1,0 +1,92 @@
+---
+title: "Users"
+description: "User objects represent distinct users that connect their accounts via Transcrypts Bridge."
+---
+
+## Overview
+
+User objects represent distinct users that would connect their accounts via Transcrypts Bridge.
+
+## User Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Unique ID of user |
+| `external_user_id` | string | External user ID |
+| `first_name` | string | First name* |
+| `last_name` | string | Last name* |
+| `email` | string | User email |
+| `phone` | string | User phone number |
+| `ssn` | string | User SSN |
+| `created_at` | datetime | Timestamp when user was created |
+| `updated_at` | datetime | Timestamp when user was last updated |
+
+<Note>
+Full name is required. Users and applicants require both `first_name` and `last_name` values when testing for document processing integration.
+</Note>
+
+## Endpoints
+
+Available endpoints for user management:
+
+- [List all users](/docs/user-flow-endpoints/users-list)
+- [Create a user](/docs/user-flow-endpoints/users-create)
+- [Retrieve a user](/docs/user-flow-endpoints/users-read)
+- [Update a user](/docs/user-flow-endpoints/users-update)
+- [Delete a user](/docs/user-flow-endpoints/users-delete)
+
+## Example Response
+
+From the Create User endpoint:
+
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "external_user_id": "12345",
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "phone": "+14155554193",
+  "ssn": "222233333",
+  "created_at": "2022-05-04T11:30:00Z",
+  "updated_at": "2022-05-04T12:00:00Z"
+}
+```
+
+## User Bridge Token
+
+A User bridge token is a temporary value required for loading Transcrypts Bridge for a specific user.
+
+### Bridge Token Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `bridge_token` | string | Unique ID of Bridge Token |
+| `tracking_info` | string | Information to associate with current user |
+| `client_name` | string | Client name for Transcrypts Bridge |
+| `product_type` | string | Indicates main product type |
+| `allowed_products` | array | List of allowed products; only main type if not included |
+| `company_mapping_id` | string | Company ID to skip search step (see Deeplinking) |
+| `access_token` | string | Access token of existing Link for data refresh |
+
+### Bridge Token Endpoint
+
+- [Create a bridge token](/docs/user-flow-endpoints/bridge-token-create)
+
+### Example Bridge Token Response
+
+```json
+{
+  "bridge_token": "2f67984a110747d190c39e1022c81837",
+  "tracking_info": "any data for tracking current user",
+  "client_name": "Transcrypts Demo",
+  "product_type": "income",
+  "allowed_products": [
+    "income",
+    "deposit_switch"
+  ],
+  "company_mapping_id": "99dd17074ac94aa9ace2621d657c7610",
+  "access_token": "99dd17074ac94aa9ace2621d657c7610",
+  "user_id": "99dd17074ac94aa9ace2621d657c7610"
+}
+```

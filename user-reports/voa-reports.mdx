@@ -1,0 +1,138 @@
+---
+title: "VOA Reports"
+description: "Verification of Assets (VOA) reports containing information from the user's accounts"
+---
+
+Verification of Assets (VOA) reports contain information from the user's accounts.
+
+## Attributes
+
+### Main Report Object
+
+<ParamField body="report_id" type="string">
+  Unique report identifier.
+</ParamField>
+
+<ParamField body="created_at" type="date-time">
+  Report creation timestamp.
+</ParamField>
+
+<ParamField body="completed_at" type="date-time">
+  Report completion timestamp.
+</ParamField>
+
+<ParamField body="days_requested" type="integer">
+  Number of days for requested transactions.
+</ParamField>
+
+<ParamField body="large_deposit_threshold" type="integer" nullable>
+  Minimum deposit amount to mark as large.
+</ParamField>
+
+<ParamField body="is_voe" type="boolean">
+  Indicates if report is deposit-based employment verification.
+</ParamField>
+
+<ParamField body="borrower" type="object">
+  Borrower information.
+</ParamField>
+
+<ParamField body="links" type="array of objects">
+  List of asset links.
+</ParamField>
+
+<ParamField body="summary" type="object">
+  Balance summary information.
+</ParamField>
+
+### Borrower Object
+
+Contains user identity information including `id`, `external_user_id`, `first_name`, `last_name`, `email`, `phone`, `SSN`, and timestamps.
+
+### Links Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `link_id` | string | Unique link identifier |
+| `tracking_info` | string | Optional user-provided identifier |
+| `provider` | string | Financial institution ID |
+| `provider_name` | string | Financial institution name |
+| `accounts` | array of objects | List of asset accounts |
+
+### Accounts Object
+
+Detailed account information including:
+
+- **Basic Details**: `id`, `created_at`, `updated_at`, `type`, `subtype`, `mask`, `routing_number`, `nickname`
+- **Balance Info**: `days_available`, `balance_as_of`, `balances` object
+- **Transaction Data**: `transactions` array with individual transaction records
+- **Ownership**: `owners` array showing account holders
+- **Summary**: Average balances for 30/60/90 day periods
+- **Verification**: `same_owner_as_requested` (boolean), `direct_deposit_from_employer` (boolean), NSF count
+
+### Balances Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `currency_code` | string | ISO 4217 currency code |
+| `balance` | string | Current account balance |
+| `available_balance` | string | Available balance for checking/savings |
+| `credit_limit` | string | Associated credit limit |
+
+### Transactions Object
+
+Contains individual transaction records with:
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Transaction identifier |
+| `external_id` | string | External transaction identifier |
+| `amount` | string | Transaction amount |
+| `currency_code` | string | ISO 4217 currency code |
+| `check_number` | string | Check number |
+| `categories` | string | Transaction categories |
+| `description` | string | Transaction description |
+| `status` | string | `POSTED` or `PENDING` |
+| `type` | string | `CREDIT` or `DEBIT` |
+| `posted_at` | date-time | Posted timestamp |
+| `transacted_at` | date-time | Transaction timestamp |
+| `merchant_category_code` | string | Merchant category code |
+| `ending_daily_balance` | string | Ending daily balance |
+| `is_direct_deposit` | boolean | Whether transaction is a direct deposit |
+| `is_subscription` | boolean | Whether transaction is a subscription |
+
+### Owners Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | string | Owner ID |
+| `full_name` | string | Owner name |
+| `email` | string | Email address |
+| `phone` | string | Phone number |
+| `address` | object | Street, city, state, zip, country |
+| `relation_type` | string | Account relationship type |
+
+#### Relation Types
+
+| Value | Description |
+|-------|-------------|
+| `PRIMARY` | Primary account holder |
+| `BUSINESS` | Business account relationship |
+| `JOINT` | Joint account holder |
+| `SECONDARY` | Secondary account holder |
+| `AUTHORIZED_USER` | Authorized user on account |
+| `FOR_BENEFIT_OF` | Account held for another person's benefit |
+
+### Summary Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `avg_30` | string | 30-day average balance |
+| `avg_60` | string | 60-day average balance |
+| `avg_90` | string | 90-day average balance |
+| `currency_code` | string | ISO 4217 currency code |
+
+## Endpoints
+
+- [Create an assets report](/docs/user-reports/assets-report-create)
+- [Retrieve an assets report](/docs/user-reports/assets-report-retrieve)

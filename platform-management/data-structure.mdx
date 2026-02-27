@@ -1,0 +1,38 @@
+---
+title: "Data Structure"
+description: "Overview of Transcrypts's data architecture including Links, Tasks, and provider connections"
+---
+
+## Overview
+
+The Transcrypts API enables users to establish connections with data sources like payroll providers and create Links to manage data retrieval and modifications.
+
+The workflow begins by generating a Bridge token and creating a user. Customers then use Transcrypts Bridge to connect with one or more data providers.
+
+## Connecting to Providers
+
+When users attempt to connect to a data provider, the system generates a Link object. A Task object subsequently initiates processing for the requested action. Each Task progresses through distinct stages in the connection lifecycle with specific status updates.
+
+For successful Tasks, data from providers can be accessed through these endpoints:
+
+- Identity Profile
+- Employment
+- Pay Statements
+- Bank Accounts
+- Shifts
+- Reports
+
+### Link Structure
+
+Link ID values combine data source and user credentials. Each Link has an associated data provider ID. Successful connections include an Identity object retrieved from the data provider.
+
+Multiple employment objects are available from data providers, reflecting accounts with:
+
+- Multiple pay statements
+- Multiple bank accounts
+- Multiple tax documents
+- Multiple shifts
+
+<Note>
+This page serves as an introductory reference to Transcrypts's data architecture. Detailed information about specific endpoints and connection lifecycle stages is available in related documentation sections.
+</Note>

@@ -1,0 +1,45 @@
+---
+title: "Bridge Token"
+description: "A short-lived token required to open Transcrypts Bridge."
+---
+
+## Overview
+
+A bridge token represents a temporary credential required to initialize Transcrypts Bridge. It is a short-lived token that is required to open Transcrypts Bridge.
+
+## Bridge Token Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `bridge_token` | string | Unique identifier for the token |
+| `tracking_info` | string | Data associated with the current user |
+| `product_type` | string | Primary product classification |
+| `data_sources` | array | List of data sources (defaults applied if blank) |
+| `use_case` | string | Connection purpose for billing purposes |
+| `template_id` | string | Customization template identifier |
+| `allowed_products` | array | Permitted product types for linked account |
+| `company_mapping_id` | string | Company ID for skipping search (deeplinking) |
+| `provider_id` | string | Provider ID for skipping search (deeplinking) |
+| `access_token` | string | Token for existing Link data refresh |
+| `account` | object | Bank account data for deposit switching/lending |
+
+## Endpoints
+
+- [Create a bridge token](/docs/user-flow-endpoints/bridge-token-create)
+
+## Example Response
+
+```json
+{
+  "bridge_token": "2f67984a110747d190c39e1022c81837",
+  "tracking_info": "any data for tracking current user",
+  "client_name": "Transcrypts Demo",
+  "product_type": "income",
+  "allowed_products": [
+    "income",
+    "deposit_switch"
+  ],
+  "company_mapping_id": "99dd17074ac94aa9ace2621d657c7610",
+  "access_token": "99dd17074ac94aa9ace2621d657c7610"
+}
+```

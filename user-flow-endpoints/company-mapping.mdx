@@ -1,0 +1,93 @@
+---
+title: "Search Companies"
+description: "Locate a company and retrieve its company_mapping_id."
+api: "POST /v1/companies/"
+---
+
+## Overview
+
+This endpoint enables you to locate a company and retrieve its `company_mapping_id`. This identifier can be passed to the `/bridge-tokens` endpoint to allow users to skip the company selection step and have a data provider pre-suggested.
+
+## Request
+
+### Endpoint
+
+```
+POST https://prod.transcrypts.com/v1/companies/
+```
+
+### Authentication
+
+API authentication requires the following headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-Access-Client-Id` | Your Client ID |
+| `X-Access-Secret` | Your Access Key |
+
+### Request Body
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `name` | string | Company name | `"Google"` |
+| `domain` | string | Company domain | `"google.com"` |
+| `ein` | string | Company EIN | `"770493581"` |
+| `address` | object | Company location details | See below |
+| `phone` | string | Company phone number | `"6503087300"` |
+| `id` | string | Company ID | `"d94df7ecffcb4b218ab2dbff70e7cda8"` |
+| `product_type` | string | Product type for success rate calculation | `"income"`, `"employment"`, `"deposit_switch"`, `"pll"` |
+
+### Address Object Structure
+
+```json
+{
+  "street": "1600 Amphitheatre Pkwy",
+  "city": "Mountain View",
+  "state": "CA",
+  "zip": "94043"
+}
+```
+
+### Example Request
+
+```json
+{
+  "name": "Google",
+  "domain": "google.com",
+  "product_type": "income"
+}
+```
+
+## Response
+
+### Success Response (HTTP 200)
+
+| Field | Type | Description | Example |
+|-------|------|-------------|---------|
+| `company_mapping_id` | string (nullable) | Unique mapping ID | `"48427a36d43c4d5aa6324bc06c692456"` |
+| `name` | string | Company name | `"Facebook Demo"` |
+| `domain` | string | Company domain | `"facebook.com"` |
+| `logo_url` | string (nullable) | URL to company logo | `"https://citadelid-resources.s3-us-west-2.amazonaws.com/facebook.png"` |
+| `success_rate` | string | Success rate category | `"low"`, `"high"`, `"unsupported"`, or `null` |
+| `confidence_level` | string | Confidence metric (0 to 1) | `"0.9"` |
+| `mapping_status` | string | Company mapping status | `"verified"`, `"mapped"`, or `"unmapped"` |
+
+```json
+{
+  "company_mapping_id": "48427a36d43c4d5aa6324bc06c692456",
+  "name": "Facebook Demo",
+  "domain": "facebook.com",
+  "logo_url": "https://citadelid-resources.s3-us-west-2.amazonaws.com/facebook.png",
+  "success_rate": "high",
+  "confidence_level": "0.9",
+  "mapping_status": "verified"
+}
+```
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 400 | Bad Request - Incorrect request parameters |
+| 401 | Unauthorized - Missing or invalid authentication credentials |
+| 403 | Forbidden - Insufficient permissions |

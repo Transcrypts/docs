@@ -1,0 +1,58 @@
+---
+title: "Shifts"
+description: "Shifts object attributes and data structure for time entries and work shift data"
+---
+
+## Overview
+
+The Shifts endpoint provides access to time entries including clock in/out times, work type, and earnings information. This data is linked to the `link_id` from Transcrypts's Income and Employment API.
+
+## Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| count | integer | Total number of results |
+| next | string | Link to next page |
+| previous | string | Link to previous page |
+| results | array of objects | List of shifts |
+
+### Shift Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique ID of shifts |
+| external_id | string | External ID of selected shifts |
+| created_at | string | Shift creation timestamp |
+| updated_at | string | Shift update timestamp |
+| start_date | string | Shift start date |
+| end_date | string | Shift end date |
+| time_entries | array of objects | List of shift-related time entries |
+| type | string | Type of shift: Other, Delivery, Rideshare, or Shift |
+
+### Time Entry Object
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| id | string | Unique time entry ID |
+| external_id | string | Time entry external ID |
+| created_at | string | Time entry creation timestamp |
+| updated_at | string | Time entry update timestamp |
+| entry_date | string | Entry date of event in time tracking system |
+| start | string | Date and time when work shift started |
+| end | string | Date and time when work shift ended |
+| earnings | array of objects | Aggregated earnings for shift |
+
+## Endpoints
+
+- [List all shifts](/reference/link-shifts)
+
+## Example Response
+
+```json
+{
+  "count": 0,
+  "next": null,
+  "previous": null,
+  "results": []
+}
+```

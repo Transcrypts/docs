@@ -1,0 +1,39 @@
+---
+title: "Retrieve an Order Invoice"
+description: "Returns an order invoice for the specified order"
+api: "GET /v1/orders/{id}/invoice/"
+---
+
+## Endpoint Overview
+
+**GET** `https://prod.transcrypts.com/v1/orders/{id}/invoice/`
+
+The endpoint returns an order invoice.
+
+## Authentication
+
+This endpoint requires API credentials to be included in the request headers:
+- **ClientID** (Header)
+- **AccessKey** (Header)
+
+## Parameters
+
+### Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | string | **Required.** The order identifier |
+
+## Response
+
+The endpoint returns invoice data for the specified order.
+
+## Related Operations
+
+- [Create an order](/docs/orders/orders-create)
+- [Retrieve an order](/docs/orders/orders-read)
+- [Get list of orders by SSN](/docs/orders/orders-list-lookup)
+- [Cancel an order](/docs/orders/orders-cancel)
+- [Add new employer to existing order](/docs/orders/orders-add-employer)
+- [Retrieve order events](/docs/orders/orders-events)
+- [Retrieve self-certification results](/docs/orders/orders-certifications)

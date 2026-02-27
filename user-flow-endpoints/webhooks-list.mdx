@@ -1,0 +1,27 @@
+---
+title: "List All Webhooks"
+description: "Retrieve a list of all configured webhooks"
+api: "GET /v1/webhooks"
+---
+
+## Description
+
+The endpoint returns a list of webhooks.
+
+## Authentication
+
+This endpoint requires API key credentials via header authentication:
+- Client ID (header)
+- Access Key (header)
+
+## Response
+
+### Success Response (200 OK)
+
+Returns a paginated list of webhook configuration objects.
+
+### Error Responses
+
+**401 Unauthorized:** Authentication failed or credentials are missing.
+
+**403 Forbidden:** Insufficient permissions for the authenticated user.
